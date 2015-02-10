@@ -1,0 +1,23 @@
+{
+  "name": "KanbanParPeople",
+  "version": "0.0.0",
+  "homepage": "https://github.com/snakazawa/KanbanParPeople",
+  "authors": [
+    "snakazawa <nakazawa.tms0314@gmail.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "public/vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2",
+    "underscore": "~1",
+    "knockoutjs": "~3",
+    "bootstrap": "~3"
+  }
+}
