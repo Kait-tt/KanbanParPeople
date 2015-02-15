@@ -28,6 +28,7 @@ body {
     width: 280px;
     margin: 0;
     padding: 10px;
+    vertical-align: top;
 }
 
 .stage-block .stage-title {
@@ -37,13 +38,13 @@ body {
     margin-bottom: 14px;
 }
 
-#name-block {
+.stage-block#name-block {
     width: 120px;
-    padding: 10px;
     margin: 0 10px 0 30px;
 }
 
-#name-block .stage-title {
+.stage-block#name-block .stage-title {
+    padding-top: 5px;
     font-size: 20px;
     color: #808080;
 }
@@ -62,8 +63,6 @@ body {
 
 .cell-block {
     padding: 0;
-    margin: 0;
+    margin: 0 auto;
     list-style-type: none;
-    display: inline-block;
-    vertical-align: top;
 }
