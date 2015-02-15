@@ -5,7 +5,58 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <div class="main container">
+        <ul class="blocks">
+            <li id="issues-block" class="stage-block">
+                <h2 class="stage-title">Issues</h2>
+                <ul class="cell-block" data-bind="foreach: issues">
+                    <li class="card" data-bind="text: name"></li>
+                </ul>
+            </li>
+            <li id="name-block" class="stage-block">
+                <h2 class="stage-title">(Name)</h2>
+            </li>
+            <li id="todo-block" class="stage-block">
+                <h2 class="stage-title">TODO</h2>
+                <ul class="cell-block">
+                    <li class="card">A</li>
+                    <li class="card">B</li>
+                </ul>
+            </li>
+            <li id="doing-block" class="stage-block">
+                <h2 class="stage-title">Doing</h2>
+                <ul class="cell-block">
+                    <li class="card">A</li>
+                    <li class="card">B</li>
+                    <li class="card">C</li>
+                </ul>
+            </li>
+            <li id="review-block" class="stage-block">
+                <h2 class="stage-title">Review</h2>
+                <ul class="cell-block">
+                    <li class="card">A</li>
+                    <li class="card">B</li>
+                    <li class="card">C</li>
+                </ul>
+            </li>
+            <li id="done-block" class="stage-block">
+                <h2 class="stage-title">Done</h2>
+                <ul class="cell-block">
+                    <li class="card">A</li>
+                    <li class="card">B</li>
+                    <li class="card">C</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <!-- javascript -->
+    <script src="/vendor/jquery/dist/jquery.min.js"></script>
+    <script src="/vendor/underscore/underscore-min.js"></script>
+    <script src="/vendor/knockoutjs/dist/knockout.js"></script>
+
+    <script src="/javascripts/module/util.js"></script>
+    <script src="/javascripts/stub.js"></script>
+    <script src="/javascripts/index.js"></script>
   </body>
 </html>

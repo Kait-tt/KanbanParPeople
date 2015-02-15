@@ -1,0 +1,31 @@
+{
+  "bitwise": true,
+  "curly": true,
+  "eqeqeq": true,
+  "forin": true,
+  "freeze": true,
+  "immed": true,
+  "newcap": true,
+  "noarg": true,
+  "noempty": true,
+  "nonew": true,
+  "undef": true,
+  "strict": true,
+  "trailing": true,
+  "latedef": "nofunc",
+  "unused": "vars",
+  "indent": 4,
+  "quotmark": "single",
+  "browser": true,
+  "devel": true,
+  "jquery": true,
+  "onevar": true,
+  "white": true,
+  "predef": [
+    "$", "_", "util", "ko",
+    "TestCase", "fail", "assert", "assertTrue", "assertFalse", "assertEquals", "assertNotEquals", "assertSame", "assertNotSame",
+    "assertNull", "assertNotNull", "assertUndefined", "assertNotUndefined", "assertNaN", "assertNotNaN", "assertException", "assertNoException",
+    "assertArray", "assertTypeOf", "assertBoolean", "assertFunction", "assertObject", "assertNumber", "assertString", "assertMatch",
+    "assertNoMatch", "assertTagName", "assertClassName", "assertElementId", "assertInstanceOf", "assertNotInstanceOf"
+  ]
+}
