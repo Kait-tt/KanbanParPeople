@@ -81,6 +81,7 @@ body {
   list-style-type: none;
   background: #efefef;
   background: -moz-linear-gradient(left, #efefef 0%, #a5a5a5 100%);
+  background: -we bkit-gradient(linear, left top, right top, color-stop(0%, #efefef), color-stop(100%, #a5a5a5));
   background: -webkit-linear-gradient(left, #efefef 0%, #a5a5a5 100%);
   background: -o-linear-gradient(left, #efefef 0%, #a5a5a5 100%);
   background: -ms-linear-gradient(left, #efefef 0%, #a5a5a5 100%);
@@ -88,42 +89,38 @@ body {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#efefef', endColorstr='#a5a5a5',GradientType=1 );
 }
 
-/* line 27, ../../scss/style.scss */
+/* line 28, ../../scss/style.scss */
 .stage-block {
   display: inline-block;
   letter-spacing: normal;
   width: 280px;
   margin: 0;
   padding: 10px;
+  vertical-align: top;
 }
-/* line 34, ../../scss/style.scss */
+
+/* line 37, ../../scss/style.scss */
 .stage-block .stage-title {
   text-align: center;
   font-size: 28px;
   margin-top: 8px;
   margin-bottom: 14px;
 }
-/* line 40, ../../scss/style.scss */
-.stage-block .stage-title .cell-block {
-  padding: 0;
-  margin: 0;
-  list-style-type: none;
-  display: inline-block;
-  vertical-align: top;
-}
-/* line 49, ../../scss/style.scss */
+
+/* line 44, ../../scss/style.scss */
 .stage-block#name-block {
   width: 120px;
-  padding: 10px;
   margin: 0 10px 0 30px;
 }
-/* line 53, ../../scss/style.scss */
+
+/* line 49, ../../scss/style.scss */
 .stage-block#name-block .stage-title {
+  padding-top: 5px;
   font-size: 20px;
   color: #808080;
 }
 
-/* line 60, ../../scss/style.scss */
+/* line 55, ../../scss/style.scss */
 .card {
   width: 238px;
   height: 38px;
@@ -134,4 +131,11 @@ body {
   border-radius: 6px;
   cursor: pointer;
   display: block;
+}
+
+/* line 67, ../../scss/style.scss */
+.cell-block {
+  padding: 0;
+  margin: 0 auto;
+  list-style-type: none;
 }

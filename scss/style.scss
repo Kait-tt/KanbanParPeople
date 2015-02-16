@@ -17,6 +17,7 @@ body {
   list-style-type: none;
   background: #efefef;
   background: -moz-linear-gradient(left,  #efefef 0%, #a5a5a5 100%);
+  background: -we bkit-gradient(linear, left top, right top, color-stop(0%,#efefef), color-stop(100%,#a5a5a5));
   background: -webkit-linear-gradient(left,  #efefef 0%,#a5a5a5 100%);
   background: -o-linear-gradient(left,  #efefef 0%,#a5a5a5 100%);
   background: -ms-linear-gradient(left,  #efefef 0%,#a5a5a5 100%);
@@ -30,31 +31,25 @@ body {
   width: 280px;
   margin: 0;
   padding: 10px;
+  vertical-align: top;
+}
 
-  .stage-title {
-    text-align: center;
-    font-size: 28px;
-    margin-top: 8px;
-    margin-bottom: 14px;
+.stage-block .stage-title {
+  text-align: center;
+  font-size: 28px;
+  margin-top: 8px;
+  margin-bottom: 14px;
+}
 
-    .cell-block {
-      padding: 0;
-      margin: 0;
-      list-style-type: none;
-      display: inline-block;
-      vertical-align: top;
-    }
-  }
+.stage-block#name-block {
+  width: 120px;
+  margin: 0 10px 0 30px;
+}
 
-  &#name-block {
-    width: 120px;
-    padding: 10px;
-    margin: 0 10px 0 30px;
-    .stage-title {
-      font-size: 20px;
-      color: #808080;
-    }
-  }
+.stage-block#name-block .stage-title {
+  padding-top: 5px;
+  font-size: 20px;
+  color: #808080;
 }
 
 .card {
@@ -67,4 +62,10 @@ body {
   border-radius: 6px;
   cursor: pointer;
   display: block;
+}
+
+.cell-block {
+  padding: 0;
+  margin: 0 auto;
+  list-style-type: none;
 }
