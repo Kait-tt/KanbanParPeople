@@ -65,12 +65,11 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 
 /* line 4, ../../scss/style.scss */
 body {
-  padding: 0;
   margin: 0;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-/* line 10, ../../scss/style.scss */
+/* line 9, ../../scss/style.scss */
 .blocks {
   position: absolute;
   min-height: 100%;
@@ -78,6 +77,7 @@ body {
   margin: 0;
   letter-spacing: -.40em;
   width: 1680px;
+  min-width: 100%;
   list-style-type: none;
   background: #efefef;
   background: -moz-linear-gradient(left, #efefef 0%, #a5a5a5 100%);
@@ -98,30 +98,32 @@ body {
   padding: 10px;
   vertical-align: top;
 }
-
-/* line 37, ../../scss/style.scss */
+/* line 36, ../../scss/style.scss */
 .stage-block .stage-title {
   text-align: center;
   font-size: 28px;
   margin-top: 8px;
   margin-bottom: 14px;
 }
-
-/* line 44, ../../scss/style.scss */
+/* line 43, ../../scss/style.scss */
 .stage-block#name-block {
   width: 120px;
   margin: 0 10px 0 30px;
 }
-
-/* line 49, ../../scss/style.scss */
+/* line 47, ../../scss/style.scss */
 .stage-block#name-block .stage-title {
   padding-top: 5px;
   font-size: 20px;
   color: #808080;
 }
-
-/* line 55, ../../scss/style.scss */
-.card {
+/* line 54, ../../scss/style.scss */
+.stage-block .cell-block {
+  padding: 0;
+  margin: 0 auto;
+  list-style-type: none;
+}
+/* line 59, ../../scss/style.scss */
+.stage-block .cell-block .card {
   width: 238px;
   height: 38px;
   margin: 0 auto 10px;
@@ -131,11 +133,4 @@ body {
   border-radius: 6px;
   cursor: pointer;
   display: block;
-}
-
-/* line 67, ../../scss/style.scss */
-.cell-block {
-  padding: 0;
-  margin: 0 auto;
-  list-style-type: none;
 }
