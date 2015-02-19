@@ -26,9 +26,9 @@ body {
   min-width: 100%;
   padding: 0;
   margin: 0;
-  background: #efefef;
-  @include background-image(linear-gradient(right, #b5b5b5, #efefef));
-  @include filter-gradient(#b5b5b5, #efefef, vertical);
+  background: #b9b;
+  @include background-image(linear-gradient(right, #969, #b9b));
+  @include filter-gradient(#969, #b9b, vertical);
 }
 
 .blocks {
@@ -53,6 +53,7 @@ body {
     font-size: 28px;
     margin-top: 8px;
     margin-bottom: 14px;
+    color: #e9e9e9;
   }
 
   &#name-block {
@@ -60,10 +61,15 @@ body {
     margin: 0 $name-block_padding-right 0 $name-block_padding-left;
 
     .stage-title {
-      padding-top: 5px;
-      font-size: 20px;
-      color: #808080;
+      padding-top: 6px;
+      font-size: 18px;
+      color: #e9e9e9;
     }
+  }
+
+
+  &#issues-block {
+    border-right: solid #996699 3px;
   }
 
   .cell-block {
@@ -71,28 +77,21 @@ body {
     margin: 0 auto;
     list-style-type: none;
 
-    .card {
-      width: $card_width - $card_padding * 2;
-      height: $card_height - $card_padding * 2;
-      margin: 0 auto 10px;
-      padding: $card_padding;
-      background-color: #e0e0e0;
-      border: solid #909090 1px;
-      border-radius: 6px;
-      cursor: pointer;
-      display: block;
-    }
-
     .user-cell-block {
       height: $user_height - $user_padding-height * 2;
       margin-bottom: 60px;
       padding-top: $user_padding-height;
       padding-bottom: $user_padding-height;
-      overflow: auto;
       position: relative;
 
       &:last-child {
         margin-bottom: 0;
+      }
+
+      .card-list {
+        list-style-type: none;
+        height: 100%;
+        overflow: auto;
       }
 
       .user-name {
@@ -106,8 +105,20 @@ body {
         width: 120px;
         height: 24px;
         font-size: 24px;
-        color: #333;
+        color: #e9e9e9;
       }
     }
   }
+}
+
+.card {
+  width: $card_width - $card_padding * 2;
+  height: $card_height - $card_padding * 2;
+  margin: 0 auto 10px;
+  padding: $card_padding;
+  background-color: #efefef;
+  border: solid #909090 1px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: block;
 }
