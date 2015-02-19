@@ -10,21 +10,29 @@
             <li id="issues-block" class="stage-block">
                 <h2 class="stage-title">Issues</h2>
                 <ul class="cell-block" data-bind="foreach: issues">
-                    <li class="card" data-bind="text: name"></li>
+                    <li data-bind="if: assigned === null">
+                        <p class="card" data-bind="text: name"></p>
+                    </li>
                 </ul>
             </li>
+
             <li id="name-block" class="stage-block">
                 <h2 class="stage-title">(Name)</h2>
-                <ul class="cell-block">
-                    <li>A</li>
-                    <li>B</li>
+                <ul class="cell-block" data-bind="foreach: users">
+                    <li class="user-cell-block">
+                        <p class="user-name" data-bind="text: name"></p>
+                    </li>
                 </ul>
             </li>
+
             <li id="todo-block" class="stage-block">
                 <h2 class="stage-title">TODO</h2>
-                <ul class="cell-block">
-                    <li class="card">A</li>
-                    <li class="card">B</li>
+                <ul class="cell-block" data-bind="foreach: users">
+                    <li class="user-cell-block">
+                        <ul data-bind="foreach: todo">
+                            <li class="card" data-bind="text: name"></li>
+                        </ul>
+                    </li>
                 </ul>
             </li>
             <li id="doing-block" class="stage-block">

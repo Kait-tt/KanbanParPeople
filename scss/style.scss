@@ -1,6 +1,17 @@
 @import "compass";
 @import "compass/reset";
 
+$card_width: 250px;
+$card_height: 50px;
+$card_padding: 6px;
+$block_width: 300px;
+$block_padding: 10px;
+$name-block_width: 160px;
+$name-block_padding-left: 10px;
+$name-block_padding-right: 30px;
+$user_height: $card_height * 2 + 34;
+$user_padding-height: 10px;
+
 body {
   margin: 0;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
@@ -16,21 +27,16 @@ body {
   min-width: 100%;
   list-style-type: none;
   background: #efefef;
-  background: -moz-linear-gradient(left,  #efefef 0%, #a5a5a5 100%);
-  background: -we bkit-gradient(linear, left top, right top, color-stop(0%,#efefef), color-stop(100%,#a5a5a5));
-  background: -webkit-linear-gradient(left,  #efefef 0%,#a5a5a5 100%);
-  background: -o-linear-gradient(left,  #efefef 0%,#a5a5a5 100%);
-  background: -ms-linear-gradient(left,  #efefef 0%,#a5a5a5 100%);
-  background: linear-gradient(to right,  #efefef 0%,#a5a5a5 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#efefef', endColorstr='#a5a5a5',GradientType=1 );
+  @include background-image(linear-gradient(right, #a5a5a5, #efefef));
+  @include filter-gradient(#a5a5a5, #efefef, vertical);
 }
 
 .stage-block {
   display: inline-block;
   letter-spacing: normal;
-  width: 280px;
+  width: $block_width - $block_padding * 2;
+  padding: $block_padding;
   margin: 0;
-  padding: 10px;
   vertical-align: top;
 
   .stage-title {
@@ -41,8 +47,8 @@ body {
   }
 
   &#name-block {
-    width: 120px;
-    margin: 0 10px 0 30px;
+    width: $name-block_width - $name-block_padding-left - $name-block_padding-right;
+    margin: 0 $name-block_padding-left 0 $name-block_padding-right;
 
     .stage-title {
       padding-top: 5px;
@@ -57,16 +63,41 @@ body {
     list-style-type: none;
 
     .card {
-      width: 238px;
-      height: 38px;
+      width: $card_width - $card_padding * 2;
+      height: $card_height - $card_padding * 2;
       margin: 0 auto 10px;
-      padding: 6px;
+      padding: $card_padding;
       background-color: #e0e0e0;
       border: solid #909090 1px;
       border-radius: 6px;
       cursor: pointer;
       display: block;
     }
-  }
 
+    .user-cell-block {
+      height: $user_height - $user_padding-height * 2;
+      margin-bottom: 40px;
+      padding-top: $user_padding-height;
+      padding-bottom: $user_padding-height;
+      overflow: hidden;
+      position: relative;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .user-name {
+        vertical-align: middle;
+        position: absolute;
+        margin: auto;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100px;
+        height: 20px;
+        background-color: red;
+      }
+    }
+  }
 }
