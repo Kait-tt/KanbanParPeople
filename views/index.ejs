@@ -37,26 +37,32 @@
             </li>
             <li id="doing-block" class="stage-block">
                 <h2 class="stage-title">Doing</h2>
-                <ul class="cell-block">
-                    <li class="card">A</li>
-                    <li class="card">B</li>
-                    <li class="card">C</li>
+                <ul class="cell-block" data-bind="foreach: users">
+                    <li class="user-cell-block">
+                        <ul data-bind="foreach: doing">
+                            <li class="card" data-bind="text: name"></li>
+                        </ul>
+                    </li>
                 </ul>
             </li>
             <li id="review-block" class="stage-block">
                 <h2 class="stage-title">Review</h2>
-                <ul class="cell-block">
-                    <li class="card">A</li>
-                    <li class="card">B</li>
-                    <li class="card">C</li>
+                <ul class="cell-block" data-bind="foreach: users">
+                    <li class="user-cell-block">
+                        <ul data-bind="foreach: review">
+                            <li class="card" data-bind="text: name"></li>
+                        </ul>
+                    </li>
                 </ul>
             </li>
             <li id="done-block" class="stage-block">
                 <h2 class="stage-title">Done</h2>
-                <ul class="cell-block">
-                    <li class="card">A</li>
-                    <li class="card">B</li>
-                    <li class="card">C</li>
+                <ul class="cell-block" data-bind="foreach: users">
+                    <li class="user-cell-block">
+                        <ul data-bind="foreach: done">
+                            <li class="card" data-bind="text: name"></li>
+                        </ul>
+                    </li>
                 </ul>
             </li>
         </ul>

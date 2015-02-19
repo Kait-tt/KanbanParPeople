@@ -4,11 +4,14 @@
 $card_width: 250px;
 $card_height: 50px;
 $card_padding: 6px;
+
 $block_width: 300px;
 $block_padding: 10px;
-$name-block_width: 160px;
-$name-block_padding-left: 10px;
-$name-block_padding-right: 30px;
+
+$name-block_width: 240px;
+$name-block_padding-left: 60px;
+$name-block_padding-right: 10px;
+
 $user_height: $card_height * 2 + 34;
 $user_padding-height: 10px;
 
@@ -23,7 +26,7 @@ body {
   padding: 0;
   margin: 0;
   letter-spacing: -.40em;
-  width: 1680px;
+  width: $block_width * 5 + $name-block_width + 30;
   min-width: 100%;
   list-style-type: none;
   background: #efefef;
@@ -48,7 +51,7 @@ body {
 
   &#name-block {
     width: $name-block_width - $name-block_padding-left - $name-block_padding-right;
-    margin: 0 $name-block_padding-left 0 $name-block_padding-right;
+    margin: 0 $name-block_padding-right 0 $name-block_padding-left;
 
     .stage-title {
       padding-top: 5px;
@@ -94,8 +97,9 @@ body {
         left: 0;
         right: 0;
         bottom: 0;
-        width: 100px;
-        height: 20px;
+        width: 120px;
+        height: 24px;
+        font-size: 24px;
         background-color: red;
       }
     }

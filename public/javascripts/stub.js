@@ -19,11 +19,16 @@
         { id: '13', name: 'Qg85Zc9T', assigned: '2' },
         { id: '14', name: 'Jy5iqBMP', assigned: '2' },
         { id: '15', name: 'eK4csxNT', assigned: '2' },
-        { id: '16', name: 'Gt9aCKBF', assigned: null },
-        { id: '17', name: 'Tq9mAd7w', assigned: null },
-        { id: '18', name: 'gB2jnPN5', assigned: null },
-        { id: '19', name: 'c2LrACGY', assigned: null },
-        { id: '20', name: 'm3Kv7gYH', assigned: null }
+        { id: '16', name: 'Gt9aCKBF', assigned: '3' },
+        { id: '17', name: 'Tq9mAd7w', assigned: '3' },
+        { id: '18', name: 'gB2jnPN5', assigned: '3' },
+        { id: '19', name: 'c2LrACGY', assigned: '3' },
+        { id: '20', name: 'm3Kv7gYH', assigned: '3' },
+        { id: '21', name: 'Gt9aCKBF', assigned: '3' },
+        { id: '22', name: 'Tq9mAd7w', assigned: null },
+        { id: '23', name: 'gB2jnPN5', assigned: null },
+        { id: '24', name: 'c2LrACGY', assigned: null },
+        { id: '38', name: 'm3Kv7gYH', assigned: null }
     ];
 
     ns.users = [
@@ -42,6 +47,14 @@
             doing: ['11', '12'],
             review: ['10'],
             done: ['7', '8', '9']
+        },
+        {
+            id: '3',
+            name: '97QNTJ4R',
+            todo: ['21'],
+            doing: ['20'],
+            review: [],
+            done: ['18', '17', '16', '19']
         }
     ];
 

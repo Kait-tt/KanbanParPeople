@@ -63,20 +63,20 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
   display: block;
 }
 
-/* line 15, ../../scss/style.scss */
+/* line 18, ../../scss/style.scss */
 body {
   margin: 0;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-/* line 20, ../../scss/style.scss */
+/* line 23, ../../scss/style.scss */
 .blocks {
   position: absolute;
   min-height: 100%;
   padding: 0;
   margin: 0;
   letter-spacing: -.40em;
-  width: 1680px;
+  width: 1770px;
   min-width: 100%;
   list-style-type: none;
   background: #efefef;
@@ -90,7 +90,7 @@ body {
   filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FFA5A5A5', endColorstr='#FFEFEFEF');
 }
 
-/* line 34, ../../scss/style.scss */
+/* line 37, ../../scss/style.scss */
 .stage-block {
   display: inline-block;
   letter-spacing: normal;
@@ -99,31 +99,31 @@ body {
   margin: 0;
   vertical-align: top;
 }
-/* line 42, ../../scss/style.scss */
+/* line 45, ../../scss/style.scss */
 .stage-block .stage-title {
   text-align: center;
   font-size: 28px;
   margin-top: 8px;
   margin-bottom: 14px;
 }
-/* line 49, ../../scss/style.scss */
+/* line 52, ../../scss/style.scss */
 .stage-block#name-block {
-  width: 120px;
-  margin: 0 10px 0 30px;
+  width: 170px;
+  margin: 0 10px 0 60px;
 }
-/* line 53, ../../scss/style.scss */
+/* line 56, ../../scss/style.scss */
 .stage-block#name-block .stage-title {
   padding-top: 5px;
   font-size: 20px;
   color: #808080;
 }
-/* line 60, ../../scss/style.scss */
+/* line 63, ../../scss/style.scss */
 .stage-block .cell-block {
   padding: 0;
   margin: 0 auto;
   list-style-type: none;
 }
-/* line 65, ../../scss/style.scss */
+/* line 68, ../../scss/style.scss */
 .stage-block .cell-block .card {
   width: 238px;
   height: 38px;
@@ -135,7 +135,7 @@ body {
   cursor: pointer;
   display: block;
 }
-/* line 77, ../../scss/style.scss */
+/* line 80, ../../scss/style.scss */
 .stage-block .cell-block .user-cell-block {
   height: 114px;
   margin-bottom: 40px;
@@ -144,11 +144,11 @@ body {
   overflow: hidden;
   position: relative;
 }
-/* line 85, ../../scss/style.scss */
+/* line 88, ../../scss/style.scss */
 .stage-block .cell-block .user-cell-block:last-child {
   margin-bottom: 0;
 }
-/* line 89, ../../scss/style.scss */
+/* line 92, ../../scss/style.scss */
 .stage-block .cell-block .user-cell-block .user-name {
   vertical-align: middle;
   position: absolute;
@@ -157,6 +157,8 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  height: 20px;
+  width: 120px;
+  height: 24px;
+  font-size: 24px;
   background-color: red;
 }
