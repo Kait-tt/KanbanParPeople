@@ -77,14 +77,14 @@ body {
   padding: 0;
   margin: 0;
   background: #efefef;
-  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjEuMCIgeTE9IjAuNSIgeDI9IjAuMCIgeTI9IjAuNSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2E1YTVhNSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2VmZWZlZiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjEuMCIgeTE9IjAuNSIgeDI9IjAuMCIgeTI9IjAuNSI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2I1YjViNSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2VmZWZlZiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
   background-size: 100%;
-  background-image: -webkit-gradient(linear, 100% 50%, 0% 50%, color-stop(0%, #a5a5a5), color-stop(100%, #efefef));
-  background-image: -moz-linear-gradient(right, #a5a5a5, #efefef);
-  background-image: -webkit-linear-gradient(right, #a5a5a5, #efefef);
-  background-image: linear-gradient(to left, #a5a5a5, #efefef);
+  background-image: -webkit-gradient(linear, 100% 50%, 0% 50%, color-stop(0%, #b5b5b5), color-stop(100%, #efefef));
+  background-image: -moz-linear-gradient(right, #b5b5b5, #efefef);
+  background-image: -webkit-linear-gradient(right, #b5b5b5, #efefef);
+  background-image: linear-gradient(to left, #b5b5b5, #efefef);
   *zoom: 1;
-  filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FFA5A5A5', endColorstr='#FFEFEFEF');
+  filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FFB5B5B5', endColorstr='#FFEFEFEF');
 }
 
 /* line 34, ../../scss/style.scss */
@@ -144,11 +144,11 @@ body {
 }
 /* line 86, ../../scss/style.scss */
 .stage-block .cell-block .user-cell-block {
-  height: 114px;
-  margin-bottom: 40px;
+  height: 124px;
+  margin-bottom: 60px;
   padding-top: 10px;
   padding-bottom: 10px;
-  overflow: hidden;
+  overflow: auto;
   position: relative;
 }
 /* line 94, ../../scss/style.scss */
@@ -167,5 +167,5 @@ body {
   width: 120px;
   height: 24px;
   font-size: 24px;
-  background-color: red;
+  color: #333;
 }
