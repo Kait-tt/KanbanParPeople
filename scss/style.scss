@@ -20,18 +20,24 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-.blocks {
+.main {
   position: absolute;
   min-height: 100%;
+  min-width: 100%;
   padding: 0;
   margin: 0;
-  letter-spacing: -.40em;
-  width: $block_width * 5 + $name-block_width + 30;
-  min-width: 100%;
-  list-style-type: none;
   background: #efefef;
   @include background-image(linear-gradient(right, #a5a5a5, #efefef));
   @include filter-gradient(#a5a5a5, #efefef, vertical);
+}
+
+.blocks {
+  position: relative;
+  width: $block_width * 5 + $name-block_width + 30;
+  padding: 20px;
+  margin: 0;
+  letter-spacing: -.40em;
+  list-style-type: none;
 }
 
 .stage-block {
