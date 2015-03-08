@@ -18,6 +18,7 @@
     "jquery": "~2",
     "underscore": "~1",
     "knockoutjs": "~3",
-    "bootstrap": "~3.3.2"
+    "bootstrap": "~3.3.2",
+    "blockui": "*"
   }
 }

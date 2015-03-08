@@ -35,11 +35,6 @@ passport.use(new GitHubStrategy({
     }
 ));
 
-var routes = require('./routes/index');
-var auth = require('./routes/auth')(passport);
-var user = require('./routes/user');
-var project = require('./routes/project');
-
 var app = express();
 
 // view engine setup
@@ -57,11 +52,18 @@ app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: false
 app.use(passport.initialize());
 app.use(passport.session());
 
+// routing
+var routes = require('./routes/index');
+var auth = require('./routes/auth')(passport);
+var user = require('./routes/user');
+var project = require('./routes/project');
+var api = require('./routes/api');
+
 app.use('/', routes);
+app.use('/api', api);
 app.use('/auth', auth);
-app.use(auth.ensureAuthenticated);
-app.use('/users/', user);
-app.use('/users/:user/projects/', project);
+app.use('/users', auth.ensureAuthenticated, user);
+app.use('/users/:user/projects', auth.ensureAuthenticated, project);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,4 +1,4 @@
-(function (global, $, _, ko, util) {
+(function ($, _, ko, util) {
     'use strict';
 
     var stub = util.namespace('kpp.stub'),
@@ -19,4 +19,4 @@
 
     ko.applyBindings(vm);
 
-}(window, jQuery, _, ko, window.nakazawa.util));
+}(jQuery, _, ko, window.nakazawa.util));

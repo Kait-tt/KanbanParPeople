@@ -1,0 +1,15 @@
+.alerts {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 10px;
+  z-index: 5000;
+}
+
+.alerts>.alert-item {
+  margin: 0;
+  margin-top: 5px !important;
+}

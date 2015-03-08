@@ -8567,3 +8567,21 @@ body {
 .container {
   margin-top: 20px;
 }
+
+/* line 1, ../../scss/_alert.scss */
+.alerts {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 10px;
+  z-index: 5000;
+}
+
+/* line 12, ../../scss/_alert.scss */
+.alerts > .alert-item {
+  margin: 0;
+  margin-top: 5px !important;
+}
