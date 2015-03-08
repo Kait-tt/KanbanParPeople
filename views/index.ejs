@@ -1,81 +1,81 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="UTF-8">
     <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <div class="main container">
-        <ul class="blocks">
-            <li id="issues-block" class="stage-block">
-                <h2 class="stage-title">Issues</h2>
-                <ul class="cell-block" data-bind="foreach: issues">
-                    <li data-bind="if: assigned === null">
-                        <p class="card" data-bind="text: name"></p>
-                    </li>
-                </ul>
-            </li>
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
+</head>
+<body>
+<div class="main container">
+    <ul class="blocks">
+        <li id="issues-block" class="stage-block">
+            <h2 class="stage-title">Issues</h2>
+            <ul class="cell-block" data-bind="foreach: issues">
+                <li data-bind="if: assigned === null">
+                    <p class="card" data-bind="text: name"></p>
+                </li>
+            </ul>
+        </li>
 
-            <li id="name-block" class="stage-block">
-                <h2 class="stage-title">(Name)</h2>
-                <ul class="cell-block" data-bind="foreach: users">
-                    <li class="user-cell-block">
-                        <p class="user-name" data-bind="text: name"></p>
-                    </li>
-                </ul>
-            </li>
+        <li id="name-block" class="stage-block">
+            <h2 class="stage-title">(Name)</h2>
+            <ul class="cell-block" data-bind="foreach: users">
+                <li class="user-cell-block">
+                    <p class="user-name" data-bind="text: name"></p>
+                </li>
+            </ul>
+        </li>
 
-            <li id="todo-block" class="stage-block">
-                <h2 class="stage-title">TODO</h2>
-                <ul class="cell-block" data-bind="foreach: users">
-                    <li class="user-cell-block">
-                        <ul class="card-list" data-bind="foreach: todo">
-                            <li class="card" data-bind="text: name"></li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-            <li id="doing-block" class="stage-block">
-                <h2 class="stage-title">Doing</h2>
-                <ul class="cell-block" data-bind="foreach: users">
-                    <li class="user-cell-block">
-                        <ul class="card-list" data-bind="foreach: doing">
-                            <li class="card" data-bind="text: name"></li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-            <li id="review-block" class="stage-block">
-                <h2 class="stage-title">Review</h2>
-                <ul class="cell-block" data-bind="foreach: users">
-                    <li class="user-cell-block">
-                        <ul class="card-list" data-bind="foreach: review">
-                            <li class="card" data-bind="text: name"></li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-            <li id="done-block" class="stage-block">
-                <h2 class="stage-title">Done</h2>
-                <ul class="cell-block" data-bind="foreach: users">
-                    <li class="user-cell-block">
-                        <ul class="card-list" data-bind="foreach: done">
-                            <li class="card" data-bind="text: name"></li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </div>
+        <li id="todo-block" class="stage-block">
+            <h2 class="stage-title">TODO</h2>
+            <ul class="cell-block" data-bind="foreach: users">
+                <li class="user-cell-block">
+                    <ul class="card-list" data-bind="foreach: todo">
+                        <li class="card" data-bind="text: name"></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li id="doing-block" class="stage-block">
+            <h2 class="stage-title">Doing</h2>
+            <ul class="cell-block" data-bind="foreach: users">
+                <li class="user-cell-block">
+                    <ul class="card-list" data-bind="foreach: doing">
+                        <li class="card" data-bind="text: name"></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li id="review-block" class="stage-block">
+            <h2 class="stage-title">Review</h2>
+            <ul class="cell-block" data-bind="foreach: users">
+                <li class="user-cell-block">
+                    <ul class="card-list" data-bind="foreach: review">
+                        <li class="card" data-bind="text: name"></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li id="done-block" class="stage-block">
+            <h2 class="stage-title">Done</h2>
+            <ul class="cell-block" data-bind="foreach: users">
+                <li class="user-cell-block">
+                    <ul class="card-list" data-bind="foreach: done">
+                        <li class="card" data-bind="text: name"></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
 
-    <!-- javascript -->
-    <script src="/vendor/jquery/dist/jquery.min.js"></script>
-    <script src="/vendor/underscore/underscore-min.js"></script>
-    <script src="/vendor/knockoutjs/dist/knockout.js"></script>
+<!-- javascript -->
+<script src="/vendor/jquery/dist/jquery.min.js"></script>
+<script src="/vendor/underscore/underscore-min.js"></script>
+<script src="/vendor/knockoutjs/dist/knockout.js"></script>
 
-    <script src="/javascripts/module/util.js"></script>
-    <script src="/javascripts/stub.js"></script>
-    <script src="/javascripts/index.js"></script>
-  </body>
+<script src="/javascripts/module/util.js"></script>
+<script src="/javascripts/stub.js"></script>
+<script src="/javascripts/index.js"></script>
+</body>
 </html>
