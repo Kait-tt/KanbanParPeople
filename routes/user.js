@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var project = require('../lib/model/projects');
+var project = require('../lib/model/project');
 
 // My Page
 router.get('/me', function (req, res) {
@@ -8,8 +8,9 @@ router.get('/me', function (req, res) {
 
     res.render('user', {
         title: userName + ' | KanbanParPeople',
-        displayTitle: userName,
-        user: req.user
+        displayTitle: userName + ' | KanbanParPeople',
+        user: req.user,
+        projects: []
     });
 });
 
