@@ -1,5 +1,5 @@
 @import "compass";
-@import "compass/reset";
+@import "reset";
 
 $card_width: 250px;
 $card_height: 50px;
@@ -17,7 +17,7 @@ $user_padding-height: 10px;
 
 body {
   margin: 0;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-family: "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
 }
 
 .main {
@@ -29,6 +29,11 @@ body {
   background: #b9b;
   @include background-image(linear-gradient(right, #969, #b9b));
   @include filter-gradient(#969, #b9b, vertical);
+}
+
+.container {
+  padding: 20px;
+  margin: 0;
 }
 
 .blocks {

@@ -37,6 +37,8 @@ passport.use(new GitHubStrategy({
 
 var routes = require('./routes/index');
 var auth = require('./routes/auth')(passport);
+var user = require('./routes/user');
+var project = require('./routes/project');
 
 var app = express();
 
@@ -57,6 +59,9 @@ app.use(passport.session());
 
 app.use('/', routes);
 app.use('/auth', auth);
+app.use(auth.ensureAuthenticated);
+app.use('/users/', user);
+app.use('/users/:user/projects/', project);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

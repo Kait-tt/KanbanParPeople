@@ -22,10 +22,6 @@ module.exports = function (passport) {
         res.redirect('/');
     });
 
-    router.get('/accountCheck', router.ensureAuthenticated, function (req, res) {
-        res.render('accountCheck', {user: req.user});
-    });
-
     router.get('/github', passport.authenticate('github'),
         function (req, res) {
             // The request will be redirected to GitHub for authentication, so this
@@ -34,7 +30,7 @@ module.exports = function (passport) {
 
     router.get('/github/callback', passport.authenticate('github', {failureRedirect: '/auth/login'}),
         function (req, res) {
-            res.redirect('/');
+            res.redirect('/users/me');
         });
 
     return router;
