@@ -14,7 +14,7 @@ router.get('/:projectId/:projectName', function (req, res, next) {
             userName: userName
         })
         .populate('create_user')
-        .populate('members.userId')
+        .populate('members.user')
         .exec(function (err, project) {
             if (err) { next(err); return; }
             if (!project) { next(new Error('project not found')); return; }

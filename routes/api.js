@@ -7,7 +7,7 @@ var GitHub = require('../lib/model/github');
 router.get('/projects', function (req, res) {
     Project.find({userName: req.username})
         .populate('create_user')
-        .populate('members.userId')
+        .populate('members.user')
         .exec(function (err, projects) {
             if (err) {
                 res.status(500).json({
@@ -28,7 +28,7 @@ router.get('/projects', function (req, res) {
 router.get('/projects/:projectId', function (req, res) {
     Project.findOne({id: req.params.projectId})
         .populate('create_user')
-        .populate('members.userId')
+        .populate('members.user')
         .exec(function (err, project) {
             if (err) {
                 res.status(500).json({

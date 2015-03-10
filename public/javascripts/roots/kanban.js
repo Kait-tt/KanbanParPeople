@@ -33,9 +33,9 @@
         projectId = getProjectId();
         project.fetch(projectId)
             .done(function () {
-                // create member
+                // create user
                 project.members.map(function (member) {
-                    return new User(member.userId);
+                    return new User(member.user);
                 }).forEach(function (user) {
                     vm.users.push(user);
                 });
