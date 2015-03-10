@@ -5,44 +5,38 @@ var GitHub = require('../lib/model/github');
 
 // Get Projects
 router.get('/projects', function (req, res) {
-    Project.find({userName: req.username})
-        .populate('create_user')
-        .populate('members.user')
-        .exec(function (err, projects) {
-            if (err) {
-                res.status(500).json({
-                    message: 'server error.',
-                    error: err.message
-                });
-                return;
-            }
-
-            res.status(200).json({
-                message: 'OK',
-                projects: projects
+    Project.findPopulated({userName: req.username}, {}, function (err, projects) {
+        if (err) {
+            res.status(500).json({
+                message: 'server error.',
+                error: err.message
             });
+            return;
+        }
+
+        res.status(200).json({
+            message: 'OK',
+            projects: projects
         });
+    });
 });
 
 // Get a Project
 router.get('/projects/:projectId', function (req, res) {
-    Project.findOne({id: req.params.projectId})
-        .populate('create_user')
-        .populate('members.user')
-        .exec(function (err, project) {
-            if (err) {
-                res.status(500).json({
-                    message: 'server error.',
-                    error: err.message
-                });
-                return;
-            }
-
-            res.status(200).json({
-                message: 'OK',
-                project: project
+    Project.findPopulated({id: req.params.projectId}, {one: true}, function (err, project) {
+        if (err) {
+            res.status(500).json({
+                message: 'server error.',
+                error: err.message
             });
+            return;
+        }
+
+        res.status(200).json({
+            message: 'OK',
+            project: project
         });
+    });
 });
 
 // Import Project
@@ -62,12 +56,22 @@ router.post('/projects', function (req, res) {
                     message: 'server error.',
                     error: err.message
                 });
-                return ;
+                return;
             }
 
-            res.status(200).json({
-               message: 'OK',
-               project: project
+            Project.findPopulated({id: project.id}, {one: true}, function (err, doc) {
+                if (err) {
+                    res.status(500).json({
+                        message: 'server error.',
+                        error: err.message
+                    });
+                    return;
+                }
+
+                res.status(200).json({
+                    message: 'OK',
+                    project: doc
+                });
             });
         });
 });
