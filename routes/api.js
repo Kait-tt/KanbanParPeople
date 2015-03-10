@@ -1,7 +1,27 @@
 var express = require('express');
 var router = express.Router();
-var project = require('../lib/model/project');
+var Project = require('../lib/model/project');
 var GitHub = require('../lib/model/github');
+
+// Get Projects
+router.get('/projects', function (req, res) {
+    Project.find({userName: req.username})
+        .populate('User')
+        .exec(function (err, projects) {
+            if (err) {
+                res.status(500).json({
+                    message: 'server error.',
+                    error: err.message
+                });
+                return;
+            }
+
+            res.status(200).json({
+                message: 'OK',
+                projects: projects
+            });
+        });
+});
 
 // Import Project
 router.post('/projects', function (req, res) {

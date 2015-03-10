@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/basic.css'/>
+    <link rel='stylesheet' href='/stylesheets/user.css'/>
 </head>
 <body>
 
@@ -14,16 +14,15 @@
 
         <div class="projects">
             <h2>Projects</h2>
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#import-project-modal">
-                Import Project
-            </button>
-            <ul>
-                <% projects.forEach(function (project) { %>
+            <div class="project-buttons">
+                <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#import-project-modal">
+                    Import Project
+                </button>
+            </div>
+            <ul class="projects" data-bind="foreach: projects">
                 <li>
-                    <%= project.name %>
+                    <a data-bind="text: name, attr: { href: url }"></a>
                 </li>
-                <% }); %>
             </ul>
         </div>
     </div>
@@ -77,6 +76,7 @@
 <script src="/javascripts/module/util.js"></script>
 <script src="/javascripts/module/block.js"></script>
 <script src="/javascripts/model/Project.js"></script>
+<script src="/javascripts/model/Projects.js"></script>
 <script src="/javascripts/viewmodel/ImportProject.js"></script>
 <script src="/javascripts/viewmodel/Alert.js"></script>
 <script src="/javascripts/roots/user.js"></script>

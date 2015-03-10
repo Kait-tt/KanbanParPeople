@@ -2,8 +2,7 @@
     'use strict';
 
     var ns = util.namespace('kpp.viewmodel'),
-        block = util.namespace('kpp.module').block,
-        Project = util.namespace('kpp.model').Project;
+        block = util.namespace('kpp.module').block;
 
     ns.ImportProject = ns.ImportProject || ImportProject;
 
@@ -12,7 +11,7 @@
 
         that.opts = o;
 
-        that.project = new Project(o);
+        that.projects = o.projects;
 
         that.username = ko.observable();
 
@@ -20,7 +19,7 @@
 
         that.submit = function () {
             block.connect();
-            return that.project.importGitHub({
+            return that.projects.importGitHub({
                 userName: that.username(),
                 repoName: that.repository()
             }).then(block.unblock, block.unblock);
