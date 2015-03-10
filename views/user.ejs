@@ -19,7 +19,10 @@
                     Import Project
                 </button>
             </div>
-            <ul class="projects" data-bind="foreach: projects">
+            <ul class="projects" data-bind="foreach: {
+                data: projects,
+                afterAdd: effects.fadeIn,
+                beforeRemove: effects.fadeOut }">
                 <li>
                     <a data-bind="attr: { href: url }">
                         <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
@@ -108,6 +111,7 @@
 <script src="/javascripts/module/block.js"></script>
 <script src="/javascripts/model/Project.js"></script>
 <script src="/javascripts/model/Projects.js"></script>
+<script src="/javascripts/view/effects.js"></script>
 <script src="/javascripts/viewmodel/ImportProject.js"></script>
 <script src="/javascripts/viewmodel/Alert.js"></script>
 <script src="/javascripts/roots/user.js"></script>

@@ -3,7 +3,9 @@
 
     var viewmodel = util.namespace('kpp.viewmodel'),
         model = util.namespace('kpp.model'),
+        view = util.namespace('kpp.view'),
         alert = new (util.namespace('util.viewmodel')).Alert(),
+        effects = view.effects,
         projects = new model.Projects(),
         vm = {
             importProject: new viewmodel.ImportProject({
@@ -25,6 +27,7 @@
 
     projects.fetch()
         .done(function () {
+            effects.applyBindings(global);
             ko.applyBindings(vm);
         });
 
