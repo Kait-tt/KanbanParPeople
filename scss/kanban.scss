@@ -8,9 +8,9 @@ $card_padding: 6px;
 $block_width: 300px;
 $block_padding: 10px;
 
-$name-block_width: 240px;
-$name-block_padding-left: 60px;
-$name-block_padding-right: 10px;
+$name-block_width: 260px;
+$name-block_padding-left: 40px;
+$name-block_padding-right: 20px;
 
 $user_height: $card_height * 2 + 44;
 $user_padding-height: 10px;
@@ -31,6 +31,18 @@ $user_padding-height: 10px;
   padding: $block_padding;
   margin: 0;
   vertical-align: top;
+
+
+
+  &:not(#name-block):not(#issues-block) {
+    &:nth-child(odd) {
+      background: $background-second-color;
+    }
+
+    &:nth-child(even) {
+      background: $background-first-color;
+    }
+  }
 
   .stage-title {
     text-align: center;

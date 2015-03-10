@@ -95,7 +95,7 @@ body {
 /* line 18, ../../scss/kanban.scss */
 .blocks {
   position: relative;
-  width: 1770px;
+  width: 1790px;
   padding: 20px;
   margin: 0;
   letter-spacing: -.40em;
@@ -111,7 +111,15 @@ body {
   margin: 0;
   vertical-align: top;
 }
-/* line 35, ../../scss/kanban.scss */
+/* line 38, ../../scss/kanban.scss */
+.stage-block:not(#name-block):not(#issues-block):nth-child(odd) {
+  background: #bf90bd;
+}
+/* line 42, ../../scss/kanban.scss */
+.stage-block:not(#name-block):not(#issues-block):nth-child(even) {
+  background: #d3add3;
+}
+/* line 47, ../../scss/kanban.scss */
 .stage-block .stage-title {
   text-align: center;
   font-size: 28px;
@@ -119,28 +127,28 @@ body {
   margin-bottom: 14px;
   color: #e9e9e9;
 }
-/* line 43, ../../scss/kanban.scss */
+/* line 55, ../../scss/kanban.scss */
 .stage-block#name-block {
-  width: 170px;
-  margin: 0 10px 0 60px;
+  width: 200px;
+  margin: 0 20px 0 40px;
 }
-/* line 47, ../../scss/kanban.scss */
+/* line 59, ../../scss/kanban.scss */
 .stage-block#name-block .stage-title {
   padding-top: 6px;
   font-size: 18px;
   color: #e9e9e9;
 }
-/* line 55, ../../scss/kanban.scss */
+/* line 67, ../../scss/kanban.scss */
 .stage-block#issues-block {
   border-right: solid #996699 3px;
 }
-/* line 59, ../../scss/kanban.scss */
+/* line 71, ../../scss/kanban.scss */
 .stage-block .cell-block {
   padding: 0;
   margin: 0 auto;
   list-style-type: none;
 }
-/* line 64, ../../scss/kanban.scss */
+/* line 76, ../../scss/kanban.scss */
 .stage-block .cell-block .user-cell-block {
   height: 124px;
   margin-bottom: 60px;
@@ -148,17 +156,17 @@ body {
   padding-bottom: 10px;
   position: relative;
 }
-/* line 71, ../../scss/kanban.scss */
+/* line 83, ../../scss/kanban.scss */
 .stage-block .cell-block .user-cell-block:last-child {
   margin-bottom: 0;
 }
-/* line 75, ../../scss/kanban.scss */
+/* line 87, ../../scss/kanban.scss */
 .stage-block .cell-block .user-cell-block .card-list {
   list-style-type: none;
   height: 100%;
   overflow: auto;
 }
-/* line 81, ../../scss/kanban.scss */
+/* line 93, ../../scss/kanban.scss */
 .stage-block .cell-block .user-cell-block .user-name {
   vertical-align: middle;
   position: absolute;
@@ -173,7 +181,7 @@ body {
   color: #e9e9e9;
 }
 
-/* line 98, ../../scss/kanban.scss */
+/* line 110, ../../scss/kanban.scss */
 .card {
   width: 238px;
   height: 38px;
