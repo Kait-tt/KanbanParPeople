@@ -6,7 +6,8 @@ var GitHub = require('../lib/model/github');
 // Get Projects
 router.get('/projects', function (req, res) {
     Project.find({userName: req.username})
-        .populate('User')
+        .populate('create_user')
+        .populate('members.userId')
         .exec(function (err, projects) {
             if (err) {
                 res.status(500).json({
@@ -23,6 +24,27 @@ router.get('/projects', function (req, res) {
         });
 });
 
+// Get a Project
+router.get('/projects/:projectId', function (req, res) {
+    Project.findOne({id: req.params.projectId})
+        .populate('create_user')
+        .populate('members.userId')
+        .exec(function (err, project) {
+            if (err) {
+                res.status(500).json({
+                    message: 'server error.',
+                    error: err.message
+                });
+                return;
+            }
+
+            res.status(200).json({
+                message: 'OK',
+                project: project
+            });
+        });
+});
+
 // Import Project
 router.post('/projects', function (req, res) {
     if (!req.body.userName || !req.body.repoName) {
@@ -30,20 +52,24 @@ router.post('/projects', function (req, res) {
         return;
     }
 
-    (new GitHub(req.user.token)).importProject(req.body.userName, req.body.repoName, req.user.username, function (err, project) {
-        if (err) {
-            res.status(500).json({
-                message: 'server error.',
-                error: err.message
-            });
-            return ;
-        }
+    (new GitHub(req.user.token)).importProject(
+        req.body.userName,
+        req.body.repoName,
+        req.user.username,
+        function (err, project) {
+            if (err) {
+                res.status(500).json({
+                    message: 'server error.',
+                    error: err.message
+                });
+                return ;
+            }
 
-        res.status(200).json({
-           message: 'OK',
-           project: project
+            res.status(200).json({
+               message: 'OK',
+               project: project
+            });
         });
-    });
 });
 
 module.exports = router;

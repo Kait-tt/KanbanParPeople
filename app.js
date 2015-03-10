@@ -65,7 +65,7 @@ var api = require('./routes/api');
 
 app.use('/', routes);
 app.use('/auth', auth);
-app.use('/api', auth.ensureAuthenticated, api);
+app.use('/api', api);
 app.use('/users', auth.ensureAuthenticated, user);
 app.use('/users/:user/projects', auth.ensureAuthenticated, project);
 

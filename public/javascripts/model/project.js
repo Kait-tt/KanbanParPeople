@@ -21,11 +21,30 @@
         o = o || {};
         this.opts = _.defaults(o || {}, defaultOptions);
 
+        this.init(o);
+    }
+
+    Project.prototype.init = function (o) {
         _.each(columnKeys, function (key) {
             this[key] = o[key];
         }.bind(this));
 
-        this.url = '/users/' + this.create_user + '/projects/' + this.name;
+        this.url = createUrl(this.create_user ? this.create_user.userName : 'me',
+            this.id, this.name);
+    };
+
+    Project.prototype.fetch = function (id) {
+        return $.ajax({
+            url: this.opts.url + '/' + id,
+            type: 'get',
+            dataType: 'json'
+        }).then(function (res) {
+            this.init(res.project);
+        }.bind(this));
+    };
+
+    function createUrl (userName, projectId, projectName) {
+        return '/users/' + userName + '/projects/' + projectId + '/' + projectName;
     }
 
 }(_, window.nakazawa.util));

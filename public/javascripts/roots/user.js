@@ -13,8 +13,6 @@
             projects: projects.items
         };
 
-    window.vm = vm;
-
     vm.importProject.submit = alert.wrapDeferred(vm.importProject.submit,
         'ProjectのImportに成功しました',
         'ProjectのImportに失敗しました');
@@ -23,7 +21,5 @@
         .done(function () {
             ko.applyBindings(vm);
         });
-
-
 
 }(window, jQuery, _, ko, window.nakazawa.util));
