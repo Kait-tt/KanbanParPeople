@@ -7,10 +7,7 @@ var GitHub = require('../lib/model/github');
 router.get('/projects', function (req, res) {
     Project.findPopulated({userName: req.username}, {}, function (err, projects) {
         if (err) {
-            res.status(500).json({
-                message: 'server error.',
-                error: err.message
-            });
+            serverError(res, err);
             return;
         }
 
@@ -25,10 +22,7 @@ router.get('/projects', function (req, res) {
 router.get('/projects/:projectId', function (req, res) {
     Project.findPopulated({id: req.params.projectId}, {one: true}, function (err, project) {
         if (err) {
-            res.status(500).json({
-                message: 'server error.',
-                error: err.message
-            });
+            serverError(res, err);
             return;
         }
 
@@ -52,19 +46,13 @@ router.post('/projects', function (req, res) {
         req.user.username,
         function (err, project) {
             if (err) {
-                res.status(500).json({
-                    message: 'server error.',
-                    error: err.message
-                });
+                serverError(res, err);
                 return;
             }
 
             Project.findPopulated({id: project.id}, {one: true}, function (err, doc) {
                 if (err) {
-                    res.status(500).json({
-                        message: 'server error.',
-                        error: err.message
-                    });
+                    serverError(res, err);
                     return;
                 }
 
@@ -75,5 +63,12 @@ router.post('/projects', function (req, res) {
             });
         });
 });
+
+function serverError(res, err) {
+    res.status(500).json({
+        message: 'server error.',
+        error: err.message
+    });
+}
 
 module.exports = router;
