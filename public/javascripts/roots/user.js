@@ -11,7 +11,8 @@
             }),
             alerts: alert.alerts,
             projects: projects.items,
-            removeProject: null
+            removeProject: null,
+            selectedProject: ko.observable()
         };
 
     vm.importProject.submit = alert.wrapDeferred(vm.importProject.submit,
@@ -27,7 +28,8 @@
             ko.applyBindings(vm);
         });
 
-    function removeProject(project) {
+    function removeProject() {
+        var project = vm.selectedProject();
         return project.remove()
             .then(function () {
                 projects.items.remove(project);
