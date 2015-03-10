@@ -1,7 +1,9 @@
-@import "../node_modules/bootstrap-sass/assets/stylesheets/_bootstrap";
-@import "common";
-@import "_alert";
+@import "basic";
 
 .projects {
   margin: 5px;
+}
+
+.projects li {
+  font-size: 16px;
 }

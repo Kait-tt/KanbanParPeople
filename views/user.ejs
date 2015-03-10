@@ -21,7 +21,10 @@
             </div>
             <ul class="projects" data-bind="foreach: projects">
                 <li>
-                    <a data-bind="text: name, attr: { href: url }"></a>
+                    <a data-bind="attr: { href: url }">
+                        <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                        <span data-bind="text: name"></span>
+                    </a>
                 </li>
             </ul>
         </div>

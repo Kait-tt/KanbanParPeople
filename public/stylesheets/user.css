@@ -370,8 +370,8 @@ th {
 }
 @font-face {
   font-family: 'Glyphicons Halflings';
-  src: url("../fonts/bootstrap/glyphicons-halflings-regular.eot");
-  src: url("../fonts/bootstrap/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/bootstrap/glyphicons-halflings-regular.woff2") format("woff2"), url("../fonts/bootstrap/glyphicons-halflings-regular.woff") format("woff"), url("../fonts/bootstrap/glyphicons-halflings-regular.ttf") format("truetype"), url("../fonts/bootstrap/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg");
+  src: url("../vendor/bootstrap/fonts/glyphicons-halflings-regular.eot");
+  src: url("../vendor/bootstrap/fonts/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../vendor/bootstrap/fonts/glyphicons-halflings-regular.woff2") format("woff2"), url("../vendor/bootstrap/fonts/glyphicons-halflings-regular.woff") format("woff"), url("../vendor/bootstrap/fonts/glyphicons-halflings-regular.ttf") format("truetype"), url("../vendor/bootstrap/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg");
 }
 /* line 22, ../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/_glyphicons.scss */
 .glyphicon {
@@ -8586,7 +8586,12 @@ body {
   margin-top: 5px !important;
 }
 
-/* line 5, ../../scss/user.scss */
+/* line 3, ../../scss/user.scss */
 .projects {
   margin: 5px;
+}
+
+/* line 7, ../../scss/user.scss */
+.projects li {
+  font-size: 16px;
 }
