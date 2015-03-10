@@ -8590,11 +8590,22 @@ body {
 .projects {
   margin: 5px;
 }
-
-/* line 7, ../../scss/user.scss */
+/* line 6, ../../scss/user.scss */
 .projects li {
-  font-size: 16px;
+  font-size: 18px;
   list-style-type: none;
   margin-left: -15px;
   margin-top: 5px;
+}
+/* line 12, ../../scss/user.scss */
+.projects li .created-at {
+  font-size: 12px;
+  color: #777;
+}
+/* line 17, ../../scss/user.scss */
+.projects li .trash {
+  font-size: 14px;
+  color: #BD2C00;
+  cursor: pointer;
+  margin-left: 6px;
 }

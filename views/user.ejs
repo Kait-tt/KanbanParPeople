@@ -25,6 +25,8 @@
                         <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
                         <span data-bind="text: name"></span>
                     </a>
+                    <span class="created-at" data-bind="text: created_at"></span>
+                    <span class="trash glyphicon glyphicon-trash" aria-hidden="true" data-bind="click: $root.removeProject"></span>
                 </li>
             </ul>
         </div>

@@ -34,6 +34,14 @@
             this.id, this.name);
     };
 
+    Project.prototype.remove = function () {
+        return $.ajax({
+            url: this.opts.url + '/' + this.id,
+            type: 'delete',
+            dataType: 'json'
+        });
+    };
+
     Project.prototype.fetch = function (id) {
         return $.ajax({
             url: this.opts.url + '/' + id,

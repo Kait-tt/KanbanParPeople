@@ -33,6 +33,20 @@ router.get('/projects/:projectId', function (req, res) {
     });
 });
 
+// Remove a Project
+router.delete('/projects/:projectId', function (req, res) {
+    Project.remove({id: req.params.projectId}, function (err, project) {
+        if (err) {
+            serverError(res, err);
+            return;
+        }
+
+        res.status(200).json({
+            message: 'OK'
+        });
+    });
+});
+
 // Import Project
 router.post('/projects', function (req, res) {
     if (!req.body.userName || !req.body.repoName) {

@@ -10,16 +10,28 @@
                 projects: projects
             }),
             alerts: alert.alerts,
-            projects: projects.items
+            projects: projects.items,
+            removeProject: null
         };
 
     vm.importProject.submit = alert.wrapDeferred(vm.importProject.submit,
         'ProjectのImportに成功しました',
         'ProjectのImportに失敗しました');
 
+    vm.removeProject = alert.wrapDeferred(removeProject,
+        'Projectの削除に成功しました',
+        'Projectの削除に失敗しました');
+
     projects.fetch()
         .done(function () {
             ko.applyBindings(vm);
         });
+
+    function removeProject(project) {
+        return project.remove()
+            .then(function () {
+                projects.items.remove(project);
+            });
+    }
 
 }(window, jQuery, _, ko, window.nakazawa.util));
