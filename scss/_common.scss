@@ -14,6 +14,9 @@ $name-block_padding-right: 10px;
 $user_height: $card_height * 2 + 44;
 $user_padding-height: 10px;
 
+$background-first-color: #d3add3;
+$background-second-color: #bf90bd;
+
 body {
   margin: 0;
   font-family: "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
@@ -25,9 +28,9 @@ body {
   min-width: 100%;
   padding: 0;
   margin: 0;
-  background: #b9b;
-  @include background-image(linear-gradient(right, #969, #b9b));
-  @include filter-gradient(#969, #b9b, vertical);
+  background: $background-first-color;
+  @include background-image(linear-gradient(right, $background-second-color, $background-first-color));
+  @include filter-gradient($background-second-color, $background-first-color, vertical);
 }
 
 .container {

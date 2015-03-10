@@ -9,9 +9,9 @@ router.get('/me', function (req, res) {
     res.render('user', {
         title: userName + ' | KanbanParPeople',
         displayTitle: userName + ' | KanbanParPeople',
-        user: req.user,
-        projects: []
+        user: req.user
     });
+
 });
 
 module.exports = router;

@@ -8539,13 +8539,13 @@ button.close {
     display: none !important;
   }
 }
-/* line 17, ../../scss/_common.scss */
+/* line 20, ../../scss/_common.scss */
 body {
   margin: 0;
   font-family: "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
 }
 
-/* line 22, ../../scss/_common.scss */
+/* line 25, ../../scss/_common.scss */
 .main {
   position: absolute;
   min-height: 100%;
@@ -8563,7 +8563,7 @@ body {
   filter: progid:DXImageTransform.Microsoft.gradient(gradientType=0, startColorstr='#FF996699', endColorstr='#FFBB99BB');
 }
 
-/* line 33, ../../scss/_common.scss */
+/* line 36, ../../scss/_common.scss */
 .container {
   margin-top: 20px;
 }

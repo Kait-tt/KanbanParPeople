@@ -44,10 +44,6 @@ router.post('/projects', function (req, res) {
            project: project
         });
     });
-
-    setTimeout(function () {
-        res.status(200).json({message: 'OK'});
-    }, 2000);
 });
 
 module.exports = router;
