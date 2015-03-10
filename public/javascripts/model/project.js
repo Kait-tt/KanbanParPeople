@@ -6,10 +6,11 @@
             url: '/api/projects'
         },
         columnKeys = [
+            '_id',
+            'id',
             'create_user',
             'created_at',
             'github',
-            'id',
             'issues',
             'members',
             'name'
