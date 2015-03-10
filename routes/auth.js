@@ -5,12 +5,12 @@ module.exports = function (passport) {
 
     router.ensureAuthenticated = function (req, res, next) {
         if (req.isAuthenticated()) { return next(); }
-        res.redirect('/auth/login')
+        res.redirect('/auth/login');
     };
 
     router.notEnsureAuthenticated = function (req, res, next) {
         if (!req.isAuthenticated()) { return next(); }
-        res.redirect('/')
+        res.redirect('/');
     };
 
     router.get('/login', router.notEnsureAuthenticated, function (req, res) {
