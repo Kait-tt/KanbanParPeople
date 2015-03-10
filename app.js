@@ -7,9 +7,13 @@ var bodyParser = require('body-parser');
 var passport = require('passport');
 var GitHubStrategy = require('passport-github').Strategy;
 var session = require('express-session');
+var mongoose = require('mongoose');
 
 var GITHUB_CLIENT_ID = process.env.KPP_GITHUB_CLIENT_ID;
 var GITHUB_CLIENT_SECRET = process.env.KPP_GITHUB_CLIENT_SECRET;
+
+// mongoose
+mongoose.connect('mongodb://localhost/kpp');
 
 // Passport session setup.
 passport.serializeUser(function(user, done) {
@@ -60,8 +64,8 @@ var project = require('./routes/project');
 var api = require('./routes/api');
 
 app.use('/', routes);
-app.use('/api', api);
 app.use('/auth', auth);
+app.use('/api', auth.ensureAuthenticated, api);
 app.use('/users', auth.ensureAuthenticated, user);
 app.use('/users/:user/projects', auth.ensureAuthenticated, project);
 

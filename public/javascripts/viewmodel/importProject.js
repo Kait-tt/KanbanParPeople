@@ -20,9 +20,11 @@
 
         that.submit = function () {
             block.connect();
-            return that.project.importGitHub()
-                .then(block.unblock, block.unblock);
-        }
+            return that.project.importGitHub({
+                userName: that.username(),
+                repoName: that.repository()
+            }).then(block.unblock, block.unblock);
+        };
     }
 
 }(ko, window.nakazawa.util));

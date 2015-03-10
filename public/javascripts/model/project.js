@@ -12,11 +12,13 @@
         this.opts = _.defaults(o || {}, defaultOptions);
     }
 
-    Project.prototype.importGitHub = function () {
+    Project.prototype.importGitHub = function (o)
+    {
         return $.ajax({
             url: this.opts.url,
             type: 'post',
-            dataType: 'json'
+            dataType: 'json',
+            data: _.pick(o, 'userName', 'repoName')
         });
     };
 

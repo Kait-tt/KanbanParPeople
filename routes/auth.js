@@ -1,4 +1,5 @@
 var express = require('express');
+var User = require('../lib/model/user');
 
 module.exports = function (passport) {
     var router = express.Router();
@@ -29,8 +30,14 @@ module.exports = function (passport) {
         });
 
     router.get('/github/callback', passport.authenticate('github', {failureRedirect: '/auth/login'}),
-        function (req, res) {
-            res.redirect('/users/me');
+        function (req, res, next) {
+            User.findOrCreate(req.user.username, function (err) {
+                if (err) {
+                    console.log(err);
+                    next(err);
+                }
+                res.redirect('/users/me');
+            });
         });
 
     return router;
