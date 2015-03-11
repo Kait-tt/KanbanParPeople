@@ -1,6 +1,9 @@
 <!-- alerts -->
 <!-- ko if: $root.alerts -->
-<div class="alerts" data-bind="foreach: alerts">
+<div class="alerts" data-bind="foreach: {
+                data: alerts,
+                afterAdd: effects.fadeIn,
+                beforeRemove: effects.fadeOut }">
     <div class="alert alert-item fade in" data-bind="css: { 'alert-success': isSuccess, 'alert-danger': !isSuccess }">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <strong data-bind="text: title+': '"></strong>

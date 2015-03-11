@@ -4,7 +4,9 @@
     var viewmodel = util.namespace('kpp.viewmodel'),
         model = util.namespace('kpp.model'),
         view = util.namespace('kpp.view'),
-        alert = new (util.namespace('util.viewmodel')).Alert(),
+        alert = new (util.namespace('util.viewmodel')).Alert({
+            maxAlertNum: 2
+        }),
         effects = view.effects,
         projects = new model.Projects(),
         vm = {
