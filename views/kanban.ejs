@@ -7,66 +7,85 @@
 </head>
 <body>
 <div class="main">
-    <ul class="blocks">
-        <li id="issues-block" class="stage-block">
-            <h2 class="stage-title">Issues</h2>
-            <ul class="cell-block" data-bind="foreach: issues">
-                <li data-bind="if: assignee === null">
-                    <p class="card" data-bind="text: title"></p>
-                </li>
-            </ul>
-        </li>
+    <div class="container">
+        <h1><%= title %></h1>
+    </div>
 
-        <li id="name-block" class="stage-block">
-            <h2 class="stage-title">(Name)</h2>
-            <ul class="cell-block" data-bind="foreach: users">
-                <li class="user-cell-block">
-                    <p class="user-name" data-bind="text: userName"></p>
-                </li>
-            </ul>
-        </li>
+    <div class="blocks">
 
-        <li id="todo-block" class="stage-block">
-            <h2 class="stage-title">TODO</h2>
-            <ul class="cell-block" data-bind="foreach: users">
-                <li class="user-cell-block">
-                    <ul class="card-list" data-bind="foreach: todo">
-                        <li class="card" data-bind="text: title"></li>
-                    </ul>
-                </li>
-            </ul>
-        </li>
-        <li id="doing-block" class="stage-block">
-            <h2 class="stage-title">Doing</h2>
-            <ul class="cell-block" data-bind="foreach: users">
-                <li class="user-cell-block">
-                    <ul class="card-list" data-bind="foreach: doing">
-                        <li class="card" data-bind="text: title"></li>
-                    </ul>
-                </li>
-            </ul>
-        </li>
-        <li id="review-block" class="stage-block">
-            <h2 class="stage-title">Review</h2>
-            <ul class="cell-block" data-bind="foreach: users">
-                <li class="user-cell-block">
-                    <ul class="card-list" data-bind="foreach: review">
-                        <li class="card" data-bind="text: title"></li>
-                    </ul>
-                </li>
-            </ul>
-        </li>
-        <li id="done-block" class="stage-block">
-            <h2 class="stage-title">Done</h2>
-            <ul class="cell-block" data-bind="foreach: users">
-                <li class="user-cell-block">
-                    <ul class="card-list" data-bind="foreach: done">
-                        <li class="card" data-bind="text: title"></li>
-                    </ul>
-                </li>
-            </ul>
-        </li>
-    </ul>
+        <ul class="stage-blocks">
+            <li id="issues-block" class="stage-block">
+                <h2 class="stage-title">Issues</h2>
+                <ul class="cell-block" data-bind="foreach: issues">
+                    <li data-bind="if: assignee === null">
+                        <p class="card" data-bind="text: title"></p>
+                    </li>
+                </ul>
+            </li>
+
+            <li id="todo-block" class="stage-block">
+                <h2 class="stage-title">TODO</h2>
+                <ul class="cell-block" data-bind="foreach: users">
+                    <li class="dummy-user-cell-block"></li>
+                </ul>
+            </li>
+            <li id="doing-block" class="stage-block">
+                <h2 class="stage-title">Doing</h2>
+                <ul class="cell-block" data-bind="foreach: users">
+                    <li class="dummy-user-cell-block"></li>
+                </ul>
+            </li>
+            <li id="review-block" class="stage-block">
+                <h2 class="stage-title">Review</h2>
+                <ul class="cell-block" data-bind="foreach: users">
+                    <li class="dummy-user-cell-block"></li>
+                </ul>
+            </li>
+            <li id="done-block" class="stage-block">
+                <h2 class="stage-title">Done</h2>
+                <ul class="cell-block" data-bind="foreach: users">
+                    <li class="dummy-user-cell-block"></li>
+                </ul>
+            </li>
+        </ul>
+
+        <ul class="user-blocks" data-bind="foreach: users">
+            <li class="user-block">
+                <p class="user-name" data-bind="text: userName"></p>
+
+                <ul class="stage-blocks">
+                    <li id="todo-block" class="stage-block">
+                        <div class="user-cell-block">
+                            <ul class="card-list" data-bind="foreach: todo">
+                                <li class="card" data-bind="text: title"></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li id="doing-block" class="stage-block">
+                        <div class="user-cell-block">
+                        <ul class="card-list" data-bind="foreach: doing">
+                            <li class="card" data-bind="text: title"></li>
+                        </ul>
+                        </div>
+                    </li>
+                    <li id="review-block" class="stage-block">
+                        <div class="user-cell-block">
+                            <ul class="card-list" data-bind="foreach: review">
+                                <li class="card" data-bind="text: title"></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li id="done-block" class="stage-block">
+                        <div class="user-cell-block">
+                            <ul class="card-list" data-bind="foreach: done">
+                                <li class="card" data-bind="text: title"></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
 
     <% include alert %>
 </div>
