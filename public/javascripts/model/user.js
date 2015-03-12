@@ -26,7 +26,7 @@
 
         _.each(stageTypes, function (key) {
             this[key] = ko.observableArray([]);
-        }.bind(this))
+        }.bind(this));
     };
 
 }(_, window.nakazawa.util));
