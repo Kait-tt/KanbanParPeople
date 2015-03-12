@@ -1,5 +1,5 @@
 @import "compass/reset";
-@import "common";
+@import "basic";
 
 $card_width: 250px;
 $card_height: 50px;
@@ -25,7 +25,7 @@ $issue-block_right-margin: 60px;
 
 .blocks {
   position: relative;
-  width: $block_width * 5 + $issue-block_right-margin + 30;
+  width: $block_width * 5 + $issue-block_right-margin + 30 + $block_padding * 4;
   padding: 20px;
   margin: 0;
 }
@@ -39,7 +39,7 @@ $issue-block_right-margin: 60px;
 .stage-block {
   display: inline-block;
   letter-spacing: normal;
-  width: $block_width - $block_padding * 2;
+  width: $block_width;
   padding: $block_padding;
   margin: 0;
   vertical-align: top;
@@ -90,7 +90,7 @@ $issue-block_right-margin: 60px;
     list-style-type: none;
 
     .dummy-user-cell-block {
-      height: $user-height - $user_padding-height * 2 + 12;
+      height: $user-height + 12;
       margin-bottom: $user_margin-bottom;
       padding-top: $user_padding-height;
       padding-bottom: $user_padding-height;
@@ -120,7 +120,7 @@ ul.user-blocks {
 
     .user-name {
       font-size: 12px;
-      height: 12px;
+      height: 12px + 17;
       color: #222;
       background-color: rgba(229, 229, 229, 0.60);
       border-right: 1px solid lightgray;
@@ -130,6 +130,11 @@ ul.user-blocks {
       display: inline-block;
       position: absolute;
       z-index: 6;
+
+      .close {
+        font-size: 14px;
+        float: none;
+      }
     }
 
     .stage-blocks {
@@ -163,7 +168,7 @@ ul.user-blocks {
 
 .card {
   width: $card_width - $card_padding * 2;
-  height: $card_height - $card_padding * 2;
+  height: $card_height - $card_padding * 2 + 16;
   margin: 0 auto 10px;
   padding: $card_padding;
   background-color: #fefefe;
@@ -175,10 +180,5 @@ ul.user-blocks {
 
 // description, title, etc...
 .container {
-  margin: 20px 20px 0;
-
-  h1 {
-    font-size: 32px;
-    height: 48px;
-  }
+  margin-left: 20px;
 }

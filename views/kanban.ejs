@@ -51,7 +51,10 @@
 
         <ul class="user-blocks" data-bind="foreach: users">
             <li class="user-block">
-                <p class="user-name" data-bind="text: userName"></p>
+                <p class="user-name">
+                    <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <span data-bind="text: userName"></span>
+                </p>
 
                 <ul class="stage-blocks">
                     <li id="todo-block" class="stage-block">
@@ -100,6 +103,7 @@
 <script src="/javascripts/model/Projects.js"></script>
 <script src="/javascripts/model/Issue.js"></script>
 <script src="/javascripts/model/User.js"></script>
+<script src="/javascripts/view/effects.js"></script>
 <script src="/javascripts/viewmodel/Alert.js"></script>
 <script src="/javascripts/stub.js"></script>
 <script src="/javascripts/roots/kanban.js"></script>

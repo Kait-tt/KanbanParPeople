@@ -1,10 +1,12 @@
-(function ($, _, ko, util) {
+(function (global, $, _, ko, util) {
     'use strict';
 
     var viewmodel = util.namespace('kpp.viewmodel'),
         model = util.namespace('kpp.model'),
         stub = util.namespace('kpp.stub'),
+        view = util.namespace('kpp.view'),
         alert = new (util.namespace('util.viewmodel')).Alert(),
+        effects = view.effects,
         User = model.User,
         Issue = model.Issue,
         project = new model.Project(),
@@ -63,6 +65,7 @@
                 });
 
                 // done
+                effects.applyBindings(global);
                 ko.applyBindings(vm);
             });
     }
@@ -71,4 +74,4 @@
         return _.compact(location.pathname.split('/')).splice(-2, 1)[0];
     }
 
-}(jQuery, _, ko, window.nakazawa.util));
+}(window, jQuery, _, ko, window.nakazawa.util));
