@@ -1,4 +1,4 @@
-(function (ko, util) {
+(function (ko, io, util) {
     'use strict';
 
     var ns = util.namespace('kpp.viewmodel'),
@@ -19,7 +19,9 @@
         that.init = function (project) {
             that.members = project.members;
             that.issues = project.issues;
+
+            that.socket = io.connect();
         };
     }
 
-}(ko, window.nakazawa.util));
+}(ko, io, window.nakazawa.util));
