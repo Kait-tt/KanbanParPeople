@@ -2,6 +2,8 @@
     'use strict';
 
     var ns = util.namespace('kpp.model'),
+        User = ns.User,
+        Issue = ns.Issue,
         defaultOptions = {
             url: '/api/projects'
         },
@@ -30,6 +32,10 @@
             this[key] = o[key];
         }.bind(this));
 
+        this.members = bindMembers(o.members);
+        this.issues = bindIssues(o.issues);
+        bindIssuesToMembers(this.members(), this.issues());
+
         this.url = createUrl(this.create_user ? this.create_user.userName : 'me',
             this.id, this.name);
     };
@@ -51,6 +57,36 @@
             this.init(res.project);
         }.bind(this));
     };
+
+    function bindMembers (members) {
+        members = members || [];
+        return ko.observableArray(members.map(function (member) {
+            return new User(member.user);
+        }));
+    }
+
+    function bindIssues (issues) {
+        issues = issues || [];
+        return ko.observableArray(issues.map(function (issue) {
+            return new Issue(issue);
+        }));
+    }
+
+    function bindIssuesToMembers(members, issues) {
+        members.forEach(function (user) {
+            var userIssues = issues.filter(function (issue) {
+                return issue.assignee && issue.assignee === user._id;
+            });
+
+            Issue.stageTypes.forEach(function (stageName) {
+                userIssues.filter(function (issue) {
+                    return issue.stage === stageName;
+                }).forEach(function (issue) {
+                    user[issue.stage].push(issue);
+                });
+            });
+        });
+    }
 
     function createUrl (userName, projectId, projectName) {
         return '/users/' + userName + '/projects/' + projectId + '/' + projectName;

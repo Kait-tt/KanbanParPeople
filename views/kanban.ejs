@@ -25,33 +25,36 @@
 
             <li id="todo-block" class="stage-block">
                 <h2 class="stage-title">TODO</h2>
-                <ul class="cell-block" data-bind="foreach: users">
+                <ul class="cell-block" data-bind="foreach: members">
                     <li class="dummy-user-cell-block"></li>
                 </ul>
             </li>
             <li id="doing-block" class="stage-block">
                 <h2 class="stage-title">Doing</h2>
-                <ul class="cell-block" data-bind="foreach: users">
+                <ul class="cell-block" data-bind="foreach: members">
                     <li class="dummy-user-cell-block"></li>
                 </ul>
             </li>
             <li id="review-block" class="stage-block">
                 <h2 class="stage-title">Review</h2>
-                <ul class="cell-block" data-bind="foreach: users">
+                <ul class="cell-block" data-bind="foreach: members">
                     <li class="dummy-user-cell-block"></li>
                 </ul>
             </li>
             <li id="done-block" class="stage-block">
                 <h2 class="stage-title">Done</h2>
-                <ul class="cell-block" data-bind="foreach: users">
+                <ul class="cell-block" data-bind="foreach: members">
                     <li class="dummy-user-cell-block"></li>
                 </ul>
             </li>
         </ul>
 
-        <ul class="user-blocks" data-bind="foreach: users">
+        <ul class="user-blocks" data-bind="foreach: members">
             <li class="user-block">
-                <p class="user-name" data-bind="text: userName"></p>
+                <p class="user-name">
+                    <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <span data-bind="text: userName"></span>
+                </p>
 
                 <ul class="stage-blocks">
                     <li id="todo-block" class="stage-block">
@@ -94,14 +97,16 @@
 <script src="/vendor/jquery/dist/jquery.min.js"></script>
 <script src="/vendor/underscore/underscore-min.js"></script>
 <script src="/vendor/knockoutjs/dist/knockout.js"></script>
+<script src="/socket.io/socket.io.js"></script>
 
 <script src="/javascripts/module/util.js"></script>
-<script src="/javascripts/model/Project.js"></script>
-<script src="/javascripts/model/Projects.js"></script>
 <script src="/javascripts/model/Issue.js"></script>
 <script src="/javascripts/model/User.js"></script>
+<script src="/javascripts/model/Project.js"></script>
+<script src="/javascripts/model/Projects.js"></script>
+<script src="/javascripts/view/effects.js"></script>
 <script src="/javascripts/viewmodel/Alert.js"></script>
-<script src="/javascripts/stub.js"></script>
+<script src="/javascripts/viewmodel/Kanban.js"></script>
 <script src="/javascripts/roots/kanban.js"></script>
 </body>
 </html>
