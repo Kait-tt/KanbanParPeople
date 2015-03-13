@@ -6,8 +6,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var GitHubStrategy = require('passport-github').Strategy;
-var session = require('express-session');
 var mongoose = require('mongoose');
+var sessionMiddleware = require('./lib/module/sessionMiddleware');
 
 var GITHUB_CLIENT_ID = process.env.KPP_GITHUB_CLIENT_ID;
 var GITHUB_CLIENT_SECRET = process.env.KPP_GITHUB_CLIENT_SECRET;
@@ -52,7 +52,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: false }));
+app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
 
