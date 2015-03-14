@@ -22,6 +22,10 @@
 
             that.socket = io.connect();
         };
+
+        that.removeMember = function (member) {
+            that.members.remove(member);
+        };
     }
 
 }(ko, io, window.nakazawa.util));

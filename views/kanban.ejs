@@ -1,3 +1,12 @@
+<%
+var stages = [
+    {name: 'todo', displayName: 'TODO'},
+    {name: 'doing', displayName: 'Doing'},
+    {name: 'review', displayName: 'Review'},
+    {name: 'done', displayName: 'Done'}
+];
+
+%>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -23,36 +32,31 @@
                 </ul>
             </li>
 
-            <li id="todo-block" class="stage-block">
-                <h2 class="stage-title">TODO</h2>
-                <ul class="cell-block" data-bind="foreach: members">
+            <% stages.forEach(function (stage) { %>
+
+            <li id="<%= stage.name %>-block" class="stage-block">
+                <h2 class="stage-title"><%= stage.displayName %></h2>
+                <ul class="cell-block" data-bind="foreach: {
+                data: members,
+                afterAdd: effects.slideDown,
+                beforeRemove: effects.slideUp }">
                     <li class="dummy-user-cell-block"></li>
                 </ul>
             </li>
-            <li id="doing-block" class="stage-block">
-                <h2 class="stage-title">Doing</h2>
-                <ul class="cell-block" data-bind="foreach: members">
-                    <li class="dummy-user-cell-block"></li>
-                </ul>
-            </li>
-            <li id="review-block" class="stage-block">
-                <h2 class="stage-title">Review</h2>
-                <ul class="cell-block" data-bind="foreach: members">
-                    <li class="dummy-user-cell-block"></li>
-                </ul>
-            </li>
-            <li id="done-block" class="stage-block">
-                <h2 class="stage-title">Done</h2>
-                <ul class="cell-block" data-bind="foreach: members">
-                    <li class="dummy-user-cell-block"></li>
-                </ul>
-            </li>
+
+            <% }); %>
         </ul>
 
-        <ul class="user-blocks" data-bind="foreach: members">
+        <ul class="user-blocks" data-bind="foreach: {
+                data: members,
+                afterAdd: effects.slideDown,
+                beforeRemove: effects.slideUp }">
             <li class="user-block">
                 <p class="user-name">
-                    <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" aria-label="Close" data-bind="
+                    click: $root.removeMember">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                     <span data-bind="text: userName"></span>
                 </p>
 
@@ -66,9 +70,9 @@
                     </li>
                     <li id="doing-block" class="stage-block">
                         <div class="user-cell-block">
-                        <ul class="card-list" data-bind="foreach: doing">
-                            <li class="card" data-bind="text: title"></li>
-                        </ul>
+                            <ul class="card-list" data-bind="foreach: doing">
+                                <li class="card" data-bind="text: title"></li>
+                            </ul>
                         </div>
                     </li>
                     <li id="review-block" class="stage-block">
