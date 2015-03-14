@@ -11,8 +11,7 @@ module.exports = function (server) {
 
     // 接続時
     io.sockets.on('connection', function (socket) {
-        var userId = socket.request.session.passport.user;
-        console.log("Your User ID is", userId);
+        var username = socket.request.session.passport.user.username;
 
         console.log('new connected: ' + socket.id);
 
