@@ -8810,11 +8810,12 @@ ul.user-blocks li.user-block .stage-blocks .stage-block .user-cell-block {
   -webkit-box-shadow: 2px 2px 1px 0px rgba(0, 0, 0, 0.1);
   box-shadow: 2px 2px 1px 0px rgba(0, 0, 0, 0.1);
   border-radius: 6px;
+  overflow: hidden;
   cursor: pointer;
   display: block;
 }
 
-/* line 182, ../../scss/kanban.scss */
+/* line 183, ../../scss/kanban.scss */
 .container {
   margin-left: 20px;
 }
