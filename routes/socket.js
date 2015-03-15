@@ -30,11 +30,11 @@ module.exports = function (server) {
             var projectId = req.projectId;
 
             Project.exists({id: projectId}, function (err, isExists) {
-                if (err) { serverErrorWrap(err, fn); return; }
+                if (err) { serverErrorWrap(fn, err); return; }
 
                 // invalid
                 if (!isExists) {
-                    userErrorWrap('invalid projectId: ' + projectId, fn);
+                    userErrorWrap(fn, 'invalid projectId: ' + projectId);
                     return;
                 }
 
@@ -42,7 +42,7 @@ module.exports = function (server) {
                 leaveProjectRoom(socket);
                 joinProjectRoom(socket, projectId);
 
-                successWrap('joined room', fn);
+                successWrap(fn, 'joined room');
             });
         });
 
@@ -57,9 +57,9 @@ module.exports = function (server) {
             var targetUserName = req.userName;
 
             Project.removeMember({id: projectId}, targetUserName, function (err) {
-                if (err) { serverErrorWrap(err, fn); return; }
+                if (err) { serverErrorWrap(fn, err); return; }
 
-                successWrap('removed member', fn);
+                successWrap(fn, 'removed member');
             });
         });
 
@@ -88,26 +88,26 @@ module.exports = function (server) {
         }
     }
 
-    function serverErrorWrap(err, fn) {
+    function serverErrorWrap(fn, err, otherParam) {
         console.err(err);
-        fn({
+        fn(_.extend({
             status: 'server error',
             message: err.message
-        });
+        }, otherParam || {}));
     }
 
-    function userErrorWrap(message, fn) {
-        fn({
+    function userErrorWrap(fn, message, otherParam) {
+        fn(_.extend({
             status: 'error',
             message: message
-        });
+        }, otherParam || {}));
     }
 
-    function successWrap(message, fn) {
-        fn({
+    function successWrap(fn, message, otherParam) {
+        fn(_.extend({
             status: 'success',
             message: message
-        });
+        }, otherParam || {}));
     }
 
     // passport と room をチェック
