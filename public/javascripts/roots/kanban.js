@@ -7,7 +7,7 @@
         alert = new (util.namespace('util.viewmodel')).Alert(),
         effects = view.effects,
         project = new model.Project(),
-        kanban = new viewmodel.Kanban({alert: alert}),
+        kanban = new viewmodel.Kanban(),
         projectId;
 
     projectId = getProjectId();
