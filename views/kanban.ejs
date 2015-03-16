@@ -47,58 +47,98 @@ var stages = [
             <% }); %>
         </ul>
 
-        <ul class="user-blocks" data-bind="foreach: {
-                data: members,
-                afterAdd: effects.slideDown,
-                beforeRemove: effects.slideUp }">
-            <li class="user-block">
-                <p class="user-name">
-                    <button type="button" class="close" aria-label="Close" data-bind="
-                    click: $root.removeMember">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <span data-bind="text: userName"></span>
-                </p>
+        <div class="user-block-area">
+            <div class="user-area-header">
+                <button type="button" class="btn btn-sm btn-default"
+                        data-toggle="modal" data-target="#add-member-modal">Add member</button>
+            </div>
 
-                <ul class="stage-blocks">
-                    <li id="todo-block" class="stage-block">
-                        <div class="user-cell-block">
-                            <ul class="card-list" data-bind="foreach: todo">
-                                <li class="card" data-bind="text: title"></li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li id="doing-block" class="stage-block">
-                        <div class="user-cell-block">
-                            <ul class="card-list" data-bind="foreach: doing">
-                                <li class="card" data-bind="text: title"></li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li id="review-block" class="stage-block">
-                        <div class="user-cell-block">
-                            <ul class="card-list" data-bind="foreach: review">
-                                <li class="card" data-bind="text: title"></li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li id="done-block" class="stage-block">
-                        <div class="user-cell-block">
-                            <ul class="card-list" data-bind="foreach: done">
-                                <li class="card" data-bind="text: title"></li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-            </li>
-        </ul>
+            <ul class="user-blocks" data-bind="foreach: {
+                    data: members,
+                    afterAdd: effects.slideDown,
+                    beforeRemove: effects.slideUp }">
+                <li class="user-block">
+                    <p class="user-name">
+                        <button type="button" class="close" aria-label="Close" data-bind="
+                        click: $root.removeMember">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <span data-bind="text: userName"></span>
+                    </p>
+
+                    <ul class="stage-blocks">
+                        <li id="todo-block" class="stage-block">
+                            <div class="user-cell-block">
+                                <ul class="card-list" data-bind="foreach: todo">
+                                    <li class="card" data-bind="text: title"></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li id="doing-block" class="stage-block">
+                            <div class="user-cell-block">
+                                <ul class="card-list" data-bind="foreach: doing">
+                                    <li class="card" data-bind="text: title"></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li id="review-block" class="stage-block">
+                            <div class="user-cell-block">
+                                <ul class="card-list" data-bind="foreach: review">
+                                    <li class="card" data-bind="text: title"></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li id="done-block" class="stage-block">
+                            <div class="user-cell-block">
+                                <ul class="card-list" data-bind="foreach: done">
+                                    <li class="card" data-bind="text: title"></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
     </div>
 
     <% include alert %>
 </div>
 
+<!-- Add Member Modal -->
+<div class="modal fade" id="add-member-modal" tabindex="-1" role="dialog" aria-labelledby="add-member-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="add-member-modal-label">Add Member</h4>
+            </div>
+            <form class="form">
+                <div class="modal-body">
+                    <p>
+                        メンバーを追加します。<br>
+                        追加するメンバー情報を入力してください。
+                    </p>
+                    <div class="form-group">
+                        <label for="add-member-username" class="control-label">GitHubのユーザ名</label>
+                        <input type="text" class="form-control" id="add-member-username" placeholder="GitHub User Name"
+                               data-bind="value: addMemberUserName" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success" data-dismiss="modal"
+                            data-bind="click: addMember">Add</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
 <!-- javascript -->
 <script src="/vendor/jquery/dist/jquery.min.js"></script>
+<script src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="/vendor/underscore/underscore-min.js"></script>
 <script src="/vendor/knockoutjs/dist/knockout.js"></script>
 <script src="/socket.io/socket.io.js"></script>

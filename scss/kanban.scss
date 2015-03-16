@@ -103,49 +103,59 @@ $issue-block_right-margin: 60px;
   }
 }
 
-ul.user-blocks {
+div.user-block-area {
   position: absolute;
   top: 0;
   margin: 80px 0 0 $block_width + $issue-block_right-margin / 2;
 
-  li.user-block {
+  .user-area-header {
+    height: 40px;
+    margin: 0;
+    padding: 0 20px;
+  }
+
+  ul.user-blocks {
     position: relative;
-    background-color: rgba(242, 242, 242, 0.60);
-    width: $block_width * 4 + 50px + 10px;
-    height: $user_height + 15;
-    border-radius: 20px;
-    margin-bottom: $user_margin-bottom;
-    z-index: 5;
-    @include box-shadow(2px 2px 2px 0px rgba(#000, .1));
 
-    .user-name {
-      font-size: 12px;
-      height: 12px + 17;
-      color: #222;
-      background-color: rgba(229, 229, 229, 0.60);
-      border-right: 1px solid lightgray;
-      border-bottom: 1px solid lightgray;
-      padding: 7px 8px 6px 8px;
-      @include border-radius(20px 0 20px 0);
-      display: inline-block;
-      position: absolute;
-      z-index: 6;
+    li.user-block {
+      position: relative;
+      background-color: rgba(242, 242, 242, 0.60);
+      width: $block_width * 4 + 50px + 10px;
+      height: $user_height + 15;
+      border-radius: 20px;
+      margin-bottom: $user_margin-bottom;
+      z-index: 5;
+      @include box-shadow(2px 2px 2px 0px rgba(#000, .1));
 
-      .close {
-        font-size: 14px;
-        float: none;
+      .user-name {
+        font-size: 12px;
+        height: 12px + 17;
+        color: #222;
+        background-color: rgba(229, 229, 229, 0.60);
+        border-right: 1px solid lightgray;
+        border-bottom: 1px solid lightgray;
+        padding: 7px 8px 6px 8px;
+        @include border-radius(20px 0 20px 0);
+        display: inline-block;
+        position: absolute;
+        z-index: 6;
+
+        .close {
+          font-size: 14px;
+          float: none;
+        }
       }
-    }
 
-    .stage-blocks {
-      margin-left: 30px;
+      .stage-blocks {
+        margin-left: 30px;
 
-      .stage-block {
-        background-color: inherit;
+        .stage-block {
+          background-color: inherit;
 
-        .user-cell-block {
-          margin: 20px 0 0 0;
-          padding: 0;
+          .user-cell-block {
+            margin: 20px 0 0 0;
+            padding: 0;
+          }
         }
       }
     }

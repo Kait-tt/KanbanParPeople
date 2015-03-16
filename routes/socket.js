@@ -63,6 +63,23 @@ module.exports = function (server) {
             });
         });
 
+        // memberの追加
+        socket.json.on('add-member', function (req, fn) {
+            req = req || {};
+            fn = fn || function () {};
+
+            if (!checkAuth(socket, fn)) { return; }
+
+            var projectId = users[socket.id].projectRoomId;
+            var targetUserName = req.userName;
+
+            Project.addMember({id: projectId}, targetUserName, function (err, project, member) {
+                if (err) { serverErrorWrap(fn, err); return; }
+
+                successWrap(fn, 'added member', {member: member});
+            });
+        });
+
         // 切断
         socket.on('disconnect', function () {
             console.log('disconnected: ' + socket.id);
@@ -89,7 +106,7 @@ module.exports = function (server) {
     }
 
     function serverErrorWrap(fn, err, otherParam) {
-        console.err(err);
+        console.error(err);
         fn(_.extend({
             status: 'server error',
             message: err.message

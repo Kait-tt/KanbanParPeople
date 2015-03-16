@@ -17,6 +17,8 @@
 
         that.project = null;
 
+        that.addMemberUserName = ko.observable();
+
         that.init = function (project) {
             that.project = project;
             that.members = project.members;
@@ -33,8 +35,19 @@
 
         that.removeMember = function (member) {
             that.socket.emit('remove-member', {userName: member.userName}, function (res) {
-                that.members.remove(member);
                 console.log(res);
+                if (res.status === 'success') {
+                    that.members.remove(member);
+                }
+            });
+        };
+
+        that.addMember = function () {
+            that.socket.emit('add-member', {userName: that.addMemberUserName()}, function (res) {
+                console.log(res);
+                if (res.status === 'success') {
+                    that.members.unshift(new User(res.member.user));
+                }
             });
         };
     }

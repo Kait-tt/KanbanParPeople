@@ -8731,13 +8731,23 @@ body {
 }
 
 /* line 106, ../../scss/kanban.scss */
-ul.user-blocks {
+div.user-block-area {
   position: absolute;
   top: 0;
   margin: 80px 0 0 330px;
 }
 /* line 111, ../../scss/kanban.scss */
-ul.user-blocks li.user-block {
+div.user-block-area .user-area-header {
+  height: 40px;
+  margin: 0;
+  padding: 0 20px;
+}
+/* line 117, ../../scss/kanban.scss */
+div.user-block-area ul.user-blocks {
+  position: relative;
+}
+/* line 120, ../../scss/kanban.scss */
+div.user-block-area ul.user-blocks li.user-block {
   position: relative;
   background-color: rgba(242, 242, 242, 0.6);
   width: 1260px;
@@ -8749,8 +8759,8 @@ ul.user-blocks li.user-block {
   -webkit-box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.1);
   box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.1);
 }
-/* line 121, ../../scss/kanban.scss */
-ul.user-blocks li.user-block .user-name {
+/* line 130, ../../scss/kanban.scss */
+div.user-block-area ul.user-blocks li.user-block .user-name {
   font-size: 12px;
   height: 29px;
   color: #222;
@@ -8765,26 +8775,26 @@ ul.user-blocks li.user-block .user-name {
   position: absolute;
   z-index: 6;
 }
-/* line 134, ../../scss/kanban.scss */
-ul.user-blocks li.user-block .user-name .close {
+/* line 143, ../../scss/kanban.scss */
+div.user-block-area ul.user-blocks li.user-block .user-name .close {
   font-size: 14px;
   float: none;
 }
-/* line 140, ../../scss/kanban.scss */
-ul.user-blocks li.user-block .stage-blocks {
+/* line 149, ../../scss/kanban.scss */
+div.user-block-area ul.user-blocks li.user-block .stage-blocks {
   margin-left: 30px;
 }
-/* line 143, ../../scss/kanban.scss */
-ul.user-blocks li.user-block .stage-blocks .stage-block {
+/* line 152, ../../scss/kanban.scss */
+div.user-block-area ul.user-blocks li.user-block .stage-blocks .stage-block {
   background-color: inherit;
 }
-/* line 146, ../../scss/kanban.scss */
-ul.user-blocks li.user-block .stage-blocks .stage-block .user-cell-block {
+/* line 155, ../../scss/kanban.scss */
+div.user-block-area ul.user-blocks li.user-block .stage-blocks .stage-block .user-cell-block {
   margin: 20px 0 0 0;
   padding: 0;
 }
 
-/* line 155, ../../scss/kanban.scss */
+/* line 165, ../../scss/kanban.scss */
 .user-cell-block {
   height: 120px;
   margin-bottom: 30px;
@@ -8792,14 +8802,14 @@ ul.user-blocks li.user-block .stage-blocks .stage-block .user-cell-block {
   padding-bottom: 20px;
   position: relative;
 }
-/* line 162, ../../scss/kanban.scss */
+/* line 172, ../../scss/kanban.scss */
 .user-cell-block .card-list {
   list-style-type: none;
   height: 100%;
   overflow: auto;
 }
 
-/* line 169, ../../scss/kanban.scss */
+/* line 179, ../../scss/kanban.scss */
 .card {
   width: 238px;
   height: 54px;
@@ -8815,7 +8825,7 @@ ul.user-blocks li.user-block .stage-blocks .stage-block .user-cell-block {
   display: block;
 }
 
-/* line 183, ../../scss/kanban.scss */
+/* line 193, ../../scss/kanban.scss */
 .container {
   margin-left: 20px;
 }

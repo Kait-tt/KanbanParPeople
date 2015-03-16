@@ -17,8 +17,8 @@
         })
         .done(function () {
             effects.applyBindings(global);
-            ko.applyBindings(kanban, $('.blocks')[0]);
             ko.applyBindings(alert, $('.alerts')[0]);
+            ko.applyBindings(kanban);
         });
 
     function getProjectId() {
