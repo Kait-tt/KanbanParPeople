@@ -56,11 +56,7 @@ module.exports = function (server) {
             var projectId = users[socket.id].projectRoomId;
             var targetUserName = req.userName;
 
-            Project.removeMember({id: projectId}, targetUserName, function (err) {
-                if (err) { serverErrorWrap(fn, err); return; }
-
-                successWrap(fn, 'removed member');
-            });
+            removeMember(projectId, targetUserName, fn);
         });
 
         // memberの追加
@@ -73,11 +69,7 @@ module.exports = function (server) {
             var projectId = users[socket.id].projectRoomId;
             var targetUserName = req.userName;
 
-            Project.addMember({id: projectId}, targetUserName, function (err, project, member) {
-                if (err) { serverErrorWrap(fn, err); return; }
-
-                successWrap(fn, 'added member', {member: member});
-            });
+            addMember(projectId, targetUserName, fn);
         });
 
         // 切断
@@ -89,6 +81,27 @@ module.exports = function (server) {
 
     /**** emitter *****/
 
+    function removeMember(projectId, targetUserName, fn) {
+        Project.removeMember({id: projectId}, targetUserName, function (err, project, member) {
+            if (err) { serverErrorWrap(fn, err); return; }
+
+            successWrap(fn, 'removed member');
+            io.to(projectId).json.emit('remove-member', {
+                member: member
+            });
+        });
+    }
+
+    function addMember(projectId, targetUserName, fn) {
+        Project.addMember({id: projectId}, targetUserName, function (err, project, member) {
+            if (err) { serverErrorWrap(fn, err); return; }
+
+            successWrap(fn, 'added member', {member: member});
+            io.to(projectId).json.emit('add-member', {
+                member: member
+            });
+        });
+    }
 
     /**** helper *****/
 

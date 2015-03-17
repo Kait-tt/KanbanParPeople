@@ -23,7 +23,22 @@
             that.project = project;
             that.members = project.members;
             that.issues = project.issues;
+            initSocket();
+        };
 
+        that.removeMember = function (member) {
+            that.socket.emit('remove-member', {userName: member.userName}, function (res) {
+                console.log(res);
+            });
+        };
+
+        that.addMember = function () {
+            that.socket.emit('add-member', {userName: that.addMemberUserName()}, function (res) {
+                console.log(res);
+            });
+        };
+
+        function initSocket () {
             that.socket = io.connect();
 
             that.socket.on('connect', function () {
@@ -31,25 +46,18 @@
                     console.log(res);
                 });
             });
-        };
 
-        that.removeMember = function (member) {
-            that.socket.emit('remove-member', {userName: member.userName}, function (res) {
-                console.log(res);
-                if (res.status === 'success') {
-                    that.members.remove(member);
-                }
+            that.socket.on('remove-member', function (res) {
+                var targetMember = _.find(that.members(), function (member) {
+                    return member._id === res.member.user._id;
+                });
+                that.members.remove(targetMember);
             });
-        };
 
-        that.addMember = function () {
-            that.socket.emit('add-member', {userName: that.addMemberUserName()}, function (res) {
-                console.log(res);
-                if (res.status === 'success') {
-                    that.members.unshift(new User(res.member.user));
-                }
+            that.socket.on('add-member', function (res) {
+                that.members.unshift(new User(res.member.user));
             });
-        };
+        }
     }
 
 }(ko, io, window.nakazawa.util));
