@@ -85,28 +85,48 @@ var stages = [
                         <li id="todo-block" class="stage-block">
                             <div class="user-cell-block">
                                 <ul class="card-list" data-bind="foreach: todo">
-                                    <li class="card" data-bind="text: title"></li>
+                                    <p class="card">
+                                        <button type="button" class="close" aria-label="Close" data-bind="click: $root.removeIssue">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <span data-bind="text: title"></span>
+                                    </p>
                                 </ul>
                             </div>
                         </li>
                         <li id="doing-block" class="stage-block">
                             <div class="user-cell-block">
                                 <ul class="card-list" data-bind="foreach: doing">
-                                    <li class="card" data-bind="text: title"></li>
+                                    <p class="card">
+                                        <button type="button" class="close" aria-label="Close" data-bind="click: $root.removeIssue">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <span data-bind="text: title"></span>
+                                    </p>
                                 </ul>
                             </div>
                         </li>
                         <li id="review-block" class="stage-block">
                             <div class="user-cell-block">
                                 <ul class="card-list" data-bind="foreach: review">
-                                    <li class="card" data-bind="text: title"></li>
+                                    <p class="card">
+                                        <button type="button" class="close" aria-label="Close" data-bind="click: $root.removeIssue">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <span data-bind="text: title"></span>
+                                    </p>
                                 </ul>
                             </div>
                         </li>
                         <li id="done-block" class="stage-block">
                             <div class="user-cell-block">
                                 <ul class="card-list" data-bind="foreach: done">
-                                    <li class="card" data-bind="text: title"></li>
+                                    <p class="card">
+                                        <button type="button" class="close" aria-label="Close" data-bind="click: $root.removeIssue">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <span data-bind="text: title"></span>
+                                    </p>
                                 </ul>
                             </div>
                         </li>
