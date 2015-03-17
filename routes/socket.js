@@ -84,6 +84,18 @@ module.exports = function (server) {
             addIssue(projectId, req.title, req.body, fn);
         });
 
+        // issueの削除
+        socket.json.on('remove-issue', function (req, fn) {
+            req = req || {};
+            fn = fn || function () {};
+
+            if (!checkAuth(socket, fn)) { return; }
+
+            var projectId = users[socket.id].projectRoomId;
+
+            removeIssue(projectId, req.issueId, fn);
+        });
+
         // 切断
         socket.on('disconnect', function () {
             console.log('disconnected: ' + socket.id);
@@ -128,6 +140,15 @@ module.exports = function (server) {
                     io.to(projectId).json.emit('add-issue', {issue: issue});
                 });
             });
+        });
+    }
+
+    function removeIssue(projectId, issueId, fn) {
+        Project.removeIssue({id: projectId}, issueId, function (err, project, issue) {
+            if (err) { serverErrorWrap(fn, err); return; }
+
+            successWrap(fn, 'removed issue', {issue: issue});
+            io.to(projectId).json.emit('remove-issue', {issue: issue});
         });
     }
 

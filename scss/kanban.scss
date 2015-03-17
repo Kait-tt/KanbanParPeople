@@ -191,6 +191,12 @@ div.user-block-area {
   overflow: hidden;
   cursor: pointer;
   display: block;
+
+  .close {
+    margin: 0 0 2px 2px;
+    font-size: 18px;
+    float: right;
+  }
 }
 
 // description, title, etc...

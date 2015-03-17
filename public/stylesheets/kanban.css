@@ -8828,8 +8828,14 @@ div.user-block-area ul.user-blocks li.user-block .stage-blocks .stage-block .use
   cursor: pointer;
   display: block;
 }
+/* line 195, ../../scss/kanban.scss */
+.card .close {
+  margin: 0 0 2px 3x;
+  font-size: 18px;
+  float: right;
+}
 
-/* line 197, ../../scss/kanban.scss */
+/* line 203, ../../scss/kanban.scss */
 .container {
   margin-left: 20px;
 }

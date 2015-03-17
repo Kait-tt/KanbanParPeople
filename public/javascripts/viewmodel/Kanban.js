@@ -30,12 +30,6 @@
             initSocket();
         };
 
-        that.removeMember = function (member) {
-            that.socket.emit('remove-member', {userName: member.userName}, function (res) {
-                console.log(res);
-            });
-        };
-
         that.addMember = function () {
             that.socket.emit('add-member', {userName: that.addMemberUserName()}, function (res) {
                 console.log(res);
@@ -43,6 +37,12 @@
                     // reset
                     that.addMemberUserName(null);
                 }
+            });
+        };
+
+        that.removeMember = function (member) {
+            that.socket.emit('remove-member', {userName: member.userName}, function (res) {
+                console.log(res);
             });
         };
 
@@ -60,6 +60,12 @@
             });
         };
 
+        that.removeIssue = function (issue) {
+            that.socket.emit('remove-issue', {issueId: issue._id}, function (res) {
+                console.log(res);
+            });
+        };
+
         function initSocket () {
             that.socket = io.connect();
 
@@ -69,6 +75,10 @@
                 });
             });
 
+            that.socket.on('add-member', function (res) {
+                that.members.unshift(new User(res.member.user));
+            });
+
             that.socket.on('remove-member', function (res) {
                 var targetMember = _.find(that.members(), function (member) {
                     return member._id === res.member.user._id;
@@ -76,12 +86,15 @@
                 that.members.remove(targetMember);
             });
 
-            that.socket.on('add-member', function (res) {
-                that.members.unshift(new User(res.member.user));
-            });
-
             that.socket.on('add-issue', function (res) {
                 that.issues.unshift(new Issue(res.issue));
+            });
+
+            that.socket.on('remove-issue', function (res) {
+                var targetIssue = _.find(that.issues(), function (issue) {
+                    return issue._id === res.issue._id;
+                });
+                that.issues.remove(targetIssue);
             });
         }
     }

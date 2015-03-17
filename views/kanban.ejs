@@ -36,7 +36,12 @@ var stages = [
                     afterAdd: effects.slideDown,
                     beforeRemove: effects.slideUp }">
                     <li data-bind="if: assignee === null">
-                        <p class="card" data-bind="text: title"></p>
+                        <p class="card">
+                            <button type="button" class="close" aria-label="Close" data-bind="click: $root.removeIssue">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <span data-bind="text: title"></span>
+                        </p>
                     </li>
                 </ul>
             </li>
@@ -70,8 +75,7 @@ var stages = [
                     beforeRemove: effects.slideUp }">
                 <li class="user-block">
                     <p class="user-name">
-                        <button type="button" class="close" aria-label="Close" data-bind="
-                        click: $root.removeMember">
+                        <button type="button" class="close" aria-label="Close" data-bind="click: $root.removeMember">
                             <span aria-hidden="true">&times;</span>
                         </button>
                         <span data-bind="text: userName"></span>
