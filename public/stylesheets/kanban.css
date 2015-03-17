@@ -8699,25 +8699,29 @@ body {
   margin-right: 60px;
   border-radius: 5px;
 }
-/* line 79, ../../scss/kanban.scss */
+/* line 78, ../../scss/kanban.scss */
+.stage-block#issues-block .issue-block-header {
+  margin: 10px 21px;
+}
+/* line 83, ../../scss/kanban.scss */
 .stage-block#todo-block {
   -moz-border-radius: 5px 0 0 5px;
   -webkit-border-radius: 5px;
   border-radius: 5px 0 0 5px;
 }
-/* line 83, ../../scss/kanban.scss */
+/* line 87, ../../scss/kanban.scss */
 .stage-block#done-block {
   -moz-border-radius: 0 5px 5px 0;
   -webkit-border-radius: 0;
   border-radius: 0 5px 5px 0;
 }
-/* line 87, ../../scss/kanban.scss */
+/* line 91, ../../scss/kanban.scss */
 .stage-block .cell-block {
   padding: 0;
   margin: 0 auto;
   list-style-type: none;
 }
-/* line 92, ../../scss/kanban.scss */
+/* line 96, ../../scss/kanban.scss */
 .stage-block .cell-block .dummy-user-cell-block {
   height: 172px;
   margin-bottom: 30px;
@@ -8725,28 +8729,28 @@ body {
   padding-bottom: 20px;
   position: relative;
 }
-/* line 99, ../../scss/kanban.scss */
+/* line 103, ../../scss/kanban.scss */
 .stage-block .cell-block .dummy-user-cell-block:last-child {
   margin-bottom: 50px;
 }
 
-/* line 106, ../../scss/kanban.scss */
+/* line 110, ../../scss/kanban.scss */
 div.user-block-area {
   position: absolute;
   top: 0;
   margin: 80px 0 0 330px;
 }
-/* line 111, ../../scss/kanban.scss */
+/* line 115, ../../scss/kanban.scss */
 div.user-block-area .user-area-header {
   height: 40px;
   margin: 0;
   padding: 0 20px;
 }
-/* line 117, ../../scss/kanban.scss */
+/* line 121, ../../scss/kanban.scss */
 div.user-block-area ul.user-blocks {
   position: relative;
 }
-/* line 120, ../../scss/kanban.scss */
+/* line 124, ../../scss/kanban.scss */
 div.user-block-area ul.user-blocks li.user-block {
   position: relative;
   background-color: rgba(242, 242, 242, 0.6);
@@ -8759,7 +8763,7 @@ div.user-block-area ul.user-blocks li.user-block {
   -webkit-box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.1);
   box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.1);
 }
-/* line 130, ../../scss/kanban.scss */
+/* line 134, ../../scss/kanban.scss */
 div.user-block-area ul.user-blocks li.user-block .user-name {
   font-size: 12px;
   height: 29px;
@@ -8775,26 +8779,26 @@ div.user-block-area ul.user-blocks li.user-block .user-name {
   position: absolute;
   z-index: 6;
 }
-/* line 143, ../../scss/kanban.scss */
+/* line 147, ../../scss/kanban.scss */
 div.user-block-area ul.user-blocks li.user-block .user-name .close {
   font-size: 14px;
   float: none;
 }
-/* line 149, ../../scss/kanban.scss */
+/* line 153, ../../scss/kanban.scss */
 div.user-block-area ul.user-blocks li.user-block .stage-blocks {
   margin-left: 30px;
 }
-/* line 152, ../../scss/kanban.scss */
+/* line 156, ../../scss/kanban.scss */
 div.user-block-area ul.user-blocks li.user-block .stage-blocks .stage-block {
   background-color: inherit;
 }
-/* line 155, ../../scss/kanban.scss */
+/* line 159, ../../scss/kanban.scss */
 div.user-block-area ul.user-blocks li.user-block .stage-blocks .stage-block .user-cell-block {
   margin: 20px 0 0 0;
   padding: 0;
 }
 
-/* line 165, ../../scss/kanban.scss */
+/* line 169, ../../scss/kanban.scss */
 .user-cell-block {
   height: 120px;
   margin-bottom: 30px;
@@ -8802,14 +8806,14 @@ div.user-block-area ul.user-blocks li.user-block .stage-blocks .stage-block .use
   padding-bottom: 20px;
   position: relative;
 }
-/* line 172, ../../scss/kanban.scss */
+/* line 176, ../../scss/kanban.scss */
 .user-cell-block .card-list {
   list-style-type: none;
   height: 100%;
   overflow: auto;
 }
 
-/* line 179, ../../scss/kanban.scss */
+/* line 183, ../../scss/kanban.scss */
 .card {
   width: 238px;
   height: 54px;
@@ -8825,7 +8829,7 @@ div.user-block-area ul.user-blocks li.user-block .stage-blocks .stage-block .use
   display: block;
 }
 
-/* line 193, ../../scss/kanban.scss */
+/* line 197, ../../scss/kanban.scss */
 .container {
   margin-left: 20px;
 }

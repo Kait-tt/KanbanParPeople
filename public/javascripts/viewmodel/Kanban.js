@@ -19,6 +19,10 @@
 
         that.addMemberUserName = ko.observable();
 
+        that.addIssueTitle = ko.observable();
+
+        that.addIssueBody = ko.observable();
+
         that.init = function (project) {
             that.project = project;
             that.members = project.members;
@@ -35,6 +39,24 @@
         that.addMember = function () {
             that.socket.emit('add-member', {userName: that.addMemberUserName()}, function (res) {
                 console.log(res);
+                if (res.status === 'success') {
+                    // reset
+                    that.addMemberUserName(null);
+                }
+            });
+        };
+
+        that.addIssue = function () {
+            var title = that.addIssueTitle();
+            var body = that.addIssueBody();
+
+            that.socket.emit('add-issue', {title: title, body: body}, function (res) {
+                console.log(res);
+                if (res.status === 'success') {
+                    // reset
+                    that.addIssueTitle(null);
+                    that.addIssueBody(null);
+                }
             });
         };
 
@@ -56,6 +78,10 @@
 
             that.socket.on('add-member', function (res) {
                 that.members.unshift(new User(res.member.user));
+            });
+
+            that.socket.on('add-issue', function (res) {
+                that.issues.unshift(new Issue(res.issue));
             });
         }
     }

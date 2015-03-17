@@ -2,6 +2,7 @@ var socketio = require('socket.io');
 var _ = require('underscore');
 var sessionMiddleware = require('../lib/module/sessionMiddleware');
 var Project = require('../lib/model/Project');
+var Issue = require('../lib/model/Issue');
 
 module.exports = function (server) {
     var io = socketio.listen(server);
@@ -67,9 +68,20 @@ module.exports = function (server) {
             if (!checkAuth(socket, fn)) { return; }
 
             var projectId = users[socket.id].projectRoomId;
-            var targetUserName = req.userName;
 
-            addMember(projectId, targetUserName, fn);
+            addMember(projectId, req.userName, fn);
+        });
+
+        // issueの追加
+        socket.json.on('add-issue', function (req, fn) {
+            req = req || {};
+            fn = fn || function () {};
+
+            if (!checkAuth(socket, fn)) { return; }
+
+            var projectId = users[socket.id].projectRoomId;
+
+            addIssue(projectId, req.title, req.body, fn);
         });
 
         // 切断
@@ -86,9 +98,7 @@ module.exports = function (server) {
             if (err) { serverErrorWrap(fn, err); return; }
 
             successWrap(fn, 'removed member');
-            io.to(projectId).json.emit('remove-member', {
-                member: member
-            });
+            io.to(projectId).json.emit('remove-member', {member: member});
         });
     }
 
@@ -97,8 +107,26 @@ module.exports = function (server) {
             if (err) { serverErrorWrap(fn, err); return; }
 
             successWrap(fn, 'added member', {member: member});
-            io.to(projectId).json.emit('add-member', {
-                member: member
+            io.to(projectId).json.emit('add-member', {member: member});
+        });
+    }
+
+    function addIssue(projectId, title, body, fn) {
+        Issue.create({title: title, body: body}, function (err, issue) {
+            if (err) { serverErrorWrap(fn, err); return; }
+
+            Project.findOne({id: projectId}, function (err, project) {
+                if (err) { serverErrorWrap(fn, err); return; }
+                if (!project) { userErrorWrap(fn, 'undefined project', {projectId: projectId}); return; }
+
+                project.issues.unshift(issue);
+
+                project.save(function (err, project) {
+                    if (err) { serverErrorWrap(fn, err); return; }
+
+                    successWrap(fn, 'added issue', {issue: issue});
+                    io.to(projectId).json.emit('add-issue', {issue: issue});
+                });
             });
         });
     }
@@ -111,7 +139,9 @@ module.exports = function (server) {
     }
 
     function leaveProjectRoom(socket) {
-        var projectRoomId = users[socket.id].projectRoomId;
+        var user = users[socket.id];
+        if (!user) { return; }
+        var projectRoomId = user.projectRoomId;
 
         if (projectRoomId) {
             socket.leave(projectRoomId);

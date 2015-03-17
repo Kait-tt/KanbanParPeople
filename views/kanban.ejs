@@ -25,7 +25,16 @@ var stages = [
         <ul class="stage-blocks">
             <li id="issues-block" class="stage-block">
                 <h2 class="stage-title">Issues</h2>
-                <ul class="cell-block" data-bind="foreach: issues">
+                <div class="issue-block-header">
+                    <button type="button" class="btn btn-sm btn-default"
+                            data-toggle="modal" data-target="#add-issue-modal">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add issue
+                    </button>
+                </div>
+                <ul class="cell-block" data-bind="foreach: {
+                    data: issues,
+                    afterAdd: effects.slideDown,
+                    beforeRemove: effects.slideUp }">
                     <li data-bind="if: assignee === null">
                         <p class="card" data-bind="text: title"></p>
                     </li>
@@ -50,7 +59,9 @@ var stages = [
         <div class="user-block-area">
             <div class="user-area-header">
                 <button type="button" class="btn btn-sm btn-default"
-                        data-toggle="modal" data-target="#add-member-modal">Add member</button>
+                        data-toggle="modal" data-target="#add-member-modal">
+                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Add member
+                </button>
             </div>
 
             <ul class="user-blocks" data-bind="foreach: {
@@ -129,6 +140,44 @@ var stages = [
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-success" data-dismiss="modal"
                             data-bind="click: addMember">Add</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- Add Issue Modal -->
+<div class="modal fade" id="add-issue-modal" tabindex="-1" role="dialog" aria-labelledby="add-issue-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="add-issue-modal-label">Add Issue</h4>
+            </div>
+            <form class="form">
+                <div class="modal-body">
+                    <p>
+                        Issueを追加します。<br>
+                        追加するIssue情報を入力してください。
+                    </p>
+
+                    <div class="form-group">
+                        <label for="add-issue-title" class="control-label">タイトル</label>
+                        <input type="text" class="form-control" id="add-issue-title" placeholder="Title"
+                               data-bind="value: addIssueTitle" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="add-issue-body" class="control-label">説明</label>
+                        <textarea type="text" class="form-control" rows="3" id="add-issue-body" placeholder="Body"
+                               data-bind="value: addIssueBody"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success" data-dismiss="modal"
+                            data-bind="click: addIssue">Add</button>
                 </div>
             </form>
 

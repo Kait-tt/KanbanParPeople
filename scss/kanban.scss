@@ -74,6 +74,10 @@ $issue-block_right-margin: 60px;
   &#issues-block {
     margin-right: $issue-block_right-margin;
     border-radius: 5px;
+
+    .issue-block-header {
+      margin: 10px 21px;
+    }
   }
 
   &#todo-block {
