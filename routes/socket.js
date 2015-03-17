@@ -124,22 +124,11 @@ module.exports = function (server) {
     }
 
     function addIssue(projectId, title, body, fn) {
-        Issue.create({title: title, body: body}, function (err, issue) {
+        Project.addIssue({id: projectId}, {title: title, body: body}, function (err, project, issue) {
             if (err) { serverErrorWrap(fn, err); return; }
 
-            Project.findOne({id: projectId}, function (err, project) {
-                if (err) { serverErrorWrap(fn, err); return; }
-                if (!project) { userErrorWrap(fn, 'undefined project', {projectId: projectId}); return; }
-
-                project.issues.unshift(issue);
-
-                project.save(function (err, project) {
-                    if (err) { serverErrorWrap(fn, err); return; }
-
-                    successWrap(fn, 'added issue', {issue: issue});
-                    io.to(projectId).json.emit('add-issue', {issue: issue});
-                });
-            });
+            successWrap(fn, 'added issue', {issue: issue});
+            io.to(projectId).json.emit('add-issue', {issue: issue});
         });
     }
 
