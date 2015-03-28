@@ -19,6 +19,7 @@
     "underscore": "~1",
     "knockoutjs": "~3",
     "bootstrap": "~3.3.2",
-    "blockui": "*"
+    "blockui": "*",
+    "jquery.easing": "~1.3.1"
   }
 }

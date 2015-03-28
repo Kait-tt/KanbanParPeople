@@ -3,61 +3,34 @@ $icon-size: 14px;
 
 .mini-menu {
   position: relative;
+  display: inline-block;
 
   button {
     padding: 3px;
     width: $icon-size + 6 + 4;
     height: $icon-size + 6 + 4;
-    border-radius: ($icon-size + 6 + 4) / 2
+    border-radius: ($icon-size + 6 + 4) / 2;
   }
 
   .mini-menu-default {
+    position: relative;
+    z-index: 20;
   }
 
   .mini-menu-list {
+    z-index: 15;
     display: none;
+    position: absolute;
+    top: $mini-menu-size  / -2;
+    left: $mini-menu-size  / -2;
     width: $mini-menu-size;
     height: $mini-menu-size;
     background-color: #dddddd;
     border-radius: $mini-menu-size / 2;
 
-    .glyphicon {
+    li {
       position: absolute;
-      height: $icon-size;
-      width: $icon-size;
+      z-index: 25;
     }
   }
-
-//  .glyphicon-menu-hamburger {
-//    position: absolute;
-//    top: $mini-menu-size / 2 - $icon-size / 2;
-//    left: $mini-menu-size / 2 - $icon-size / 2;
-//  }
-//
-//  .glyphicon-user {
-//    position: absolute;
-//    top: 0;
-//  }
-//
-//  .glyphicon-trash {
-//    position: absolute;
-//    top: 0;
-//  }
-//
-//  .glyphicon-th {
-//    position: absolute;
-//    top: 0;
-//  }
-//
-//  .glyphicon-chevron-left {
-//    position: absolute;
-//    top: $mini-menu-size / 2 - $icon-size / 2;
-//    left: 0;
-//  }
-//
-//  .glyphicon-chevron-right {
-//    position: absolute;
-//    top: $mini-menu-size / 2 - $icon-size / 2;
-//    right: 0;
-//  }
 }
