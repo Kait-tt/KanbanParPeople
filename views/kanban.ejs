@@ -81,28 +81,44 @@ var stages = [
                     <ul class="stage-blocks">
                         <li id="todo-block" class="stage-block">
                             <div class="user-cell-block">
-                                <ul class="card-list" data-bind="foreach: todo">
+                                <ul class="card-list" data-bind="foreach: {
+                                data: todo,
+                                afterRender: view.MiniMenu.init,
+                                afterAdd: view.effects.slideDown,
+                                beforeRemove: view.effects.slideUp }">
                                     <% include _card %>
                                 </ul>
                             </div>
                         </li>
                         <li id="doing-block" class="stage-block">
                             <div class="user-cell-block">
-                                <ul class="card-list" data-bind="foreach: doing">
+                                <ul class="card-list" data-bind="foreach: {
+                                data: doing,
+                                afterRender: view.MiniMenu.init,
+                                afterAdd: view.effects.slideDown,
+                                beforeRemove: view.effects.slideUp }">
                                     <% include _card %>
                                 </ul>
                             </div>
                         </li>
                         <li id="review-block" class="stage-block">
                             <div class="user-cell-block">
-                                <ul class="card-list" data-bind="foreach: review">
+                                <ul class="card-list" data-bind="foreach: {
+                                data: review,
+                                afterRender: view.MiniMenu.init,
+                                afterAdd: view.effects.slideDown,
+                                beforeRemove: view.effects.slideUp }">
                                     <% include _card %>
                                 </ul>
                             </div>
                         </li>
                         <li id="done-block" class="stage-block">
                             <div class="user-cell-block">
-                                <ul class="card-list" data-bind="foreach: done">
+                                <ul class="card-list" data-bind="foreach: {
+                                data: done,
+                                afterRender: view.MiniMenu.init,
+                                afterAdd: view.effects.slideDown,
+                                beforeRemove: view.effects.slideUp }">
                                     <% include _card %>
                                 </ul>
                             </div>

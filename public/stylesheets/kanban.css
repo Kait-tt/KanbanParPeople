@@ -8845,7 +8845,7 @@ div.user-block-area ul.user-blocks li.user-block .stage-blocks .stage-block .use
 .user-cell-block .card-list {
   list-style-type: none;
   height: 100%;
-  overflow: auto;
+  overflow: visible;
 }
 
 /* line 184, ../../scss/kanban.scss */

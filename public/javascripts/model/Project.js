@@ -34,7 +34,7 @@
 
         this.members = bindMembers(o.members);
         this.issues = bindIssues(o.issues);
-        bindIssuesToMembers(this.members(), this.issues());
+        bindIssuesToMembers(this.members, this.issues);
 
         this.url = createUrl(this.create_user ? this.create_user.userName : 'me',
             this.id, this.name);
@@ -72,7 +72,10 @@
         }));
     }
 
-    function bindIssuesToMembers(members, issues) {
+    function bindIssuesToMembers(membersObservableArray, issuesObservableArray) {
+        var members = membersObservableArray(),
+            issues = issuesObservableArray();
+
         members.forEach(function (user) {
             var userIssues = issues.filter(function (issue) {
                 return issue.assignee && issue.assignee === user._id;
@@ -86,6 +89,23 @@
                 });
             });
         });
+
+        // issues元と連携
+        issuesObservableArray.subscribe(function (changes) {
+            changes.forEach(function (change) {
+                var issue = change.value,
+                    member = _.findWhere(membersObservableArray(), {_id: issue.assignee});
+
+                if (!member) { return; }
+
+                if (change.status === 'added') {
+                    member[issue.stage].unshift(issue);
+
+                } else if (change.status === 'deleted') {
+                    member[issue.stage].remove(issue);
+                }
+            });
+        }, null, 'arrayChange');
     }
 
     function createUrl (userName, projectId, projectName) {
