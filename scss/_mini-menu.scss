@@ -1,0 +1,63 @@
+$mini-menu-size: 70px;
+$icon-size: 14px;
+
+.mini-menu {
+  position: relative;
+
+  button {
+    padding: 3px;
+    width: $icon-size + 6 + 4;
+    height: $icon-size + 6 + 4;
+    border-radius: ($icon-size + 6 + 4) / 2
+  }
+
+  .mini-menu-default {
+  }
+
+  .mini-menu-list {
+    display: none;
+    width: $mini-menu-size;
+    height: $mini-menu-size;
+    background-color: #dddddd;
+    border-radius: $mini-menu-size / 2;
+
+    .glyphicon {
+      position: absolute;
+      height: $icon-size;
+      width: $icon-size;
+    }
+  }
+
+//  .glyphicon-menu-hamburger {
+//    position: absolute;
+//    top: $mini-menu-size / 2 - $icon-size / 2;
+//    left: $mini-menu-size / 2 - $icon-size / 2;
+//  }
+//
+//  .glyphicon-user {
+//    position: absolute;
+//    top: 0;
+//  }
+//
+//  .glyphicon-trash {
+//    position: absolute;
+//    top: 0;
+//  }
+//
+//  .glyphicon-th {
+//    position: absolute;
+//    top: 0;
+//  }
+//
+//  .glyphicon-chevron-left {
+//    position: absolute;
+//    top: $mini-menu-size / 2 - $icon-size / 2;
+//    left: 0;
+//  }
+//
+//  .glyphicon-chevron-right {
+//    position: absolute;
+//    top: $mini-menu-size / 2 - $icon-size / 2;
+//    right: 0;
+//  }
+}

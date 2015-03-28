@@ -8643,7 +8643,33 @@ body {
   margin-top: 5px !important;
 }
 
-/* line 26, ../../scss/kanban.scss */
+/* line 4, ../../scss/_mini-menu.scss */
+.mini-menu {
+  position: relative;
+}
+/* line 7, ../../scss/_mini-menu.scss */
+.mini-menu button {
+  padding: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
+}
+/* line 17, ../../scss/_mini-menu.scss */
+.mini-menu .mini-menu-list {
+  display: none;
+  width: 70px;
+  height: 70px;
+  background-color: #dddddd;
+  border-radius: 35px;
+}
+/* line 24, ../../scss/_mini-menu.scss */
+.mini-menu .mini-menu-list .glyphicon {
+  position: absolute;
+  height: 14px;
+  width: 14px;
+}
+
+/* line 27, ../../scss/kanban.scss */
 .blocks {
   position: relative;
   width: 1630px;
@@ -8651,14 +8677,14 @@ body {
   margin: 0;
 }
 
-/* line 33, ../../scss/kanban.scss */
+/* line 34, ../../scss/kanban.scss */
 .stage-blocks {
   position: relative;
   letter-spacing: -.40em;
   list-style-type: none;
 }
 
-/* line 39, ../../scss/kanban.scss */
+/* line 40, ../../scss/kanban.scss */
 .stage-block {
   display: inline-block;
   letter-spacing: normal;
@@ -8667,15 +8693,15 @@ body {
   margin: 0;
   vertical-align: top;
 }
-/* line 47, ../../scss/kanban.scss */
+/* line 48, ../../scss/kanban.scss */
 .stage-block:nth-child(odd) {
   background: #fae0ff;
 }
-/* line 51, ../../scss/kanban.scss */
+/* line 52, ../../scss/kanban.scss */
 .stage-block:nth-child(even) {
   background: #fceaff;
 }
-/* line 55, ../../scss/kanban.scss */
+/* line 56, ../../scss/kanban.scss */
 .stage-block .stage-title {
   text-align: center;
   font-size: 28px;
@@ -8683,45 +8709,45 @@ body {
   margin-bottom: 14px;
   color: #222;
 }
-/* line 63, ../../scss/kanban.scss */
+/* line 64, ../../scss/kanban.scss */
 .stage-block#name-block {
   width: 170px;
   margin: 0 10px 0 60px;
 }
-/* line 67, ../../scss/kanban.scss */
+/* line 68, ../../scss/kanban.scss */
 .stage-block#name-block .stage-title {
   padding-top: 6px;
   font-size: 18px;
   color: #222;
 }
-/* line 74, ../../scss/kanban.scss */
+/* line 75, ../../scss/kanban.scss */
 .stage-block#issues-block {
   margin-right: 60px;
   border-radius: 5px;
 }
-/* line 78, ../../scss/kanban.scss */
+/* line 79, ../../scss/kanban.scss */
 .stage-block#issues-block .issue-block-header {
   margin: 10px 21px;
 }
-/* line 83, ../../scss/kanban.scss */
+/* line 84, ../../scss/kanban.scss */
 .stage-block#todo-block {
   -moz-border-radius: 5px 0 0 5px;
   -webkit-border-radius: 5px;
   border-radius: 5px 0 0 5px;
 }
-/* line 87, ../../scss/kanban.scss */
+/* line 88, ../../scss/kanban.scss */
 .stage-block#done-block {
   -moz-border-radius: 0 5px 5px 0;
   -webkit-border-radius: 0;
   border-radius: 0 5px 5px 0;
 }
-/* line 91, ../../scss/kanban.scss */
+/* line 92, ../../scss/kanban.scss */
 .stage-block .cell-block {
   padding: 0;
   margin: 0 auto;
   list-style-type: none;
 }
-/* line 96, ../../scss/kanban.scss */
+/* line 97, ../../scss/kanban.scss */
 .stage-block .cell-block .dummy-user-cell-block {
   height: 172px;
   margin-bottom: 30px;
@@ -8729,28 +8755,28 @@ body {
   padding-bottom: 20px;
   position: relative;
 }
-/* line 103, ../../scss/kanban.scss */
+/* line 104, ../../scss/kanban.scss */
 .stage-block .cell-block .dummy-user-cell-block:last-child {
   margin-bottom: 50px;
 }
 
-/* line 110, ../../scss/kanban.scss */
+/* line 111, ../../scss/kanban.scss */
 div.user-block-area {
   position: absolute;
   top: 0;
   margin: 80px 0 0 330px;
 }
-/* line 115, ../../scss/kanban.scss */
+/* line 116, ../../scss/kanban.scss */
 div.user-block-area .user-area-header {
   height: 40px;
   margin: 0;
   padding: 0 20px;
 }
-/* line 121, ../../scss/kanban.scss */
+/* line 122, ../../scss/kanban.scss */
 div.user-block-area ul.user-blocks {
   position: relative;
 }
-/* line 124, ../../scss/kanban.scss */
+/* line 125, ../../scss/kanban.scss */
 div.user-block-area ul.user-blocks li.user-block {
   position: relative;
   background-color: rgba(242, 242, 242, 0.6);
@@ -8763,7 +8789,7 @@ div.user-block-area ul.user-blocks li.user-block {
   -webkit-box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.1);
   box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.1);
 }
-/* line 134, ../../scss/kanban.scss */
+/* line 135, ../../scss/kanban.scss */
 div.user-block-area ul.user-blocks li.user-block .user-name {
   font-size: 12px;
   height: 29px;
@@ -8779,26 +8805,26 @@ div.user-block-area ul.user-blocks li.user-block .user-name {
   position: absolute;
   z-index: 6;
 }
-/* line 147, ../../scss/kanban.scss */
+/* line 148, ../../scss/kanban.scss */
 div.user-block-area ul.user-blocks li.user-block .user-name .close {
   font-size: 14px;
   float: none;
 }
-/* line 153, ../../scss/kanban.scss */
+/* line 154, ../../scss/kanban.scss */
 div.user-block-area ul.user-blocks li.user-block .stage-blocks {
   margin-left: 30px;
 }
-/* line 156, ../../scss/kanban.scss */
+/* line 157, ../../scss/kanban.scss */
 div.user-block-area ul.user-blocks li.user-block .stage-blocks .stage-block {
   background-color: inherit;
 }
-/* line 159, ../../scss/kanban.scss */
+/* line 160, ../../scss/kanban.scss */
 div.user-block-area ul.user-blocks li.user-block .stage-blocks .stage-block .user-cell-block {
   margin: 20px 0 0 0;
   padding: 0;
 }
 
-/* line 169, ../../scss/kanban.scss */
+/* line 170, ../../scss/kanban.scss */
 .user-cell-block {
   height: 120px;
   margin-bottom: 30px;
@@ -8806,14 +8832,14 @@ div.user-block-area ul.user-blocks li.user-block .stage-blocks .stage-block .use
   padding-bottom: 20px;
   position: relative;
 }
-/* line 176, ../../scss/kanban.scss */
+/* line 177, ../../scss/kanban.scss */
 .user-cell-block .card-list {
   list-style-type: none;
   height: 100%;
   overflow: auto;
 }
 
-/* line 183, ../../scss/kanban.scss */
+/* line 184, ../../scss/kanban.scss */
 .card {
   width: 238px;
   height: 54px;
@@ -8828,14 +8854,14 @@ div.user-block-area ul.user-blocks li.user-block .stage-blocks .stage-block .use
   cursor: pointer;
   display: block;
 }
-/* line 195, ../../scss/kanban.scss */
+/* line 196, ../../scss/kanban.scss */
 .card .close {
-  margin: 0 0 2px 3x;
+  margin: 0 0 2px 2px;
   font-size: 18px;
   float: right;
 }
 
-/* line 203, ../../scss/kanban.scss */
+/* line 204, ../../scss/kanban.scss */
 .container {
   margin-left: 20px;
 }

@@ -24,7 +24,8 @@
         },
 
         applyBindings: function (global) {
-            global.effects = this;
+            if (!global.view) { global.view = {}; }
+            global.view.effects = this;
         }
     };
 

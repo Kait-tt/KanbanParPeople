@@ -8,7 +8,8 @@
         effects = view.effects,
         project = new model.Project(),
         kanban = new viewmodel.Kanban(),
-        projectId;
+        projectId,
+        miniMenus = new view.MiniMenu.init('.mini-menu');
 
     projectId = getProjectId();
     project.fetch(projectId)

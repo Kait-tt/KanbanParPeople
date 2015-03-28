@@ -21,8 +21,8 @@
             </div>
             <ul class="projects" data-bind="foreach: {
                 data: projects,
-                afterAdd: effects.fadeIn,
-                beforeRemove: effects.fadeOut }">
+                afterAdd: view.effects.fadeIn,
+                beforeRemove: view.effects.fadeOut }">
                 <li>
                     <a data-bind="attr: { href: url }">
                         <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
