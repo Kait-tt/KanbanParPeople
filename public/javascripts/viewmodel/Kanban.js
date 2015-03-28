@@ -28,11 +28,11 @@
             that.members = project.members;
             that.issues = project.issues;
             initSocket();
+            initSocketDebugMode();
         };
 
         that.addMember = function () {
             that.socket.emit('add-member', {userName: that.addMemberUserName()}, function (res) {
-                console.log(res);
                 if (res.status === 'success') {
                     // reset
                     that.addMemberUserName(null);
@@ -41,9 +41,7 @@
         };
 
         that.removeMember = function (member) {
-            that.socket.emit('remove-member', {userName: member.userName}, function (res) {
-                console.log(res);
-            });
+            that.socket.emit('remove-member', {userName: member.userName}, function (res) { });
         };
 
         that.addIssue = function () {
@@ -51,7 +49,6 @@
             var body = that.addIssueBody();
 
             that.socket.emit('add-issue', {title: title, body: body}, function (res) {
-                console.log(res);
                 if (res.status === 'success') {
                     // reset
                     that.addIssueTitle(null);
@@ -61,18 +58,14 @@
         };
 
         that.removeIssue = function (issue) {
-            that.socket.emit('remove-issue', {issueId: issue._id}, function (res) {
-                console.log(res);
-            });
+            that.socket.emit('remove-issue', {issueId: issue._id}, function (res) { });
         };
 
         function initSocket () {
             that.socket = io.connect();
 
             that.socket.on('connect', function () {
-                that.socket.emit('join-project-room', {projectId: that.project.id}, function (res) {
-                    console.log(res);
-                });
+                that.socket.emit('join-project-room', {projectId: that.project.id});
             });
 
             that.socket.on('add-member', function (res) {
@@ -96,6 +89,33 @@
                 });
                 that.issues.remove(targetIssue);
             });
+        }
+
+        function initSocketDebugMode () {
+            var onKeys = ['connect', 'add-member', 'remove-member', 'add-issue', 'remove-issue'];
+
+            // debug on event
+            onKeys.forEach(function (key) {
+                that.socket.on(key, function(res) {
+                    console.log('on: ' + key, res);
+                });
+            });
+
+            // debug on emit
+            (function (f) {
+                that.socket.emit = function (key, req, fn) {
+                    var callback = function (res) {
+                        console.log('callback: ' + key, res);
+                        if (fn) {
+                            fn.apply(this, arguments);
+                        }
+                    };
+
+                    console.log('emit: ' + key, req);
+
+                    f.call(that.socket, key, req, callback);
+                };
+            }(that.socket.emit));
         }
     }
 
