@@ -8,8 +8,8 @@
         effects = view.effects,
         project = new model.Project(),
         kanban = new viewmodel.Kanban(),
-        projectId,
-        miniMenus = new view.MiniMenu.init('.mini-menu');
+        MiniMenu = view.MiniMenu,
+        projectId;
 
     projectId = getProjectId();
     project.fetch(projectId)
@@ -18,6 +18,8 @@
         })
         .done(function () {
             effects.applyBindings(global);
+            MiniMenu.applyBindings(global);
+            MiniMenu.init();
             ko.applyBindings(alert, $('.alerts')[0]);
             ko.applyBindings(kanban);
         });

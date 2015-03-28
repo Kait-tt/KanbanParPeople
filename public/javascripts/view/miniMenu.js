@@ -4,9 +4,10 @@
     var ns = util.namespace('kpp.view'),
         defaultSelector = '.mini-menu',
         defaultOptions = {
-            r: 100,
-            duration: 500,
-            easing: 'easeOutCubic'
+            r: 90,
+            duration: 200,
+            easing: 'easeOutCubic',
+            margin: 0
         };
 
     ns.MiniMenu = ns.MiniMenu || MiniMenu;
@@ -23,17 +24,17 @@
         that.iconSize = that.$dom.children('.mini-menu-default').height();
 
         // add mouse event
-        that.$defaultButton.mouseenter(function () {
-            that.show();
-        });
-
-        that.$ul.mouseleave(function () {
-            that.hide();
-        });
+        that.$dom
+            .mouseenter(function () {
+                that.show();
+            })
+            .mouseleave(function () {
+                that.hide();
+            });
 
         // to initialize position and hidden
         that.$ul
-            .stop(true, true)
+            .stop(true, false)
             .css({
                 width: 0,
                 height: 0,
@@ -47,7 +48,7 @@
             var halfIconSize = that.iconSize / 2;
 
             $(this)
-                .stop(true, true)
+                .stop(true, false)
                 .css({
                     top : -halfIconSize,
                     left: -halfIconSize
@@ -61,6 +62,7 @@
             len = that.$li.length,
             duration = that.opts.duration,
             easing = that.opts.easing,
+            margin = that.opts.margin,
             r = that.opts.r;
 
         that.$ul
@@ -76,7 +78,7 @@
 
         that.$li.each(function (i) {
             var rate = i / len;
-            var alpha = Math.PI * 2 * rate;
+            var alpha = Math.PI * 2 * rate - Math.PI / 2;
             var halfIconSize = that.iconSize / 2;
             var halfR = r / 2;
 
@@ -84,8 +86,8 @@
                 .stop(true, false)
                 .show()
                 .animate({
-                    top : -halfIconSize + halfR + Math.sin(alpha) * (halfR - halfIconSize),
-                    left: -halfIconSize + halfR + Math.cos(alpha) * (halfR - halfIconSize)
+                    top : -halfIconSize + halfR + Math.sin(alpha) * (halfR - halfIconSize - margin),
+                    left: -halfIconSize + halfR + Math.cos(alpha) * (halfR - halfIconSize - margin)
                 }, duration, easing);
         });
     };
@@ -121,7 +123,21 @@
         return $(selector || defaultSelector).map(function () {
             return new MiniMenu(this, o);
         });
-    }
+    };
 
+    // to knockout
+    MiniMenu.applyBindings = function (global) {
+        if (!global.view) { global.view = {}; }
+
+        if (!global.view.MiniMenu) {
+            global.view.MiniMenu = {
+                init: function (doms) {
+                    doms.forEach(function (dom) {
+                        new MiniMenu($(dom).find(defaultSelector));
+                    });
+                }
+            };
+        }
+    };
 
 }(jQuery, _, window.nakazawa.util));

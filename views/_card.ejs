@@ -1,0 +1,29 @@
+<div class="card">
+    <div class="mini-menu">
+        <div class="mini-menu-default">
+            <button type="button" class="btn btn-sm btn-default">
+                <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
+            </button>
+        </div>
+        <ul class="mini-menu-list">
+            <li><button type="button" class="btn btn-sm btn-default">
+                    <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
+                </button></li>
+            <li><button type="button" class="btn btn-sm btn-default">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                </button></li>
+            <li><button type="button" class="btn btn-sm btn-default" data-bind="
+                                    click: $root.removeIssue">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                </button></li>
+            <li><button type="button" class="btn btn-sm btn-default">
+                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                </button></li>
+            <li><button type="button" class="btn btn-sm btn-default">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                </button></li>
+        </ul>
+    </div>
+
+    <span class="card-title" data-bind="text: title"></span>
+</div>

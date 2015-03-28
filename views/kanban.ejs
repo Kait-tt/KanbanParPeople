@@ -18,54 +18,27 @@ var stages = [
 <div class="main">
     <div class="container">
         <h1><%= title %></h1>
-
-        <div class="mini-menu">
-            <div class="mini-menu-default">
-                <button type="button" class="btn btn-sm btn-default">
-                    <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
-                </button>
-            </div>
-            <ul class="mini-menu-list">
-                <li><button type="button" class="btn btn-sm btn-default">
-                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                </button></li>
-                <li><button type="button" class="btn btn-sm btn-default">
-                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                </button></li>
-                <li><button type="button" class="btn btn-sm btn-default">
-                    <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
-                </button></li>
-                <li><button type="button" class="btn btn-sm btn-default">
-                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                </button></li>
-                <li><button type="button" class="btn btn-sm btn-default">
-                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                </button></li>
-            </ul>
-        </div>
     </div>
 
     <div class="blocks">
         <ul class="stage-blocks">
             <li id="issues-block" class="stage-block">
                 <h2 class="stage-title">Issues</h2>
+
                 <div class="issue-block-header">
                     <button type="button" class="btn btn-sm btn-default"
                             data-toggle="modal" data-target="#add-issue-modal">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add issue
                     </button>
                 </div>
+
                 <ul class="cell-block" data-bind="foreach: {
                     data: issues,
+                    afterRender: view.MiniMenu.init,
                     afterAdd: view.effects.slideDown,
                     beforeRemove: view.effects.slideUp }">
                     <li data-bind="if: assignee === null">
-                        <p class="card">
-                            <button type="button" class="close" aria-label="Close" data-bind="click: $root.removeIssue">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <span data-bind="text: title"></span>
-                        </p>
+                        <% include _card %>
                     </li>
                 </ul>
             </li>
@@ -109,48 +82,28 @@ var stages = [
                         <li id="todo-block" class="stage-block">
                             <div class="user-cell-block">
                                 <ul class="card-list" data-bind="foreach: todo">
-                                    <p class="card">
-                                        <button type="button" class="close" aria-label="Close" data-bind="click: $root.removeIssue">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                        <span data-bind="text: title"></span>
-                                    </p>
+                                    <% include _card %>
                                 </ul>
                             </div>
                         </li>
                         <li id="doing-block" class="stage-block">
                             <div class="user-cell-block">
                                 <ul class="card-list" data-bind="foreach: doing">
-                                    <p class="card">
-                                        <button type="button" class="close" aria-label="Close" data-bind="click: $root.removeIssue">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                        <span data-bind="text: title"></span>
-                                    </p>
+                                    <% include _card %>
                                 </ul>
                             </div>
                         </li>
                         <li id="review-block" class="stage-block">
                             <div class="user-cell-block">
                                 <ul class="card-list" data-bind="foreach: review">
-                                    <p class="card">
-                                        <button type="button" class="close" aria-label="Close" data-bind="click: $root.removeIssue">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                        <span data-bind="text: title"></span>
-                                    </p>
+                                    <% include _card %>
                                 </ul>
                             </div>
                         </li>
                         <li id="done-block" class="stage-block">
                             <div class="user-cell-block">
                                 <ul class="card-list" data-bind="foreach: done">
-                                    <p class="card">
-                                        <button type="button" class="close" aria-label="Close" data-bind="click: $root.removeIssue">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                        <span data-bind="text: title"></span>
-                                    </p>
+                                    <% include _card %>
                                 </ul>
                             </div>
                         </li>

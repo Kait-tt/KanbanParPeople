@@ -189,14 +189,27 @@ div.user-block-area {
   background-color: #fefefe;
   @include box-shadow(2px 2px 1px 0px rgba(#000, .1));
   border-radius: 6px;
-  overflow: hidden;
+  overflow: visible;
   cursor: pointer;
   display: block;
 
-  .close {
-    margin: 0 0 2px 2px;
+  .card-title {
+    display: inline-block;
+    margin: 2px;
+    padding: 0;
+    overflow: hidden;
+    width: $card-width - $card-padding * 2 - 41;
+    height: $card_height - $card_padding * 2 + 16 - 15;
+  }
+
+  .mini-menu {
+    margin: 0 0 1px 1px;
     font-size: 18px;
     float: right;
+
+    button {
+      border-style: none;
+    }
   }
 }
 

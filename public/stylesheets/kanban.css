@@ -8658,7 +8658,7 @@ body {
 /* line 15, ../../scss/_mini-menu.scss */
 .mini-menu .mini-menu-default {
   position: relative;
-  z-index: 20;
+  z-index: 10;
 }
 /* line 20, ../../scss/_mini-menu.scss */
 .mini-menu .mini-menu-list {
@@ -8669,7 +8669,7 @@ body {
   left: -35px;
   width: 70px;
   height: 70px;
-  background-color: #dddddd;
+  background-color: rgba(240, 240, 240, 0.8);
   border-radius: 35px;
 }
 /* line 31, ../../scss/_mini-menu.scss */
@@ -8859,18 +8859,31 @@ div.user-block-area ul.user-blocks li.user-block .stage-blocks .stage-block .use
   -webkit-box-shadow: 2px 2px 1px 0px rgba(0, 0, 0, 0.1);
   box-shadow: 2px 2px 1px 0px rgba(0, 0, 0, 0.1);
   border-radius: 6px;
-  overflow: hidden;
+  overflow: visible;
   cursor: pointer;
   display: block;
 }
 /* line 196, ../../scss/kanban.scss */
-.card .close {
-  margin: 0 0 2px 2px;
+.card .card-title {
+  display: inline-block;
+  margin: 2px;
+  padding: 0;
+  overflow: hidden;
+  width: 197px;
+  height: 39px;
+}
+/* line 205, ../../scss/kanban.scss */
+.card .mini-menu {
+  margin: 0 0 1px 1px;
   font-size: 18px;
   float: right;
 }
+/* line 210, ../../scss/kanban.scss */
+.card .mini-menu button {
+  border-style: none;
+}
 
-/* line 204, ../../scss/kanban.scss */
+/* line 217, ../../scss/kanban.scss */
 .container {
   margin-left: 20px;
 }

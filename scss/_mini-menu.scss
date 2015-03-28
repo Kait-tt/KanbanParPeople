@@ -14,7 +14,7 @@ $icon-size: 14px;
 
   .mini-menu-default {
     position: relative;
-    z-index: 20;
+    z-index: 10;
   }
 
   .mini-menu-list {
@@ -25,7 +25,7 @@ $icon-size: 14px;
     left: $mini-menu-size  / -2;
     width: $mini-menu-size;
     height: $mini-menu-size;
-    background-color: #dddddd;
+    background-color: rgba(240, 240, 240, 0.8);
     border-radius: $mini-menu-size / 2;
 
     li {
