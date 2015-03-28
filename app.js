@@ -7,13 +7,11 @@ var bodyParser = require('body-parser');
 var passport = require('passport');
 var GitHubStrategy = require('passport-github').Strategy;
 var mongoose = require('mongoose');
+var config = require('config');
 var sessionMiddleware = require('./lib/module/sessionMiddleware');
 
-var GITHUB_CLIENT_ID = process.env.KPP_GITHUB_CLIENT_ID;
-var GITHUB_CLIENT_SECRET = process.env.KPP_GITHUB_CLIENT_SECRET;
-
 // mongoose
-mongoose.connect('mongodb://localhost/kpp');
+mongoose.connect(config.mongo.url);
 
 // Passport session setup.
 passport.serializeUser(function(user, done) {
@@ -26,9 +24,9 @@ passport.deserializeUser(function(obj, done) {
 
 // Use the GitHubStrategy within Passport.
 passport.use(new GitHubStrategy({
-        clientID: GITHUB_CLIENT_ID,
-        clientSecret: GITHUB_CLIENT_SECRET,
-        callbackURL: 'http://127.0.0.1:3000/auth/github/callback',
+        clientID: config.github.clientID,
+        clientSecret: config.github.clientSecret,
+        callbackURL: config.github.callbackURL,
         scope: ['user', 'repo']
     },
     function(accessToken, refreshToken, profile, done) {

@@ -1,0 +1,23 @@
+{
+  "title": "KanbanParPeople",
+
+  "mongo": {
+    "url": "mongodb://localhost/kpp"
+  },
+
+  "github": {
+    "clientID": "",
+    "clientSecret": "",
+    "callbackURL": "http://127.0.0.1:3000/auth/github/callback",
+    "test": {
+      "token": "",
+      "user": "",
+      "repo": ""
+    }
+  },
+
+  "session": {
+    "name": "name",
+    "secret": "secret"
+  }
+}

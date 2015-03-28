@@ -7,3 +7,6 @@ public/vendor/
 .sass-cache
 
 *.log
+
+config/*
+!config/default.json
