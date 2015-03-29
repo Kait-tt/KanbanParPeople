@@ -1,12 +1,3 @@
-<%
-var stages = [
-    {name: 'todo', displayName: 'TODO'},
-    {name: 'doing', displayName: 'Doing'},
-    {name: 'review', displayName: 'Review'},
-    {name: 'done', displayName: 'Done'}
-];
-
-%>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -40,7 +31,7 @@ var stages = [
                     beforeRemove: view.effects.slideUp },
                 event: {
                     dragover: $root.dragAndDrop.ondragover,
-                    drop: $root.dragAndDrop.ondrop }">
+                    drop: $root.dragAndDrop.ondrop.bind(null, null) }">
                     <% include _card %>
                 </ul>
             </li>
@@ -70,6 +61,7 @@ var stages = [
 
             <ul class="user-blocks" data-bind="foreach: {
                     data: members,
+                    as: 'member',
                     afterAdd: view.effects.slideDown,
                     beforeRemove: view.effects.slideUp }">
                 <li class="user-block">
@@ -80,26 +72,22 @@ var stages = [
                         <span data-bind="text: userName"></span>
                     </p>
 
-                    <ul class="stage-blocks">
-                        <% stages.forEach(function (stage) { %>
-
-                        <li id="<%= stage.name %>-block" class="stage-block">
+                    <ul class="stage-blocks" data-bind="foreach: { data: <%= stageNamesJSON %>, as: 'stage' }">
+                        <li id="stage + '-block'" class="stage-block">
                             <div class="user-cell-block">
                                 <ul class="card-list" data-bind="
                                 foreach: {
-                                    data: <%= stage.name %>,
+                                    data: member[stage],
                                     afterRender: view.MiniMenu.init,
                                     afterAdd: view.effects.slideDown,
                                     beforeRemove: view.effects.slideUp },
                                 event: {
                                     dragover: $root.dragAndDrop.ondragover,
-                                    drop: $root.dragAndDrop.ondrop }">
+                                    drop: $root.dragAndDrop.ondrop.bind(this, member) }">
                                     <% include _card %>
                                 </ul>
                             </div>
                         </li>
-
-                        <% }); %>
                     </ul>
                 </li>
             </ul>

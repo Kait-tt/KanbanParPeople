@@ -2,6 +2,15 @@ var express = require('express');
 var router = express.Router();
 var Project = require('../lib/model/project');
 
+var stages = [
+    {name: 'todo', displayName: 'TODO'},
+    {name: 'doing', displayName: 'Doing'},
+    {name: 'review', displayName: 'Review'},
+    {name: 'done', displayName: 'Done'}
+];
+
+var stageNamesJSON = JSON.stringify(stages.map(function (stage) { return stage.name }));
+
 router.get('/:projectId/:projectName', function (req, res, next) {
     var id = req.params.projectId;
     var projectName = req.params.projectName;
@@ -22,7 +31,9 @@ router.get('/:projectId/:projectName', function (req, res, next) {
             res.render('kanban', {
                 title: project.name + ' | KanbanParPeople',
                 displayTitle: project.name + ' | KanbanParPeople',
-                project: project
+                project: project,
+                stages: stages,
+                stageNamesJSON: stageNamesJSON
             });
         });
 

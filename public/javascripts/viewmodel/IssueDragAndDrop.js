@@ -25,10 +25,18 @@
             return true;
         };
 
-        that.ondrop = function (data, event) {
+        that.ondrop = function (member, stage, event) {
+            if (!~stageTypes.indexOf(stage)) {
+                stage = 'issue';
+            }
+
             event.preventDefault();
             var issue = that.draggingIssue();
-            console.log(data, issue);
+            console.log(member, stage, issue);
+
+            // TODO: drop process
+
+
             return true;
         };
     }
