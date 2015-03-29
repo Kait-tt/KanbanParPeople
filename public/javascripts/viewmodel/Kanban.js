@@ -113,7 +113,7 @@
             });
 
             that.socket.on('add-member', function (res) {
-                that.project.addMember(new User(res.member.user));
+                that.project.addMember(res.member);
             });
 
             that.socket.on('remove-member', function (res) {
@@ -124,7 +124,7 @@
             });
 
             that.socket.on('add-issue', function (res) {
-                that.project.addIssue(new Issue(res.issue));
+                that.project.addIssue(res.issue);
             });
 
             that.socket.on('remove-issue', function (res) {

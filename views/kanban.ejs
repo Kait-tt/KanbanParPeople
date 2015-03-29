@@ -131,7 +131,7 @@ var stages = [
     <% include alert %>
 </div>
 
-<!-- Add Member Modal -->
+<!-- Issue Detail Modal -->
 <div class="modal fade" id="issue-detail-modal" tabindex="-1" role="dialog" aria-labelledby="issue-detail-modal-label" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -162,7 +162,7 @@ var stages = [
                     <div class="form-group">
                         <label for="issue-detail-assign" class="control-label">Assign</label>
                         <p class="form-control-static" id="issue-detail-assign"
-                           data-bind="text: $root.selectedIssue() && $root.selectedIssue().assignee"></p>
+                           data-bind="text: $root.selectedIssue() && $root.selectedIssue().assigneeUserName"></p>
                     </div>
                 </div>
                 <div class="modal-footer">

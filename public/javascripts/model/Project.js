@@ -33,9 +33,19 @@
         }.bind(this));
 
         this.noAssignedIssues = ko.observableArray();
-        this.members = bindMembers(o.members);
-        this.issues = bindIssues(o.issues);
+
+        this.members = ko.observableArray();
+        (o.members || []).forEach(function (member) { this.addMember(member, true); }, this);
+
+        this.issues = ko.observableArray();
+        (o.issues || []).forEach(function (issue) { this.addIssue(issue, true); }, this);
+
         bindIssuesToMembers(this.members, this.issues, this.noAssignedIssues);
+
+        this.noAssignedIssues.sort(Issue.sortFunc);
+        this.noAssignedIssues.subscribe(function () {
+            this.noAssignedIssues.peek().sort(Issue.sortFunc);
+        }, this);
 
         this.url = createUrl(this.create_user ? this.create_user.userName : 'me',
             this.id, this.name);
@@ -90,7 +100,6 @@
             }
         } else {
             this.noAssignedIssues.push(issue);
-            this.noAssignedIssues.sort(function (a, b) { return a._id() == b._id() ? 0 : (a._id() < b._id() ? -1 : 1) });
         }
     };
 
@@ -114,53 +123,55 @@
 
         member[oldStage].remove(issue);
         member[toStage].push(issue);
-        member.sortIssues(toStage);
     };
 
-    Project.prototype.addIssue = function (issue) {
-        this.issues.unshift(issue);
+    // direction true: push, false: unshift
+    Project.prototype.addIssue = function (issue, direction) {
+        var observableIssue = new Issue(issue);
+        // assigneeの名前版
+        observableIssue.assigneeUserName = ko.computed(function () {
+            var userId = observableIssue.assignee();
+            var member = _.find(this.members(), function (x) { return x._id === userId; });
+            return member ? member.userName : null;
+        }, this);
+
+        this.issues[direction ? 'push' : 'unshift'](observableIssue);
     };
 
     Project.prototype.removeIssue = function (issue) {
         this.issues.remove(issue);
     };
 
-    Project.prototype.addMember = function (user) {
-        this.members.unshift(user);
+    // direction true: push, false: unshift
+    Project.prototype.addMember = function (member, direction) {
+        var observableMember = new User(member.user);
+        this.members[direction ? 'push' : 'unshift'](observableMember);
     };
 
     Project.prototype.removeMember = function (member) {
         this.members.remove(member);
     };
 
-    function bindMembers (members) {
-        members = members || [];
-        return ko.observableArray(members.map(function (member) {
-            return new User(member.user);
-        }));
-    }
-
-    function bindIssues (issues) {
-        issues = issues || [];
-        return ko.observableArray(issues.map(function (issue) {
-            return new Issue(issue);
-        }));
-    }
-
     function bindIssuesToMembers(membersObservableArray, issuesObservableArray, noAssignedIssues) {
         var members = membersObservableArray(),
             issues = issuesObservableArray();
 
-        members.forEach(function (user) {
+        members.forEach(function (member) {
             var userIssues = issues.filter(function (issue) {
-                return issue.assignee() && issue.assignee() === user._id;
+                return issue.assignee() && issue.assignee() === member._id;
             });
 
             Issue.stageTypes.forEach(function (stageName) {
                 userIssues.filter(function (issue) {
                     return issue.stage() === stageName;
                 }).forEach(function (issue) {
-                    user[issue.stage()].push(issue);
+                    member[stageName].push(issue);
+                });
+
+                // sort init
+                member[stageName].sort(Issue.sortFunc);
+                member[stageName].subscribe(function () {
+                    member[stageName].peek().sort(Issue.sortFunc);
                 });
             });
         });

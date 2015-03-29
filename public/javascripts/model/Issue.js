@@ -29,6 +29,10 @@
         }.bind(this));
     };
 
+    Issue.sortFunc = function (a, b) {
+        return a._id() == b._id() ? 0 : (a._id() < b._id() ? -1 : 1);
+    };
+
     Issue.stageTypes = ['todo', 'doing', 'review', 'done'];
 
 }(_, window.nakazawa.util));
