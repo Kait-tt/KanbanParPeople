@@ -31,7 +31,7 @@
 
     User.prototype.assign = function (issue) {
         this.todo.push(issue);
-        this.todo.sort(function (a, b) { return a._id() == b._id() ? 0 : (a._id() < b._id() ? -1 : 1) })
+        this.sortIssues('todo');
     };
 
     User.prototype.unassign = function (issue) {
@@ -44,6 +44,10 @@
             }
 
         }.bind(this));
-    }
+    };
+
+    User.prototype.sortIssues = function (stage) {
+        this[stage].sort(function (a, b) { return a._id() == b._id() ? 0 : (a._id() < b._id() ? -1 : 1) })
+    };
 
 }(_, window.nakazawa.util));

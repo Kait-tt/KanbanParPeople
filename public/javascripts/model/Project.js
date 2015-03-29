@@ -90,8 +90,31 @@
             }
         } else {
             this.noAssignedIssues.push(issue);
-            this.noAssignedIssues.sort(function (a, b) { return a._id() == b._id() ? 0 : (a._id() < b._id() ? -1 : 1) })
+            this.noAssignedIssues.sort(function (a, b) { return a._id() == b._id() ? 0 : (a._id() < b._id() ? -1 : 1) });
         }
+    };
+
+    Project.prototype.updateStage = function (issueId, toStage) {
+        var issue = _.find(this.issues(), function (x) { return x._id() === issueId }),
+            oldStage, member;
+
+        if (!issue) {
+            console.error('issue not found');
+            return false;
+        }
+
+        member = _.findWhere(this.members(), {_id: issue.assignee()});
+        if (!member) {
+            console.error('assigned member not found');
+            return false;
+        }
+
+        oldStage = issue.stage();
+        issue.stage(toStage);
+
+        member[oldStage].remove(issue);
+        member[toStage].push(issue);
+        member.sortIssues(toStage);
     };
 
     Project.prototype.addIssue = function (issue) {

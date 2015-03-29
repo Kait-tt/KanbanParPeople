@@ -4,7 +4,8 @@
     var ns = util.namespace('kpp.viewmodel'),
         model = util.namespace('kpp.model'),
         User = model.User,
-        Issue = model.Issue;
+        Issue = model.Issue,
+        stageTypes = Issue.stageTypes;
 
     ns.Kanban = ns.Kanban || Kanban;
 
@@ -81,6 +82,29 @@
             });
         };
 
+        that.nextStage = function (issue) {
+            var currentStage = issue.stage(),
+                toStage = stageTypes[(stageTypes.indexOf(currentStage) + 1) % stageTypes.length];
+
+            that.socket.emit('update-stage', {issueId: issue._id(), toStage: toStage});
+        };
+
+        that.prevStage = function (issue) {
+            var currentStage = issue.stage(),
+                toIndex = stageTypes.indexOf(currentStage) - 1,
+                toStage;
+
+            if (toIndex < 0) {
+                console.error('cannot prev stage');
+                return false;
+            }
+
+            toStage = stageTypes[toIndex];
+
+            that.socket.emit('update-stage', {issueId: issue._id(), toStage: toStage});
+        };
+
+
         function initSocket () {
             that.socket = io.connect();
 
@@ -113,10 +137,14 @@
             that.socket.on('assign', function (res) {
                 that.project.assignIssue(res.issueId, res.memberId);
             });
+
+            that.socket.on('update-stage', function (res) {
+                that.project.updateStage(res.issueId, res.toStage);
+            })
         }
 
         function initSocketDebugMode () {
-            var onKeys = ['connect', 'add-member', 'remove-member', 'add-issue', 'remove-issue', 'assign'];
+            var onKeys = ['connect', 'add-member', 'remove-member', 'add-issue', 'remove-issue', 'assign', 'update-stage'];
 
             // debug on event
             onKeys.forEach(function (key) {

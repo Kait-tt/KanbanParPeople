@@ -13,7 +13,8 @@
             </li>
 
             <li>
-                <button type="button" class="btn btn-sm btn-default">
+                <button type="button" class="btn btn-sm btn-default"
+                        data-bind="click: $root.nextStage, css: {disabled: stage() === 'done' || stage() === 'issue'}">
                     <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
                 </button>
             </li>
@@ -33,7 +34,8 @@
             </li>
 
             <li>
-                <button type="button" class="btn btn-sm btn-default">
+                <button type="button" class="btn btn-sm btn-default"
+                        data-bind="click: $root.prevStage, css: {disabled: stage() === 'todo' || stage() === 'issue'}">
                     <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
                 </button>
             </li>

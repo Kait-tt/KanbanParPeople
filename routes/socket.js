@@ -113,6 +113,18 @@ module.exports = function (server) {
             assignIssue(projectId, req.issueId, req.userId, fn);
         });
 
+        // update stage
+        socket.on('update-stage', function (req, fn) {
+            req = req || {};
+            fn = fn || function () {};
+
+            if (!checkAuth(socket, fn) || !checkUserInRoom(socket, fn)) { return; }
+
+            var projectId = users[socket.id].projectRoomId;
+
+            updateStage(projectId, req.issueId, req.toStage, fn);
+        });
+
         // 切断
         socket.on('disconnect', function () {
             console.log('disconnected: ' + socket.id);
@@ -162,8 +174,16 @@ module.exports = function (server) {
         Project.assign({id: projectId}, issueId, userId, function (err, project, issue) {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
-            successWrap('assign', {issue: issue}, fn);
+            successWrap('assigned', {issue: issue}, fn);
             io.to(projectId).emit('assign', {issue: issue, issueId: issueId, memberId: userId});
+        });
+    }
+
+    function updateStage(projectId, issueId, toStage, fn) {
+        Project.updateStage({id: projectId}, issueId, toStage, function (err, project, issue) {
+
+            successWrap('updated stage', {issue: issue}, fn);
+            io.to(projectId).emit('update-stage', {issue: issue, issueId: issueId, toStage: toStage});
         });
     }
 
