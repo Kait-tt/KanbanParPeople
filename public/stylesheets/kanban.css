@@ -8639,11 +8639,6 @@ body {
   margin-top: 5px !important;
 }
 
-/* line 8, ../../scss/basic.scss */
-.navbar-static-top {
-  margin-bottom: 19px;
-}
-
 /* line 4, ../../scss/_mini-menu.scss */
 .mini-menu {
   position: relative;
@@ -8848,8 +8843,17 @@ div.user-block-area ul.user-blocks li.user-block .stage-blocks .stage-block .use
   height: 100%;
   overflow: visible;
 }
+/* line 183, ../../scss/kanban.scss */
+.user-cell-block .each-all-issues-view-button {
+  position: relative;
+  display: inline-block;
+  color: #999999;
+  float: right;
+  margin: 4px 21px 0 0;
+  padding: 0;
+}
 
-/* line 184, ../../scss/kanban.scss */
+/* line 193, ../../scss/kanban.scss */
 .card {
   width: 238px;
   height: 54px;
@@ -8864,7 +8868,7 @@ div.user-block-area ul.user-blocks li.user-block .stage-blocks .stage-block .use
   cursor: pointer;
   display: block;
 }
-/* line 196, ../../scss/kanban.scss */
+/* line 205, ../../scss/kanban.scss */
 .card .card-title {
   display: inline-block;
   margin: 2px;
@@ -8873,18 +8877,18 @@ div.user-block-area ul.user-blocks li.user-block .stage-blocks .stage-block .use
   width: 197px;
   height: 39px;
 }
-/* line 205, ../../scss/kanban.scss */
+/* line 214, ../../scss/kanban.scss */
 .card .mini-menu {
   margin: 0 0 1px 1px;
   font-size: 18px;
   float: right;
 }
-/* line 210, ../../scss/kanban.scss */
+/* line 219, ../../scss/kanban.scss */
 .card .mini-menu button {
   border-style: none;
 }
 
-/* line 217, ../../scss/kanban.scss */
+/* line 226, ../../scss/kanban.scss */
 .container {
   margin-left: 20px;
 }

@@ -76,11 +76,11 @@
                     </p>
 
                     <ul class="stage-blocks" data-bind="foreach: { data: <%= stageNamesJSON %>, as: 'stage' }">
-                        <li id="stage + '-block'" class="stage-block">
+                        <li class="stage-block">
                             <div class="user-cell-block">
                                 <ul class="card-list" data-bind="
                                 foreach: {
-                                    data: member[stage],
+                                    data: member[stage].slice(0, 2),
                                     afterRender: view.MiniMenu.init,
                                     afterAdd: view.effects.slideDown,
                                     beforeRemove: view.effects.slideUp },
@@ -89,6 +89,11 @@
                                     drop: $root.dragAndDrop.ondrop.bind(this, member) }">
                                     <% include _card %>
                                 </ul>
+
+                                <a class="each-all-issues-view-button" data-bind="
+                                visible: member[stage]().length > 2">
+                                    view all issues...
+                                </a>
                             </div>
                         </li>
                     </ul>
