@@ -11,9 +11,9 @@
     function Kanban(o) {
         var that = this;
 
-        that.members = ko.observableArray();
+        that.members = null;
 
-        that.issues = ko.observableArray();
+        that.issues = null;
 
         that.project = null;
 
@@ -22,6 +22,10 @@
         that.addIssueTitle = ko.observable();
 
         that.addIssueBody = ko.observable();
+
+        that.assignUserName = ko.observable();
+
+        that.selectedIssue = ko.observable();
 
         that.init = function (project) {
             that.project = project;
@@ -61,6 +65,24 @@
             that.socket.emit('remove-issue', {issueId: issue._id}, function (res) { });
         };
 
+        that.assignIssue = function () {
+            var issue = that.selectedIssue();
+            var userName = that.assignUserName();
+
+            var user = _.findWhere(that.members(), {userName: userName});
+
+            if (!user) {
+                // TODO: error
+                return;
+            }
+
+            that.socket.emit('assign', {issueId: issue._id, userId: user._id}, function () {
+                // reset
+                that.selectedIssue(null);
+                that.assignUserName(null);
+            });
+        };
+
         function initSocket () {
             that.socket = io.connect();
 
@@ -89,10 +111,14 @@
                 });
                 that.issues.remove(targetIssue);
             });
+
+            that.socket.on('assign', function (res) {
+                that.project.assignIssue(res.issueId, res.memberId);
+            });
         }
 
         function initSocketDebugMode () {
-            var onKeys = ['connect', 'add-member', 'remove-member', 'add-issue', 'remove-issue'];
+            var onKeys = ['connect', 'add-member', 'remove-member', 'add-issue', 'remove-issue', 'assign'];
 
             // debug on event
             onKeys.forEach(function (key) {

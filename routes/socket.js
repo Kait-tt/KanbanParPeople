@@ -30,7 +30,7 @@ module.exports = function (server) {
         /***** イベント登録 *****/
 
         // プロジェクトルームに参加
-        socket.json.on('join-project-room', function (req, fn) {
+        socket.on('join-project-room', function (req, fn) {
             req = req || {};
             fn = fn || function () {};
             var projectId = req.projectId;
@@ -53,7 +53,7 @@ module.exports = function (server) {
         });
 
         // memberの追放
-        socket.json.on('remove-member', function (req, fn) {
+        socket.on('remove-member', function (req, fn) {
             req = req || {};
             fn = fn || function () {};
 
@@ -66,7 +66,7 @@ module.exports = function (server) {
         });
 
         // memberの追加
-        socket.json.on('add-member', function (req, fn) {
+        socket.on('add-member', function (req, fn) {
             req = req || {};
             fn = fn || function () {};
 
@@ -78,7 +78,7 @@ module.exports = function (server) {
         });
 
         // issueの追加
-        socket.json.on('add-issue', function (req, fn) {
+        socket.on('add-issue', function (req, fn) {
             req = req || {};
             fn = fn || function () {};
 
@@ -90,7 +90,7 @@ module.exports = function (server) {
         });
 
         // issueの削除
-        socket.json.on('remove-issue', function (req, fn) {
+        socket.on('remove-issue', function (req, fn) {
             req = req || {};
             fn = fn || function () {};
 
@@ -99,6 +99,18 @@ module.exports = function (server) {
             var projectId = users[socket.id].projectRoomId;
 
             removeIssue(projectId, req.issueId, fn);
+        });
+
+        // assign
+        socket.on('assign', function (req, fn) {
+            req = req || {};
+            fn = fn || function () {};
+
+            if (!checkAuth(socket, fn) || !checkUserInRoom(socket, fn)) { return; }
+
+            var projectId = users[socket.id].projectRoomId;
+
+            assignIssue(projectId, req.issueId, req.userId, fn);
         });
 
         // 切断
@@ -115,7 +127,7 @@ module.exports = function (server) {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('removed member', {}, fn);
-            io.to(projectId).json.emit('remove-member', {member: member});
+            io.to(projectId).emit('remove-member', {member: member});
         });
     }
 
@@ -124,7 +136,7 @@ module.exports = function (server) {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('added member', {member: member}, fn);
-            io.to(projectId).json.emit('add-member', {member: member});
+            io.to(projectId).emit('add-member', {member: member});
         });
     }
 
@@ -133,7 +145,7 @@ module.exports = function (server) {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('added issue', {issue: issue}, fn);
-            io.to(projectId).json.emit('add-issue', {issue: issue});
+            io.to(projectId).emit('add-issue', {issue: issue});
         });
     }
 
@@ -142,7 +154,16 @@ module.exports = function (server) {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('removed issue', {issue: issue}, fn);
-            io.to(projectId).json.emit('remove-issue', {issue: issue});
+            io.to(projectId).emit('remove-issue', {issue: issue});
+        });
+    }
+
+    function assignIssue(projectId, issueId, userId, fn) {
+        Project.assign({id: projectId}, issueId, userId, function (err, project, issue) {
+            if (err) { serverErrorWrap(err, {}, fn); return; }
+
+            successWrap('assign', {issue: issue}, fn);
+            io.to(projectId).emit('assign', {issue: issue, issueId: issueId, memberId: userId});
         });
     }
 

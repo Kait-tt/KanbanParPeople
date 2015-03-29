@@ -58,6 +58,36 @@
         }.bind(this));
     };
 
+    Project.prototype.assignIssue = function (issueId, memberId) {
+        var issue = _.findWhere(this.issues(), {_id: issueId}),
+            member = _.findWhere(this.members(), {_id: memberId}),
+            oldAssigneeMember;
+
+        if (!issue || !member) {
+            // TODO error
+            console.error('issue or member not found');
+            return false;
+        }
+
+        // pull assigned
+        if (issue.assignee) {
+            oldAssigneeMember = _.findWhere(this.members(), {_id: issue.assignee});
+            if (oldAssigneeMember) {
+                oldAssigneeMember.unassign(issue);
+            }
+        }
+
+        // assign
+        issue.assignee = memberId;
+        if (member.assign(issue)) {
+            // TODO: error
+            console.error('cannot assign');
+            return false;
+        }
+
+        console.log(member);
+    };
+
     function bindMembers (members) {
         members = members || [];
         return ko.observableArray(members.map(function (member) {
@@ -90,7 +120,7 @@
             });
         });
 
-        // issues元と連携
+        // issueの追加、削除と連携
         issuesObservableArray.subscribe(function (changes) {
             changes.forEach(function (change) {
                 var issue = change.value,

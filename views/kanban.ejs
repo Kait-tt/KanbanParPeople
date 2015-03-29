@@ -202,6 +202,50 @@ var stages = [
     </div>
 </div>
 
+<!-- Assign Modal -->
+<div class="modal fade" id="assign-issue-modal" tabindex="-1" role="dialog" aria-labelledby="assign-issue-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="assign-issue-modal-label">Assign Issue</h4>
+            </div>
+            <form class="form">
+                <div class="modal-body">
+                    <p>
+                        Issueをアサインします。<br>
+                        アサイン情報情報を入力してください。
+                    </p>
+
+                    <div class="form-group">
+                        <label for="assign-issue-title" class="control-label">Issueのタイトル</label>
+                        <p class="form-control-static" id="assign-issue-title"
+                           data-bind="text: $root.selectedIssue() && $root.selectedIssue().title"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="assign-issue-body" class="control-label">Issueの説明</label>
+                        <p class="form-control-static" id="assign-issue-body"
+                           data-bind="text: $root.selectedIssue() && $root.selectedIssue().body"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="assign-issue-user" class="control-label">アサイン対象のユーザ名</label>
+                        <input type="text" class="form-control" id="assign-issue-user" placeholder="Assign User"
+                               data-bind="value: assignUserName" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success" data-dismiss="modal"
+                            data-bind="click: $root.assignIssue">Assign</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
 <!-- javascript -->
 <script src="/vendor/jquery/dist/jquery.min.js"></script>
 <script src="/vendor/jquery.easing/js/jquery.easing.min.js"></script>
