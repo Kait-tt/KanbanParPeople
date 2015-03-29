@@ -84,7 +84,6 @@
             oldAssigneeMember = _.findWhere(this.members(), {_id: issue.assignee()});
             if (oldAssigneeMember) {
                 oldAssigneeMember.unassign(issue);
-                issue.stage('issue');
             }
         } else {
             this.noAssignedIssues.remove(issue);
@@ -92,14 +91,15 @@
 
         // assign
         issue.assignee(memberId);
-        issue.stage('todo');
         if (member) {
             if (member.assign(issue)) {
                 console.error('cannot assign');
                 return false;
             }
+            issue.stage('todo');
         } else {
             this.noAssignedIssues.push(issue);
+            issue.stage('issue');
         }
     };
 
