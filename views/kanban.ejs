@@ -244,8 +244,14 @@
 
                     <div class="form-group">
                         <label for="assign-issue-user" class="control-label">アサイン対象のユーザ名</label>
-                        <input type="text" class="form-control" id="assign-issue-user" placeholder="Assign User"
-                               data-bind="value: assignUserName" required>
+
+                        <select class="form-control" id="assign-issue-user"
+                                data-bind="options: $root.members(),
+                                optionsText: 'userName',
+                                optionsValue: 'userName',
+                                value: $root.assignUserName,
+                                optionsCaption: '(no assignee)'" required>
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">
