@@ -32,12 +32,33 @@
 
             event.preventDefault();
             var issue = that.draggingIssue();
-            console.log(member, stage, issue);
 
-            // TODO: drop process
-
+            that.dropSuccess(member, stage, issue);
 
             return true;
+        };
+
+        that.dropSuccess = function (member, stage, issue) {
+            // if same member, change stage
+            // else assign
+
+            var currentAssignId = issue.assignee();
+            var nextAssignId = member ? member._id : null;
+            var nextAssignUserName = member ? member.userName : null;
+
+            if (currentAssignId !== nextAssignId) {
+                that.kanban.selectedIssue(issue);
+                that.kanban.assignUserName(nextAssignUserName);
+                that.kanban.assignIssue();
+                // stage is auto changed to 'todo'
+            } else {
+                var currentStage = issue.stage();
+                var nextStage = stage;
+
+                if (currentStage !== nextStage) {
+                    that.kanban.updateStage(issue, nextStage);
+                }
+            }
         };
     }
 

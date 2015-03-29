@@ -93,9 +93,18 @@
 
         that.nextStage = function (issue) {
             var currentStage = issue.stage(),
-                toStage = stageTypes[(stageTypes.indexOf(currentStage) + 1) % stageTypes.length];
+                toIndex = stageTypes.indexOf(currentStage) + 1,
+                toStage;
 
-            that.socket.emit('update-stage', {issueId: issue._id(), toStage: toStage});
+            if (toIndex >= stageTypes.length) {
+                // TODO: show error message
+                console.error('cannot next stage');
+                return false;
+            }
+
+            toStage = stageTypes[toIndex];
+
+            that.updateStage(issue, toStage);
         };
 
         that.prevStage = function (issue) {
@@ -104,12 +113,17 @@
                 toStage;
 
             if (toIndex < 0) {
+                // TODO: show error message
                 console.error('cannot prev stage');
                 return false;
             }
 
             toStage = stageTypes[toIndex];
 
+            that.updateStage(issue, toStage);
+        };
+
+        that.updateStage = function (issue, toStage) {
             that.socket.emit('update-stage', {issueId: issue._id(), toStage: toStage});
         };
 
