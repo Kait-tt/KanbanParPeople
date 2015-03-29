@@ -30,6 +30,15 @@
 
         that.selectedIssue = ko.observable();
 
+        that.updateIssueDetailTitle = ko.observable();
+
+        that.updateIssueDetailBody = ko.observable();
+
+        that.selectedIssue.subscribe(function (issue) {
+            that.updateIssueDetailTitle(issue ? issue.title() : null);
+            that.updateIssueDetailBody(issue ? issue.body() : null);
+        });
+
         that.init = function (project) {
             that.project = project;
             that.members = project.members;
@@ -104,6 +113,25 @@
             that.socket.emit('update-stage', {issueId: issue._id(), toStage: toStage});
         };
 
+        that.updateIssueDetail = function () {
+            if (!that.selectedIssue()) {
+                // TODO: view error message
+                console.error('unselected issue');
+                return;
+            }
+
+            that.socket.emit('update-issue-detail', {
+                issueId: that.selectedIssue()._id(),
+                title: that.updateIssueDetailTitle(),
+                body: that.updateIssueDetailBody()
+            }, function (res) {
+                if (res.status === 'success') {
+                    // reset
+                    that.selectedIssue(null);
+                }
+            });
+        };
+
 
         function initSocket () {
             that.socket = io.connect();
@@ -140,11 +168,24 @@
 
             that.socket.on('update-stage', function (res) {
                 that.project.updateStage(res.issueId, res.toStage);
-            })
+            });
+
+            that.socket.on('update-issue-detail', function (res) {
+                var targetIssue = _.find(that.issues(), function (issue) {
+                    return issue._id() === res.issue._id;
+                });
+
+                ['title', 'body'].forEach(function (key) {
+                    if (targetIssue[key]() !== res.issue[key]) {
+                        targetIssue[key](res.issue[key]);
+                    }
+                });
+            });
         }
 
         function initSocketDebugMode () {
-            var onKeys = ['connect', 'add-member', 'remove-member', 'add-issue', 'remove-issue', 'assign', 'update-stage'];
+            var onKeys = ['connect', 'add-member', 'remove-member', 'add-issue', 'remove-issue',
+                'assign', 'update-stage', 'update-issue-detail'];
 
             // debug on event
             onKeys.forEach(function (key) {
