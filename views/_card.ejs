@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card" draggable="true" data-bind="event: { dragstart: $root.dragAndDrop.ondragstart }">
     <div class="mini-menu">
         <div class="mini-menu-default">
             <button type="button" class="btn btn-sm btn-default">
@@ -21,7 +21,8 @@
                 </button>
             </li>
 
-            <li><button type="button" class="btn btn-sm btn-default"
+            <li>
+                <button type="button" class="btn btn-sm btn-default"
                         data-bind="click: $root.removeIssue">
                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                 </button>

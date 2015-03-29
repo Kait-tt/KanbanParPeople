@@ -9,7 +9,12 @@
         project = new model.Project(),
         kanban = new viewmodel.Kanban(),
         MiniMenu = view.MiniMenu,
+        issueDragAndDrop = new viewmodel.IssueDragAndDrop(kanban),
+        vm = {},
         projectId;
+
+    vm = kanban;
+    vm.dragAndDrop = issueDragAndDrop;
 
     projectId = getProjectId();
     project.fetch(projectId)
@@ -21,7 +26,7 @@
             MiniMenu.applyBindings(global);
             MiniMenu.init();
             ko.applyBindings(alert, $('.alerts')[0]);
-            ko.applyBindings(kanban);
+            ko.applyBindings(vm);
         });
 
     function getProjectId() {
