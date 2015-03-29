@@ -30,16 +30,12 @@
     };
 
     User.prototype.assign = function (issue) {
-        console.log('assign ' + issue._id + ' to ' + this.userName);
-
         this.todo.push(issue);
     };
 
     User.prototype.unassign = function (issue) {
-        console.log('unassign ' + issue._id + ' to ' + this.userName);
-
         _.each(stageTypes, function (key) {
-            var index = _.findIndex(this[key](), function (x) { return x._id === issue._id });
+            var index = _.findIndex(this[key](), function (x) { return x._id === issue._id() });
             if (index) {
                 return this[key].splice(index, 1)[0];
             } else {

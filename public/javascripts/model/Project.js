@@ -59,33 +59,33 @@
     };
 
     Project.prototype.assignIssue = function (issueId, memberId) {
-        var issue = _.findWhere(this.issues(), {_id: issueId}),
+        var issue = _.find(this.issues(), function (x) { return x._id() === issueId }),
             member = _.findWhere(this.members(), {_id: memberId}),
             oldAssigneeMember;
 
-        if (!issue || !member) {
-            // TODO error
-            console.error('issue or member not found');
+        if (!issue) {
+            console.error('issue not found');
             return false;
         }
 
         // pull assigned
-        if (issue.assignee) {
-            oldAssigneeMember = _.findWhere(this.members(), {_id: issue.assignee});
+        if (issue.assignee()) {
+            oldAssigneeMember = _.findWhere(this.members(), {_id: issue.assignee()});
             if (oldAssigneeMember) {
                 oldAssigneeMember.unassign(issue);
+                issue.stage('issue');
             }
         }
 
         // assign
-        issue.assignee = memberId;
-        if (member.assign(issue)) {
-            // TODO: error
-            console.error('cannot assign');
-            return false;
+        issue.assignee(memberId);
+        issue.stage('todo');
+        if (member) {
+            if (member.assign(issue)) {
+                console.error('cannot assign');
+                return false;
+            }
         }
-
-        console.log(member);
     };
 
     function bindMembers (members) {
@@ -108,14 +108,14 @@
 
         members.forEach(function (user) {
             var userIssues = issues.filter(function (issue) {
-                return issue.assignee && issue.assignee === user._id;
+                return issue.assignee() && issue.assignee() === user._id;
             });
 
             Issue.stageTypes.forEach(function (stageName) {
                 userIssues.filter(function (issue) {
-                    return issue.stage === stageName;
+                    return issue.stage() === stageName;
                 }).forEach(function (issue) {
-                    user[issue.stage].push(issue);
+                    user[issue.stage()].push(issue);
                 });
             });
         });
@@ -124,15 +124,15 @@
         issuesObservableArray.subscribe(function (changes) {
             changes.forEach(function (change) {
                 var issue = change.value,
-                    member = _.findWhere(membersObservableArray(), {_id: issue.assignee});
+                    member = _.findWhere(membersObservableArray(), {_id: issue.assignee()});
 
                 if (!member) { return; }
 
                 if (change.status === 'added') {
-                    member[issue.stage].unshift(issue);
+                    member[issue.stage()].unshift(issue);
 
                 } else if (change.status === 'deleted') {
-                    member[issue.stage].remove(issue);
+                    member[issue.stage()].remove(issue);
                 }
             });
         }, null, 'arrayChange');

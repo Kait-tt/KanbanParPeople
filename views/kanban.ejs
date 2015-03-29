@@ -37,7 +37,7 @@ var stages = [
                     afterRender: view.MiniMenu.init,
                     afterAdd: view.effects.slideDown,
                     beforeRemove: view.effects.slideUp }">
-                    <li data-bind="if: assignee === null">
+                    <li data-bind="if: assignee() === null && stage() === 'issue'">
                         <% include _card %>
                     </li>
                 </ul>

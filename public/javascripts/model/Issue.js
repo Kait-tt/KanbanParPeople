@@ -25,7 +25,7 @@
 
     Issue.prototype.init = function (o) {
         _.each(columnKeys, function (key) {
-            this[key] = o[key];
+            this[key] = ko.observable(o[key]);
         }.bind(this));
     };
 

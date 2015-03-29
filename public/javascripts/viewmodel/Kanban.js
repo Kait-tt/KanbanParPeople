@@ -62,7 +62,7 @@
         };
 
         that.removeIssue = function (issue) {
-            that.socket.emit('remove-issue', {issueId: issue._id}, function (res) { });
+            that.socket.emit('remove-issue', {issueId: issue._id()}, function (res) { });
         };
 
         that.assignIssue = function () {
@@ -71,12 +71,7 @@
 
             var user = _.findWhere(that.members(), {userName: userName});
 
-            if (!user) {
-                // TODO: error
-                return;
-            }
-
-            that.socket.emit('assign', {issueId: issue._id, userId: user._id}, function () {
+            that.socket.emit('assign', {issueId: issue._id(), userId: user ? user._id : null}, function () {
                 // reset
                 that.selectedIssue(null);
                 that.assignUserName(null);
@@ -107,7 +102,7 @@
 
             that.socket.on('remove-issue', function (res) {
                 var targetIssue = _.find(that.issues(), function (issue) {
-                    return issue._id === res.issue._id;
+                    return issue._id() === res.issue._id;
                 });
                 that.issues.remove(targetIssue);
             });
