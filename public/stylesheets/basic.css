@@ -8541,11 +8541,12 @@ button.close {
 }
 /* line 7, ../../scss/_common.scss */
 body {
+  padding-top: 70px;
   margin: 0;
   font-family: "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
 }
 
-/* line 12, ../../scss/_common.scss */
+/* line 13, ../../scss/_common.scss */
 .main {
   position: relative;
   min-height: 100%;
@@ -8553,11 +8554,6 @@ body {
   padding: 0;
   margin: 0;
   background: #fdfdfd;
-}
-
-/* line 23, ../../scss/_common.scss */
-.main .container {
-  margin-top: 20px;
 }
 
 /* line 1, ../../scss/_alert.scss */
@@ -8576,9 +8572,4 @@ body {
 .alerts > .alert-item {
   margin: 0;
   margin-top: 5px !important;
-}
-
-/* line 8, ../../scss/basic.scss */
-.navbar-static-top {
-  margin-bottom: 19px;
 }

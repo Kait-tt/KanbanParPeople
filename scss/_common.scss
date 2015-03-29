@@ -5,6 +5,7 @@ $background-second-color: #fae0ff;
 $background-basic-color: #fdfdfd;
 
 body {
+  padding-top: 70px;
   margin: 0;
   font-family: "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
 }
@@ -18,8 +19,4 @@ body {
   background: $background-basic-color;
 //  @include filter-gradient($background-second-color, $background-first-color, vertical);
 //  @include background-image(linear-gradient(right, $background-first-color 0%, $background-second-color 50%, $background-first-color 100%));
-}
-
-.main .container {
-  margin-top: 20px;
 }
