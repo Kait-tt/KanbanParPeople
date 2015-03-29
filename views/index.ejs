@@ -7,12 +7,31 @@
 </head>
 <body>
 
+<% include _header %>
+
 <div class="main">
     <div class="container">
         <h1><%= displayTitle %></h1>
-        <a href="/auth/github">Login with GitHub</a>
+
+        <% if (mustLogin) { %>
+        <p class="alert alert-danger">ログインしてください。</p>
+        <% } %>
+
+        <% if (logined) { %>
+
+        <p><a href="/users/me/" class="btn btn-default">利用する &raquo;</a></p>
+
+        <% } else { %>
+
+        <p><a type="button" class="btn btn-success" href="/auth/github">Login with GitHub &raquo;</a></p>
+
+        <% } %>
     </div>
 </div>
+
+<!-- include javascripts -->
+<script src="/vendor/jquery/dist/jquery.min.js"></script>
+<script src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
 
 </body>
 </html>

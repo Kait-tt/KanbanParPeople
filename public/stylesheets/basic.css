@@ -8547,7 +8547,7 @@ body {
 
 /* line 12, ../../scss/_common.scss */
 .main {
-  position: absolute;
+  position: relative;
   min-height: 100%;
   min-width: 100%;
   padding: 0;
@@ -8556,7 +8556,7 @@ body {
 }
 
 /* line 23, ../../scss/_common.scss */
-.container {
+.main .container {
   margin-top: 20px;
 }
 
@@ -8576,4 +8576,9 @@ body {
 .alerts > .alert-item {
   margin: 0;
   margin-top: 5px !important;
+}
+
+/* line 8, ../../scss/basic.scss */
+.navbar-static-top {
+  margin-bottom: 19px;
 }

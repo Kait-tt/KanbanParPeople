@@ -10,7 +10,7 @@ body {
 }
 
 .main {
-  position: absolute;
+  position: relative;
   min-height: 100%;
   min-width: 100%;
   padding: 0;
@@ -20,6 +20,6 @@ body {
 //  @include background-image(linear-gradient(right, $background-first-color 0%, $background-second-color 50%, $background-first-color 100%));
 }
 
-.container {
+.main .container {
   margin-top: 20px;
 }

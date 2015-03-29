@@ -6,9 +6,12 @@
     <link rel='stylesheet' href='/stylesheets/kanban.css'/>
 </head>
 <body>
+
+<% include _header %>
+
 <div class="main">
     <div class="container">
-        <h1><%= title %></h1>
+        <h1><%= displayTitle %></h1>
     </div>
 
     <div class="blocks">
@@ -256,7 +259,7 @@
     </div>
 </div>
 
-<!-- javascript -->
+<!-- include javascripts -->
 <script src="/vendor/jquery/dist/jquery.min.js"></script>
 <script src="/vendor/jquery.easing/js/jquery.easing.min.js"></script>
 <script src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -275,5 +278,6 @@
 <script src="/javascripts/viewmodel/Kanban.js"></script>
 <script src="/javascripts/viewmodel/IssueDragAndDrop.js"></script>
 <script src="/javascripts/roots/kanban.js"></script>
+
 </body>
 </html>

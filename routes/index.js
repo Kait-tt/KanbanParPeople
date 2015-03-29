@@ -1,15 +1,16 @@
 var express = require('express');
 var router = express.Router();
 
-router.get('/', function(req, res) {
-  res.render('index', {
-      title: 'KanbanParPeople',
-      displayTitle: 'KanbanParPeople'
-  });
-});
+router.get('/', function (req, res) {
+    var mustLogin = req.params.mustLogin === '1';
+    var logined = req.isAuthenticated && req.isAuthenticated();
 
-router.get('/kanban', function(req, res) {
-    res.render('kanban', { title: 'KanbanParPeople' });
+    res.render('index', {
+        title: 'KanbanParPeople',
+        displayTitle: 'KanbanParPeople',
+        logined: logined,
+        mustLogin: mustLogin
+    });
 });
 
 module.exports = router;

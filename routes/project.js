@@ -15,6 +15,8 @@ router.get('/:projectId/:projectName', function (req, res, next) {
     var id = req.params.projectId;
     var projectName = req.params.projectName;
     var userName = req.params.user;
+    var mustLogin = req.params.mustLogin === '1';
+    var logined = req.isAuthenticated && req.isAuthenticated();
 
     Project
         .findOne({
@@ -30,10 +32,12 @@ router.get('/:projectId/:projectName', function (req, res, next) {
 
             res.render('kanban', {
                 title: project.name + ' | KanbanParPeople',
-                displayTitle: project.name + ' | KanbanParPeople',
+                displayTitle: project.name,
                 project: project,
                 stages: stages,
-                stageNamesJSON: stageNamesJSON
+                stageNamesJSON: stageNamesJSON,
+                logined: logined,
+                mustLogin: mustLogin
             });
         });
 
