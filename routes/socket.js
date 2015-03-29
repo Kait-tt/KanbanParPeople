@@ -53,75 +53,32 @@ module.exports = function (server) {
         });
 
         // memberの追放
-        socket.on('remove-member', function (req, fn) {
-            req = req || {};
-            fn = fn || function () {};
-
-            if (!checkAuth(socket, fn) || !checkUserInRoom(socket, fn)) { return; }
-
-            var projectId = users[socket.id].projectRoomId;
-            var targetUserName = req.userName;
-
-            removeMember(projectId, targetUserName, fn);
+        socketOn(socket, 'remove-member', function (req, projectId, fn) {
+            removeMember(projectId, req.userName, fn);
         });
 
         // memberの追加
-        socket.on('add-member', function (req, fn) {
-            req = req || {};
-            fn = fn || function () {};
-
-            if (!checkAuth(socket, fn) || !checkUserInRoom(socket, fn)) { return; }
-
-            var projectId = users[socket.id].projectRoomId;
-
+        socketOn(socket, 'add-member', function (req, projectId, fn) {
             addMember(projectId, req.userName, fn);
         });
 
         // issueの追加
-        socket.on('add-issue', function (req, fn) {
-            req = req || {};
-            fn = fn || function () {};
-
-            if (!checkAuth(socket, fn) || !checkUserInRoom(socket, fn)) { return; }
-
-            var projectId = users[socket.id].projectRoomId;
-
+        socketOn(socket, 'add-issue', function (req, projectId, fn) {
             addIssue(projectId, req.title, req.body, fn);
         });
 
         // issueの削除
-        socket.on('remove-issue', function (req, fn) {
-            req = req || {};
-            fn = fn || function () {};
-
-            if (!checkAuth(socket, fn) || !checkUserInRoom(socket, fn)) { return; }
-
-            var projectId = users[socket.id].projectRoomId;
-
+        socketOn(socket, 'remove-issue', function (req, projectId, fn) {
             removeIssue(projectId, req.issueId, fn);
         });
 
         // assign
-        socket.on('assign', function (req, fn) {
-            req = req || {};
-            fn = fn || function () {};
-
-            if (!checkAuth(socket, fn) || !checkUserInRoom(socket, fn)) { return; }
-
-            var projectId = users[socket.id].projectRoomId;
-
+        socketOn(socket, 'assign', function (req, projectId, fn) {
             assignIssue(projectId, req.issueId, req.userId, fn);
         });
 
         // update stage
-        socket.on('update-stage', function (req, fn) {
-            req = req || {};
-            fn = fn || function () {};
-
-            if (!checkAuth(socket, fn) || !checkUserInRoom(socket, fn)) { return; }
-
-            var projectId = users[socket.id].projectRoomId;
-
+        socketOn(socket, 'update-stage', function (req, projectId, fn) {
             updateStage(projectId, req.issueId, req.toStage, fn);
         });
 
@@ -226,6 +183,19 @@ module.exports = function (server) {
             status: 'success',
             message: message
         }, otherParam || {}));
+    }
+
+    function socketOn(socket, eventName, callback) {
+        socket.on(eventName, function (req, fn) {
+            req = req || {};
+            fn = fn || function () {};
+
+            if (!checkAuth(socket, fn) || !checkUserInRoom(socket, fn)) { return; }
+
+            var projectId = users[socket.id].projectRoomId;
+
+            callback(req, projectId, fn);
+        });
     }
 
     // passport をチェック
