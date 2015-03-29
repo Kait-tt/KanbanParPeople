@@ -15,6 +15,8 @@
 
         that.issues = null;
 
+        that.noAssignedIssues = null;
+
         that.project = null;
 
         that.addMemberUserName = ko.observable();
@@ -31,6 +33,7 @@
             that.project = project;
             that.members = project.members;
             that.issues = project.issues;
+            that.noAssignedIssues = project.noAssignedIssues;
             initSocket();
             initSocketDebugMode();
         };
@@ -86,25 +89,25 @@
             });
 
             that.socket.on('add-member', function (res) {
-                that.members.unshift(new User(res.member.user));
+                that.project.addMember(new User(res.member.user));
             });
 
             that.socket.on('remove-member', function (res) {
                 var targetMember = _.find(that.members(), function (member) {
                     return member._id === res.member.user._id;
                 });
-                that.members.remove(targetMember);
+                that.project.removeMember(targetMember);
             });
 
             that.socket.on('add-issue', function (res) {
-                that.issues.unshift(new Issue(res.issue));
+                that.project.addIssue(new Issue(res.issue));
             });
 
             that.socket.on('remove-issue', function (res) {
                 var targetIssue = _.find(that.issues(), function (issue) {
                     return issue._id() === res.issue._id;
                 });
-                that.issues.remove(targetIssue);
+                that.project.removeIssue(targetIssue);
             });
 
             that.socket.on('assign', function (res) {

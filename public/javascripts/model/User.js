@@ -31,12 +31,13 @@
 
     User.prototype.assign = function (issue) {
         this.todo.push(issue);
+        this.todo.sort(function (a, b) { return a._id() == b._id() ? 0 : (a._id() < b._id() ? -1 : 1) })
     };
 
     User.prototype.unassign = function (issue) {
         _.each(stageTypes, function (key) {
-            var index = _.findIndex(this[key](), function (x) { return x._id === issue._id() });
-            if (index) {
+            var index = _.findIndex(this[key](), function (x) { return x._id() === issue._id() });
+            if (index >= 0) {
                 return this[key].splice(index, 1)[0];
             } else {
                 return false;

@@ -32,9 +32,10 @@
             this[key] = o[key];
         }.bind(this));
 
+        this.noAssignedIssues = ko.observableArray();
         this.members = bindMembers(o.members);
         this.issues = bindIssues(o.issues);
-        bindIssuesToMembers(this.members, this.issues);
+        bindIssuesToMembers(this.members, this.issues, this.noAssignedIssues);
 
         this.url = createUrl(this.create_user ? this.create_user.userName : 'me',
             this.id, this.name);
@@ -75,6 +76,8 @@
                 oldAssigneeMember.unassign(issue);
                 issue.stage('issue');
             }
+        } else {
+            this.noAssignedIssues.remove(issue);
         }
 
         // assign
@@ -85,7 +88,26 @@
                 console.error('cannot assign');
                 return false;
             }
+        } else {
+            this.noAssignedIssues.push(issue);
+            this.noAssignedIssues.sort(function (a, b) { return a._id() == b._id() ? 0 : (a._id() < b._id() ? -1 : 1) })
         }
+    };
+
+    Project.prototype.addIssue = function (issue) {
+        this.issues.unshift(issue);
+    };
+
+    Project.prototype.removeIssue = function (issue) {
+        this.issues.remove(issue);
+    };
+
+    Project.prototype.addMember = function (user) {
+        this.members.unshift(user);
+    };
+
+    Project.prototype.removeMember = function (member) {
+        this.members.remove(member);
     };
 
     function bindMembers (members) {
@@ -102,7 +124,7 @@
         }));
     }
 
-    function bindIssuesToMembers(membersObservableArray, issuesObservableArray) {
+    function bindIssuesToMembers(membersObservableArray, issuesObservableArray, noAssignedIssues) {
         var members = membersObservableArray(),
             issues = issuesObservableArray();
 
@@ -120,19 +142,30 @@
             });
         });
 
+        issues.filter(function (issue) {
+            return !issue.assignee() && issue.stage() === 'issue';
+        }).forEach(function (issue) {
+            noAssignedIssues.push(issue);
+        });
+
         // issueの追加、削除と連携
         issuesObservableArray.subscribe(function (changes) {
             changes.forEach(function (change) {
                 var issue = change.value,
                     member = _.findWhere(membersObservableArray(), {_id: issue.assignee()});
 
-                if (!member) { return; }
-
                 if (change.status === 'added') {
-                    member[issue.stage()].unshift(issue);
-
+                    if (member) {
+                        member[issue.stage()].unshift(issue);
+                    } else {
+                        noAssignedIssues.push(issue);
+                    }
                 } else if (change.status === 'deleted') {
-                    member[issue.stage()].remove(issue);
+                    if (member) {
+                        member[issue.stage()].remove(issue);
+                    } else {
+                        noAssignedIssues.remove(issue);
+                    }
                 }
             });
         }, null, 'arrayChange');
