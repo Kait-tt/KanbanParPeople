@@ -226,3 +226,64 @@ div.user-block-area {
 .container {
   margin-left: 20px;
 }
+
+.each-all-issues-view-area-wrap {
+  &.show {
+    position: fixed;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 1040;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  .each-all-issues-view-area-back {
+    background-color: rgba(255, 255, 255, 0);
+    @include transition(background-color 0.15s linear);
+
+    &.show {
+      position: fixed;
+      margin: 0;
+      padding: 0;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  .each-all-issues-view-area {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+
+    .each-all-issues-view-inner-area {
+      background-color: #505050;
+      margin: 30px 60px;
+      padding: 20px 40px;
+      border-radius: 10px;
+
+      .each-all-issues-view-title {
+        color: #fafafa;
+        margin-bottom: 10px;
+      }
+
+      .card-list {
+        list-style-type: none;
+
+        .card {
+          display: inline-block;
+          margin: 20px;
+        }
+      }
+    }
+  }
+}

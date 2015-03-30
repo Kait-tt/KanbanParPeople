@@ -90,7 +90,8 @@
                                     <% include _card %>
                                 </ul>
 
-                                <a class="each-all-issues-view-button" data-bind="
+                                <a href="#" class="each-all-issues-view-button" data-bind="
+                                click: $root.decideViewEachAllIssues.bind(this, member, stage),
                                 visible: member[stage]().length > 2">
                                     view all issues...
                                 </a>
@@ -267,6 +268,31 @@
             </form>
 
         </div>
+    </div>
+</div>
+
+<!-- view all issues -->
+<div class="each-all-issues-view-area-wrap" data-bind="css: { show: $root.viewEachAllIssues }">
+    <div class="each-all-issues-view-area-back"
+         data-bind="css: { show: $root.viewEachAllIssues },
+         click: $root.viewEachAllIssues.bind(null, null)"></div>
+    <div class="each-all-issues-view-area" data-bind="click: $root.viewEachAllIssues.bind(null, null)">
+        <!-- ko if: $root.viewEachAllIssues -->
+        <!-- ko with: $root.viewEachAllIssues() -->
+        <div class="each-all-issues-view-inner-area">
+            <h3 class="each-all-issues-view-title" data-bind="text: member.userName + '\'s ' + stage"></h3>
+
+            <ul class="card-list" data-bind="
+            foreach: {
+                data: issues,
+                afterRender: view.MiniMenu.init,
+                afterAdd: view.effects.slideDown,
+                beforeRemove: view.effects.slideUp }">
+                <% include _card %>
+            </ul>
+        </div>
+        <!-- /ko -->
+        <!-- /ko -->
     </div>
 </div>
 

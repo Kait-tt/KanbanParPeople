@@ -16,6 +16,21 @@
     vm = kanban;
     vm.dragAndDrop = issueDragAndDrop;
 
+    vm.viewEachAllIssues = ko.observable(null);
+    vm.decideViewEachAllIssues = function (member, stage) {
+        if (!member) {
+            vm.viewEachAllIssues(null);
+            $('body').removeClass('modal-open');
+        } else {
+            vm.viewEachAllIssues({
+                member: member,
+                stage: stage,
+                issues: member[stage]
+            });
+            $('body').addClass('modal-open');
+        }
+    };
+
     projectId = getProjectId();
     project.fetch(projectId)
         .then(function () {
