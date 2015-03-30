@@ -18,6 +18,7 @@
 
     vm.viewEachAllIssues = ko.observable(null);
     vm.decideViewEachAllIssues = function (member, stage) {
+        console.log(member);
         if (!member) {
             vm.viewEachAllIssues(null);
             $('body').removeClass('modal-open');

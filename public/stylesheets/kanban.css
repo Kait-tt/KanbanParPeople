@@ -8894,6 +8894,10 @@ div.user-block-area ul.user-blocks li.user-block .stage-blocks .stage-block .use
 }
 
 /* line 231, ../../scss/kanban.scss */
+.each-all-issues-view-area-wrap .each-all-issues-view-area {
+  display: none;
+}
+/* line 235, ../../scss/kanban.scss */
 .each-all-issues-view-area-wrap.show {
   position: fixed;
   margin: 0;
@@ -8906,16 +8910,40 @@ div.user-block-area ul.user-blocks li.user-block .stage-blocks .stage-block .use
   overflow-x: hidden;
   overflow-y: auto;
 }
-/* line 243, ../../scss/kanban.scss */
-.each-all-issues-view-area-wrap .each-all-issues-view-area-back {
-  background-color: rgba(255, 255, 255, 0);
-  -moz-transition: background-color 0.15s linear;
-  -o-transition: background-color 0.15s linear;
-  -webkit-transition: background-color 0.15s linear;
-  transition: background-color 0.15s linear;
-}
 /* line 247, ../../scss/kanban.scss */
-.each-all-issues-view-area-wrap .each-all-issues-view-area-back.show {
+.each-all-issues-view-area-wrap.show .each-all-issues-view-area {
+  display: block;
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+/* line 257, ../../scss/kanban.scss */
+.each-all-issues-view-area-wrap.show .each-all-issues-view-area .each-all-issues-view-inner-area {
+  background-color: #505050;
+  margin: 30px 60px;
+  padding: 20px 40px;
+  border-radius: 10px;
+}
+/* line 263, ../../scss/kanban.scss */
+.each-all-issues-view-area-wrap.show .each-all-issues-view-area .each-all-issues-view-inner-area .each-all-issues-view-title {
+  color: #fafafa;
+  margin-bottom: 10px;
+}
+/* line 268, ../../scss/kanban.scss */
+.each-all-issues-view-area-wrap.show .each-all-issues-view-area .each-all-issues-view-inner-area .card-list {
+  list-style-type: none;
+}
+/* line 271, ../../scss/kanban.scss */
+.each-all-issues-view-area-wrap.show .each-all-issues-view-area .each-all-issues-view-inner-area .card-list .card {
+  display: inline-block;
+  margin: 20px;
+}
+/* line 279, ../../scss/kanban.scss */
+.each-all-issues-view-area-wrap.show .each-all-issues-view-area-back {
   position: fixed;
   margin: 0;
   padding: 0;
@@ -8925,34 +8953,11 @@ div.user-block-area ul.user-blocks li.user-block .stage-blocks .stage-block .use
   left: 0;
   background-color: rgba(0, 0, 0, 0.5);
 }
-/* line 259, ../../scss/kanban.scss */
-.each-all-issues-view-area-wrap .each-all-issues-view-area {
-  position: absolute;
-  margin: 0;
-  padding: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-}
-/* line 268, ../../scss/kanban.scss */
-.each-all-issues-view-area-wrap .each-all-issues-view-area .each-all-issues-view-inner-area {
-  background-color: #505050;
-  margin: 30px 60px;
-  padding: 20px 40px;
-  border-radius: 10px;
-}
-/* line 274, ../../scss/kanban.scss */
-.each-all-issues-view-area-wrap .each-all-issues-view-area .each-all-issues-view-inner-area .each-all-issues-view-title {
-  color: #fafafa;
-  margin-bottom: 10px;
-}
-/* line 279, ../../scss/kanban.scss */
-.each-all-issues-view-area-wrap .each-all-issues-view-area .each-all-issues-view-inner-area .card-list {
-  list-style-type: none;
-}
-/* line 282, ../../scss/kanban.scss */
-.each-all-issues-view-area-wrap .each-all-issues-view-area .each-all-issues-view-inner-area .card-list .card {
-  display: inline-block;
-  margin: 20px;
+/* line 291, ../../scss/kanban.scss */
+.each-all-issues-view-area-wrap .each-all-issues-view-area-back {
+  background-color: rgba(255, 255, 255, 0);
+  -moz-transition: background-color 0.15s linear;
+  -o-transition: background-color 0.15s linear;
+  -webkit-transition: background-color 0.15s linear;
+  transition: background-color 0.15s linear;
 }

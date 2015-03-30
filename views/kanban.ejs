@@ -9,7 +9,7 @@
 
 <% include _header %>
 
-<div class="main">
+<div class="main" data-bind="visible: true" style="display: none">
     <div class="container">
         <h1><%= displayTitle %></h1>
     </div>
@@ -274,9 +274,8 @@
 <!-- view all issues -->
 <div class="each-all-issues-view-area-wrap" data-bind="css: { show: $root.viewEachAllIssues }">
     <div class="each-all-issues-view-area-back"
-         data-bind="css: { show: $root.viewEachAllIssues },
-         click: $root.viewEachAllIssues.bind(null, null)"></div>
-    <div class="each-all-issues-view-area" data-bind="click: $root.viewEachAllIssues.bind(null, null)">
+         data-bind="click: $root.decideViewEachAllIssues.bind(null, null)"></div>
+    <div class="each-all-issues-view-area" data-bind="click: $root.decideViewEachAllIssues.bind(null, null)">
         <!-- ko if: $root.viewEachAllIssues -->
         <!-- ko with: $root.viewEachAllIssues() -->
         <div class="each-all-issues-view-inner-area">
