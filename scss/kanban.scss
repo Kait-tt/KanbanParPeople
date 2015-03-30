@@ -197,17 +197,30 @@ div.user-block-area {
   padding: $card_padding;
   background-color: #fefefe;
   @include box-shadow(2px 2px 1px 0px rgba(#000, .1));
-  border-radius: 6px;
   overflow: visible;
   cursor: pointer;
   display: block;
+
+  &:before {
+    content: " ";
+    background: #3498db;
+    float: left;
+    position: relative;
+    display: inline-block;
+    top: 0;
+    left: 0;
+    height: $card_height - $card_padding * 2 + 16;
+    width: 15px;
+    margin: $card_padding * -1;
+  }
 
   .card-title {
     display: inline-block;
     margin: 2px;
     padding: 0;
     overflow: hidden;
-    width: $card-width - $card-padding * 2 - 41;
+    margin-left: 12px;
+    width: $card-width - $card-padding * 2 - 41 - 15;
     height: $card_height - $card_padding * 2 + 16 - 15;
   }
 
