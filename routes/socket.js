@@ -71,7 +71,7 @@ module.exports = function (server) {
 
         // issueの削除
         socketOn(socket, 'remove-issue', function (req, projectId, fn) {
-            removeIssue(projectId, req.issueId, fn);
+            removeIssue(projectId, user.info.token, req.issueId, fn);
         });
 
         // assign
@@ -117,7 +117,7 @@ module.exports = function (server) {
     }
 
     function addIssue(projectId, token, title, body, fn) {
-        Project.addIssue({id: projectId}, {token: token, title: title, body: body}, function (err, project, issue) {
+        Project.addIssue({id: projectId}, token, {title: title, body: body}, function (err, project, issue) {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('added issue', {issue: issue}, fn);
@@ -125,8 +125,8 @@ module.exports = function (server) {
         });
     }
 
-    function removeIssue(projectId, issueId, fn) {
-        Project.removeIssue({id: projectId}, issueId, function (err, project, issue) {
+    function removeIssue(projectId, token, issueId, fn) {
+        Project.removeIssue({id: projectId}, token, issueId, function (err, project, issue) {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('removed issue', {issue: issue}, fn);
