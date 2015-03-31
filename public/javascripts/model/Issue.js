@@ -30,7 +30,7 @@
     };
 
     Issue.sortFunc = function (a, b) {
-        return a._id() == b._id() ? 0 : (a._id() < b._id() ? -1 : 1);
+        return a._id() == b.created_at() ? 0 : (a.created_at() > b.created_at() ? -1 : 1);
     };
 
     Issue.stageTypes = ['todo', 'doing', 'review', 'done'];

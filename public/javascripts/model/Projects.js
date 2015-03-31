@@ -25,6 +25,7 @@
                 var item = new Project(project);
                 this.items.push(item);
             }.bind(this));
+            this.items.sort(Projects.sortFunc);
         }.bind(this));
     };
 
@@ -37,7 +38,12 @@
         }).then(function (res) {
             var item = new Project(res.project);
             this.items.push(item);
+            this.items.sort(Projects.sortFunc);
         }.bind(this));
+    };
+
+    Projects.sortFunc = function (a, b) {
+        return a._id == b._id ? 0 : (a._id > b._id ? -1 : 1);
     };
 
 }(_, window.nakazawa.util));
