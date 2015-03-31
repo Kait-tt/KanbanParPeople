@@ -22,7 +22,7 @@
                 <div class="issue-block-header">
                     <button type="button" class="btn btn-sm btn-default"
                             data-toggle="modal" data-target="#add-issue-modal">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add issue
+                        <span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span> Add issue
                     </button>
                 </div>
 
@@ -118,28 +118,45 @@
             <form class="form">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="issue-detail-title" class="control-label">タイトル</label>
+                        <label for="issue-detail-title" class="control-label">
+                           <span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span> タイトル
+                        </label>
                         <input type="text" class="form-control" id="issue-detail-title" placeholder="Title"
                            data-bind="value: $root.updateIssueDetailTitle">
                     </div>
 
                     <div class="form-group">
-                        <label for="issue-detail-body" class="control-label">説明</label>
+                        <label for="issue-detail-body" class="control-label">
+                            <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span> 説明
+                        </label>
                         <textarea class="form-control" rows="3" id="issue-detail-body" placeholder="Body"
                                   data-bind="value: $root.updateIssueDetailBody"></textarea>
                     </div>
 
+                    <!-- ko if: $root.selectedIssue() -->
+                    <!-- ko with: $root.selectedIssue() -->
                     <div class="form-group">
-                        <label for="issue-detail-stage" class="control-label">Stage</label>
-                        <p class="form-control-static" id="issue-detail-stage"
-                           data-bind="text: $root.selectedIssue() && $root.selectedIssue().stage"></p>
+                        <label for="issue-detail-stage" class="control-label">
+                            <span class="glyphicon glyphicon-road" aria-hidden="true"></span> Stage
+                        </label>
+                        <p class="form-control-static" id="issue-detail-stage" data-bind="text: stage"></p>
                     </div>
 
                     <div class="form-group">
-                        <label for="issue-detail-assign" class="control-label">Assign</label>
+                        <label for="issue-detail-assign" class="control-label">
+                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Assign
+                        </label>
                         <p class="form-control-static" id="issue-detail-assign"
-                           data-bind="text: $root.selectedIssue() && $root.selectedIssue().assigneeUserName"></p>
+                           data-bind="text: assigneeUserName"></p>
                     </div>
+
+                    <div>
+                        <a data-bind="attr: { href: github && github.url }">
+                            <span class="glyphicon glyphicon-link" aria-hidden="true"></span> GitHub
+                        </a>
+                    </div>
+                    <!-- /ko -->
+                    <!-- /ko -->
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -167,7 +184,9 @@
                         追加するメンバー情報を入力してください。
                     </p>
                     <div class="form-group">
-                        <label for="add-member-username" class="control-label">GitHubのユーザ名</label>
+                        <label for="add-member-username" class="control-label">
+                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span> GitHubのユーザ名
+                        </label>
                         <input type="text" class="form-control" id="add-member-username" placeholder="GitHub User Name"
                                data-bind="value: addMemberUserName" required>
                     </div>
@@ -199,13 +218,17 @@
                     </p>
 
                     <div class="form-group">
-                        <label for="add-issue-title" class="control-label">タイトル</label>
+                        <label for="add-issue-title" class="control-label">
+                            <span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span> タイトル
+                        </label>
                         <input type="text" class="form-control" id="add-issue-title" placeholder="Title"
                                data-bind="value: addIssueTitle" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="add-issue-body" class="control-label">説明</label>
+                        <label for="add-issue-body" class="control-label">
+                            <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span> 説明
+                        </label>
                         <textarea class="form-control" rows="3" id="add-issue-body" placeholder="Body"
                                data-bind="value: addIssueBody"></textarea>
                     </div>
@@ -237,19 +260,25 @@
                     </p>
 
                     <div class="form-group">
-                        <label for="assign-issue-title" class="control-label">Issueのタイトル</label>
+                        <label for="assign-issue-title" class="control-label">
+                            <span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span> Issueのタイトル
+                        </label>
                         <p class="form-control-static" id="assign-issue-title"
                            data-bind="text: $root.selectedIssue() && $root.selectedIssue().title"></p>
                     </div>
 
                     <div class="form-group">
-                        <label for="assign-issue-body" class="control-label">Issueの説明</label>
+                        <label for="assign-issue-body" class="control-label">
+                            <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span> Issueの説明
+                        </label>
                         <p class="form-control-static" id="assign-issue-body"
                            data-bind="text: $root.selectedIssue() && $root.selectedIssue().body"></p>
                     </div>
 
                     <div class="form-group">
-                        <label for="assign-issue-user" class="control-label">アサイン対象のユーザ名</label>
+                        <label for="assign-issue-user" class="control-label">
+                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span> アサイン対象のユーザ名
+                        </label>
 
                         <select class="form-control" id="assign-issue-user"
                                 data-bind="options: $root.members(),
