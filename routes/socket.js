@@ -16,11 +16,13 @@ module.exports = function (server) {
     io.sockets.on('connection', function (socket) {
         console.log('new connected: ' + socket.id);
 
-        users[socket.id] = {
+        var user = {
             info: !socket.request.session ? null :
                 !socket.request.session.passport ? null :
-                socket.request.session.passport.user
+                    socket.request.session.passport.user
         };
+
+        users[socket.id] = user;
 
         // ログインしていなかったら接続を切る
         if (!checkAuth(socket, function (message) { socket.disconnect(message); })) {
@@ -64,7 +66,7 @@ module.exports = function (server) {
 
         // issueの追加
         socketOn(socket, 'add-issue', function (req, projectId, fn) {
-            addIssue(projectId, req.title, req.body, fn);
+            addIssue(projectId, user.info.token, req.title, req.body, fn);
         });
 
         // issueの削除
@@ -114,8 +116,8 @@ module.exports = function (server) {
         });
     }
 
-    function addIssue(projectId, title, body, fn) {
-        Project.addIssue({id: projectId}, {title: title, body: body}, function (err, project, issue) {
+    function addIssue(projectId, token, title, body, fn) {
+        Project.addIssue({id: projectId}, {token: token, title: title, body: body}, function (err, project, issue) {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('added issue', {issue: issue}, fn);
