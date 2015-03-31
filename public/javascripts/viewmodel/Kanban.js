@@ -39,13 +39,23 @@
             that.updateIssueDetailBody(issue ? issue.body() : null);
         });
 
+        that.issueNums = {};
+
         that.init = function (project) {
             that.project = project;
             that.members = project.members;
             that.issues = project.issues;
             that.noAssignedIssues = project.noAssignedIssues;
+
+            stageTypes.concat(['issue']).forEach(function (type) {
+                that.issueNums[type] = ko.computed(function () {
+                    return that.issues().filter(function (x) { return x.stage() === type }).length;
+                });
+            });
+
             initSocket();
             initSocketDebugMode();
+
         };
 
         that.addMember = function () {

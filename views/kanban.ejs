@@ -17,7 +17,9 @@
     <div class="blocks">
         <ul class="stage-blocks">
             <li id="issues-block" class="stage-block">
-                <h2 class="stage-title">Issues</h2>
+                <h2 class="stage-title">
+                    Issues<span class="badge" data-bind="text: $root.issueNums.issue"></span>
+                </h2>
 
                 <div class="issue-block-header">
                     <button type="button" class="btn btn-sm btn-default"
@@ -42,7 +44,9 @@
             <% stages.forEach(function (stage) { %>
 
             <li id="<%= stage.name %>-block" class="stage-block">
-                <h2 class="stage-title"><%= stage.displayName %></h2>
+                <h2 class="stage-title">
+                    <%= stage.displayName %><span class="badge" data-bind="text: $root.issueNums.<%= stage.name %>"></span>
+                </h2>
                 <ul class="cell-block" data-bind="foreach: {
                 data: members,
                 afterAdd: view.effects.slideDown,
@@ -93,7 +97,7 @@
                                 <a href="#" class="each-all-issues-view-button" data-bind="
                                 click: $root.decideViewEachAllIssues.bind(this, member, stage),
                                 visible: member[stage]().length > 2">
-                                    view all issues...
+                                    view all issues... <span class="badge" data-bind="text: member[stage]().length"></span>
                                 </a>
                             </div>
                         </li>

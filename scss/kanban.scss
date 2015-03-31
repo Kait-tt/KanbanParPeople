@@ -59,6 +59,15 @@ $issue-block_right-margin: 60px;
     margin-top: 8px;
     margin-bottom: 14px;
     color: #222;
+
+    .badge {
+      position: absolute;
+      display: inline-block;
+      vertical-align: top;
+      margin-left: 4px;
+      background: #999999;
+      font-size: 11px;
+    }
   }
 
   &#name-block {
@@ -187,6 +196,11 @@ div.user-block-area {
     float: right;
     margin: 4px 21px 0 0;
     padding: 0;
+
+    .badge {
+      background: #999999;
+      font-size: 11px;
+    }
   }
 }
 
