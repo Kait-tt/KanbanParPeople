@@ -33,6 +33,4 @@
         return a._id() == b.created_at() ? 0 : (a.created_at() > b.created_at() ? -1 : 1);
     };
 
-    Issue.stageTypes = ['todo', 'doing', 'review', 'done'];
-
 }(_, window.nakazawa.util));
