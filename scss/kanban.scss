@@ -26,8 +26,8 @@ $issue-block_right-margin: 60px;
 
 .blocks {
   position: relative;
-  width: $block_width * 5 + $issue-block_right-margin + 30 + $block_padding * 4;
-  padding: 20px;
+  width: $block_width * 6 + $issue-block_right-margin * 2 + 30 + $block_padding * 4;
+  padding: 10px 20px;
   margin: 0;
 }
 
@@ -81,21 +81,30 @@ $issue-block_right-margin: 60px;
     }
   }
 
-  &#issues-block {
-    margin-right: $issue-block_right-margin;
-    border-radius: 5px;
+  &#issue-block {
+    @include border-radius(5px 0 0 5px);
 
     .issue-block-header {
-      margin: 10px 21px;
+      padding-left: 21px;
     }
+  }
+
+  &#backlog-block {
+    @include border-radius(0 5px 5px 0);
+    margin-right: $issue-block_right-margin;
   }
 
   &#todo-block {
     @include border-radius(5px 0 0 5px);
   }
 
-  &#done-block {
+  &#review-block {
     @include border-radius(0 5px 5px 0);
+    margin-right: $issue-block_right-margin;
+  }
+
+  &#done-block {
+    @include border-radius(5px);
   }
 
   .cell-block {
@@ -111,7 +120,7 @@ $issue-block_right-margin: 60px;
       position: relative;
 
       &:last-child {
-        margin-bottom: $user_margin-bottom + 20;
+        margin-bottom: $user_margin-bottom;
       }
     }
   }
@@ -120,7 +129,7 @@ $issue-block_right-margin: 60px;
 div.user-block-area {
   position: absolute;
   top: 0;
-  margin: 80px 0 0 $block_width + $issue-block_right-margin / 2;
+  margin: 80px 0 0 $block_width * 2 + $issue-block_right-margin / 2;
 
   .user-area-header {
     height: 40px;
@@ -134,7 +143,7 @@ div.user-block-area {
     li.user-block {
       position: relative;
       background-color: rgba(242, 242, 242, 0.60);
-      width: $block_width * 4 + 50px + 10px;
+      width: $block_width * 3 + 50px + 10px + 5px;
       height: $user_height + 15;
       border-radius: 20px;
       margin-bottom: $user_margin-bottom;
@@ -157,6 +166,14 @@ div.user-block-area {
         .close {
           font-size: 14px;
           float: none;
+        }
+
+        .user-settings-button {
+          color: #999999;
+
+          &:hover {
+            color: #626262;
+          }
         }
       }
 
@@ -318,5 +335,27 @@ div.user-block-area {
   .each-all-issues-view-area-back {
     background-color: rgba(255, 255, 255, 0);
     @include transition(background-color 0.15s linear);
+  }
+}
+
+.block-header {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  height: 40px;
+}
+
+// project
+
+.project-meta {
+  margin: 0 0 2px 20px;
+
+  .project-name {
+    font-size: 24px;
+    margin: 0 20px 0 0;
+    display: inline-block;
+  }
+
+  .project-settings-button {
+    display: inline-block;
   }
 }

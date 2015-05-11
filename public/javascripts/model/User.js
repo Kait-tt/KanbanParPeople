@@ -8,7 +8,8 @@
             'created_at',
             'userName'
         ],
-        stageTypes = ns.Issue.stageTypes;
+        stageTypes = ns.stageTypes,
+        stageTypeAssignedKeys = ns.stageTypeAssignedKeys;
 
     ns.User = ns.User || User;
 
@@ -24,9 +25,16 @@
             this[key] = o[key];
         }.bind(this));
 
-        _.each(stageTypes, function (key) {
+        _.each(stageTypeAssignedKeys, function (key) {
             this[key] = ko.observableArray([]);
         }.bind(this));
+
+        this.wipMax = ko.observable(_.random(4, 5));
+        this.wip = ko.computed(function () {
+            return _.reduce(stageTypeAssignedKeys, function (sum, stageKey) {
+                return this[stageKey]().length + sum;
+            }, 0, this);
+        }, this);
     };
 
     User.prototype.assign = function (issue) {
@@ -35,19 +43,16 @@
     };
 
     User.prototype.unassign = function (issue) {
-        _.each(stageTypes, function (key) {
-            var index = _.findIndex(this[key](), function (x) { return x._id() === issue._id() });
+        _.each(stageTypeAssignedKeys, function (key) {
+            var index = _.findIndex(this[key](), function (x) { return x._id() === issue._id(); });
             if (index >= 0) {
-                return this[key].splice(index, 1)[0];
-            } else {
-                return false;
+                this[key].splice(index, 1);
             }
-
         }.bind(this));
     };
 
     User.prototype.sortIssues = function (stage) {
-        this[stage].sort(function (a, b) { return a._id() == b._id() ? 0 : (a._id() < b._id() ? -1 : 1) })
+        this[stage].sort(function (a, b) { return a._id() == b._id() ? 0 : (a._id() < b._id() ? -1 : 1); });
     };
 
 }(_, window.nakazawa.util));

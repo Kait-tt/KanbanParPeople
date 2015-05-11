@@ -4,6 +4,9 @@
     var ns = util.namespace('kpp.model'),
         User = ns.User,
         Issue = ns.Issue,
+        stageTypes = ns.stageTypes,
+        stageTypeKeys = ns.stageTypeKeys,
+        stageTypeAssignedKeys = ns.stageTypeAssignedKeys,
         defaultOptions = {
             url: '/api/projects'
         },
@@ -32,7 +35,9 @@
             this[key] = o[key];
         }.bind(this));
 
-        this.noAssignedIssues = ko.observableArray();
+        this.stages = _.object(stageTypeKeys.map(function (stageName) {
+            return [stageName, ko.observableArray()];
+        }));
 
         this.members = ko.observableArray();
         (o.members || []).forEach(function (member) { this.addMember(member, true); }, this);
@@ -40,12 +45,7 @@
         this.issues = ko.observableArray();
         (o.issues || []).forEach(function (issue) { this.addIssue(issue, true); }, this);
 
-        bindIssuesToMembers(this.members, this.issues, this.noAssignedIssues);
-
-        this.noAssignedIssues.sort(Issue.sortFunc);
-        this.noAssignedIssues.subscribe(function () {
-            this.noAssignedIssues.peek().sort(Issue.sortFunc);
-        }, this);
+        bindIssuesToMembers(this.members, this.issues);
 
         this.url = createUrl(this.create_user ? this.create_user.userName : 'me',
             this.id, this.name);
@@ -70,7 +70,7 @@
     };
 
     Project.prototype.assignIssue = function (issueId, memberId) {
-        var issue = _.find(this.issues(), function (x) { return x._id() === issueId }),
+        var issue = _.find(this.issues(), function (x) { return x._id() === issueId; }),
             member = _.findWhere(this.members(), {_id: memberId}),
             oldAssigneeMember;
 
@@ -85,8 +85,6 @@
             if (oldAssigneeMember) {
                 oldAssigneeMember.unassign(issue);
             }
-        } else {
-            this.noAssignedIssues.remove(issue);
         }
 
         // assign
@@ -98,13 +96,12 @@
             }
             issue.stage('todo');
         } else {
-            this.noAssignedIssues.push(issue);
-            issue.stage('issue');
+            issue.stage('backlog');
         }
     };
 
     Project.prototype.updateStage = function (issueId, toStage) {
-        var issue = _.find(this.issues(), function (x) { return x._id() === issueId }),
+        var issue = _.find(this.issues(), function (x) { return x._id() === issueId; }),
             oldStage, member;
 
         if (!issue) {
@@ -112,17 +109,20 @@
             return false;
         }
 
+        // TODO: assignee check if next stage is in todo, doing, done
         member = _.findWhere(this.members(), {_id: issue.assignee()});
-        if (!member) {
-            console.error('assigned member not found');
-            return false;
-        }
+        //if (!member) {
+        //    console.error('assigned member not found');
+        //    return false;
+        //}
 
         oldStage = issue.stage();
         issue.stage(toStage);
 
-        member[oldStage].remove(issue);
-        member[toStage].push(issue);
+        if (member) {
+            member[oldStage].remove(issue);
+            member[toStage].push(issue);
+        }
     };
 
     // direction true: push, false: unshift
@@ -136,6 +136,15 @@
         }, this);
 
         this.issues[direction ? 'push' : 'unshift'](observableIssue);
+
+        this.stages[observableIssue.stage()][direction ? 'push' : 'unshift'](observableIssue);
+        observableIssue.beforeStage = observableIssue.stage();
+        observableIssue.stage.subscribe(function (stage) {
+            this.stages[observableIssue.beforeStage].remove(observableIssue);
+            this.stages[stage].push(observableIssue);
+            this.stages[stage].sort(Issue.sortFunc);
+            observableIssue.beforeStage = stage;
+        }.bind(this));
     };
 
     Project.prototype.removeIssue = function (issue) {
@@ -152,7 +161,7 @@
         this.members.remove(member);
     };
 
-    function bindIssuesToMembers(membersObservableArray, issuesObservableArray, noAssignedIssues) {
+    function bindIssuesToMembers(membersObservableArray, issuesObservableArray) {
         var members = membersObservableArray(),
             issues = issuesObservableArray();
 
@@ -161,7 +170,7 @@
                 return issue.assignee() && issue.assignee() === member._id;
             });
 
-            Issue.stageTypes.forEach(function (stageName) {
+            stageTypeAssignedKeys.forEach(function (stageName) {
                 userIssues.filter(function (issue) {
                     return issue.stage() === stageName;
                 }).forEach(function (issue) {
@@ -176,30 +185,14 @@
             });
         });
 
-        issues.filter(function (issue) {
-            return !issue.assignee() && issue.stage() === 'issue';
-        }).forEach(function (issue) {
-            noAssignedIssues.push(issue);
-        });
-
         // issueの追加、削除と連携
         issuesObservableArray.subscribe(function (changes) {
             changes.forEach(function (change) {
                 var issue = change.value,
                     member = _.findWhere(membersObservableArray(), {_id: issue.assignee()});
 
-                if (change.status === 'added') {
-                    if (member) {
-                        member[issue.stage()].unshift(issue);
-                    } else {
-                        noAssignedIssues.push(issue);
-                    }
-                } else if (change.status === 'deleted') {
-                    if (member) {
-                        member[issue.stage()].remove(issue);
-                    } else {
-                        noAssignedIssues.remove(issue);
-                    }
+                if (member) {
+                    member[issue.stage()][change.status === 'added' ? 'unshift' : 'remove'](issue);
                 }
             });
         }, null, 'arrayChange');
