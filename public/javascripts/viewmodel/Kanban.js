@@ -5,7 +5,9 @@
         model = util.namespace('kpp.model'),
         User = model.User,
         Issue = model.Issue,
-        stageTypes = Issue.stageTypes;
+        stageTypes = model.stageTypes,
+        stageTypeKeys = model.stageTypeKeys,
+        stageTypeAssignedKeys = model.stageTypeAssignedKeys;
 
     ns.Kanban = ns.Kanban || Kanban;
 
@@ -16,9 +18,9 @@
 
         that.issues = null;
 
-        that.noAssignedIssues = null;
-
         that.project = null;
+
+        that.stages = null;
 
         that.addMemberUserName = ko.observable();
 
@@ -45,11 +47,11 @@
             that.project = project;
             that.members = project.members;
             that.issues = project.issues;
-            that.noAssignedIssues = project.noAssignedIssues;
+            that.stages = project.stages;
 
-            stageTypes.concat(['issue']).forEach(function (type) {
+            stageTypeKeys.concat(['issue']).forEach(function (type) {
                 that.issueNums[type] = ko.computed(function () {
-                    return that.issues().filter(function (x) { return x.stage() === type }).length;
+                    return that.issues().filter(function (x) { return x.stage() === type; }).length;
                 });
             });
 
@@ -103,23 +105,23 @@
 
         that.nextStage = function (issue) {
             var currentStage = issue.stage(),
-                toIndex = stageTypes.indexOf(currentStage) + 1,
+                toIndex = stageTypeKeys.indexOf(currentStage) + 1,
                 toStage;
 
-            if (toIndex >= stageTypes.length) {
+            if (toIndex >= stageTypeKeys.length) {
                 // TODO: show error message
                 console.error('cannot next stage');
                 return false;
             }
 
-            toStage = stageTypes[toIndex];
+            toStage = stageTypeKeys[toIndex];
 
             that.updateStage(issue, toStage);
         };
 
         that.prevStage = function (issue) {
             var currentStage = issue.stage(),
-                toIndex = stageTypes.indexOf(currentStage) - 1,
+                toIndex = stageTypeKeys.indexOf(currentStage) - 1,
                 toStage;
 
             if (toIndex < 0) {
@@ -128,7 +130,7 @@
                 return false;
             }
 
-            toStage = stageTypes[toIndex];
+            toStage = stageTypeKeys[toIndex];
 
             that.updateStage(issue, toStage);
         };

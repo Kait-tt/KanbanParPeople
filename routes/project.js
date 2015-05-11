@@ -1,15 +1,15 @@
 var express = require('express');
 var router = express.Router();
 var Project = require('../lib/model/project');
+var _  = require('underscore');
 
 var stages = [
     {name: 'todo', displayName: 'TODO'},
     {name: 'doing', displayName: 'Doing'},
-    {name: 'review', displayName: 'Review'},
-    {name: 'done', displayName: 'Done'}
+    {name: 'review', displayName: 'Review'}
 ];
 
-var stageNamesJSON = JSON.stringify(stages.map(function (stage) { return stage.name }));
+var stageNamesJSON = JSON.stringify(_.pluck(stages, 'name'));
 
 router.get('/:projectId/:projectName', function (req, res, next) {
     var id = req.params.projectId;
