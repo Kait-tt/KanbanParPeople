@@ -2,7 +2,7 @@
 
 $background-first-color: #fceaff;
 $background-second-color: #fae0ff;
-$background-basic-color: #fdfdfd;
+$background-basic-color: #ffffff;
 
 body {
   padding-top: 70px;
@@ -17,6 +17,4 @@ body {
   padding: 0;
   margin: 0;
   background: $background-basic-color;
-//  @include filter-gradient($background-second-color, $background-first-color, vertical);
-//  @include background-image(linear-gradient(right, $background-first-color 0%, $background-second-color 50%, $background-first-color 100%));
 }
