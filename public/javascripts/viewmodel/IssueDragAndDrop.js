@@ -25,20 +25,19 @@
             return true;
         };
 
-        that.ondrop = function (member, stage, event) {
-            if (!~stageTypes.indexOf(stage)) {
-                stage = 'issue';
-            }
-
-            event.preventDefault();
+        that.ondrop = function (stage, member, obj, event) {
             var issue = that.draggingIssue();
 
-            that.dropSuccess(member, stage, issue);
+            console.log(stage, member);
+
+            event.preventDefault();
+
+            that.dropSuccess(stage, member, issue);
 
             return true;
         };
 
-        that.dropSuccess = function (member, stage, issue) {
+        that.dropSuccess = function (stage, member, issue) {
             // if same member, change stage
             // else assign
 

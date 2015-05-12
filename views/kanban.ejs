@@ -54,7 +54,7 @@
                         beforeRemove: view.effects.slideUp },
                     event: {
                         dragover: $root.dragAndDrop.ondragover,
-                        drop: $root.dragAndDrop.ondrop.bind(null, null) }">
+                        drop: $root.dragAndDrop.ondrop.bind(null, '<%= stage.name %>', null) }">
                         <% include _card %>
                     </ul>
                 <% } %>
@@ -98,8 +98,8 @@
                                     beforeRemove: view.effects.slideUp },
                                 event: {
                                     dragover: $root.dragAndDrop.ondragover,
-                                    drop: $root.dragAndDrop.ondrop.bind(this, member) }">
-                                    <!--<% include _card %>-->
+                                    drop: $root.dragAndDrop.ondrop.bind(null, stage, member) }">
+                                    <% include _card %>
                                 </ul>
 
                                 <a href="#" class="each-all-issues-view-button" data-bind="
