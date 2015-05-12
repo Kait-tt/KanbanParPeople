@@ -19,51 +19,6 @@
 
     <div class="blocks">
         <ul class="stage-blocks">
-            <li id="issue-block" class="stage-block">
-                <h2 class="stage-title">
-                    Issue<span class="badge" data-bind="text: $root.stages.issue().length"></span>
-                </h2>
-
-                <div class="block-header issue-block-header">
-                    <button type="button" class="btn btn-sm btn-default"
-                            data-toggle="modal" data-target="#add-issue-modal">
-                        <span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span> Add issue
-                    </button>
-                </div>
-
-                <ul class="cell-block" data-bind="
-                foreach: {
-                    data: $root.stages.issue,
-                    afterRender: view.MiniMenu.init,
-                    afterAdd: view.effects.slideDown,
-                    beforeRemove: view.effects.slideUp },
-                event: {
-                    dragover: $root.dragAndDrop.ondragover,
-                    drop: $root.dragAndDrop.ondrop.bind(null, null) }">
-                    <% include _card %>
-                </ul>
-            </li>
-
-            <li id="backlog-block" class="stage-block">
-                <h2 class="stage-title">
-                    Backlog<span class="badge" data-bind="text: $root.stages.backlog().length"></span>
-                </h2>
-
-                <div class="block-header block-header-dummy"></div>
-
-                <ul class="cell-block" data-bind="
-                foreach: {
-                    data: $root.stages.backlog,
-                    afterRender: view.MiniMenu.init,
-                    afterAdd: view.effects.slideDown,
-                    beforeRemove: view.effects.slideUp },
-                event: {
-                    dragover: $root.dragAndDrop.ondragover,
-                    drop: $root.dragAndDrop.ondrop.bind(null, null) }">
-                    <% include _card %>
-                </ul>
-            </li>
-
             <% stages.forEach(function (stage) { %>
 
             <li id="<%= stage.name %>-block" class="stage-block">
@@ -71,37 +26,40 @@
                     <%= stage.displayName %><span class="badge" data-bind="text: $root.stages.<%= stage.name %>().length"></span>
                 </h2>
 
-                <div class="block-header block-header-dummy"></div>
+                <% if (stage.name === 'issue') { %>
+                    <div class="block-header issue-block-header">
+                        <button type="button" class="btn btn-sm btn-default"
+                                data-toggle="modal" data-target="#add-issue-modal">
+                            <span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span> Add issue
+                        </button>
+                    </div>
+                <% } else { %>
+                    <div class="block-header block-header-dummy"></div>
+                <% } %>
 
-                <ul class="cell-block" data-bind="foreach: {
-                data: members,
-                afterAdd: view.effects.slideDown,
-                beforeRemove: view.effects.slideUp }">
-                    <li class="dummy-user-cell-block"></li>
-                </ul>
+                <% if (stage.assigned) { %>
+                    <ul class="cell-block" data-bind="foreach: {
+                        data: members,
+                        afterRender: view.MiniMenu.init,
+                        afterAdd: view.effects.slideDown,
+                        beforeRemove: view.effects.slideUp }">
+                        <li class="dummy-user-cell-block"></li>
+                    </ul>
+                <% } else { %>
+                    <ul class="cell-block" data-bind="
+                    foreach: {
+                        data: $root.stages.<%= stage.name %>,
+                        afterRender: view.MiniMenu.init,
+                        afterAdd: view.effects.slideDown,
+                        beforeRemove: view.effects.slideUp },
+                    event: {
+                        dragover: $root.dragAndDrop.ondragover,
+                        drop: $root.dragAndDrop.ondrop.bind(null, null) }">
+                        <% include _card %>
+                    </ul>
+                <% } %>
             </li>
-
             <% }); %>
-
-            <li id="done-block" class="stage-block">
-                <h2 class="stage-title">
-                    Done<span class="badge" data-bind="text: $root.stages.done().length"></span>
-                </h2>
-
-                <div class="block-header block-header-dummy"></div>
-
-                <ul class="cell-block" data-bind="
-                foreach: {
-                    data: $root.stages.done,
-                    afterRender: view.MiniMenu.init,
-                    afterAdd: view.effects.slideDown,
-                    beforeRemove: view.effects.slideUp },
-                event: {
-                    dragover: $root.dragAndDrop.ondragover,
-                    drop: $root.dragAndDrop.ondrop.bind(null, null) }">
-                    <% include _card %>
-                </ul>
-            </li>
         </ul>
 
         <div class="user-block-area">
@@ -129,7 +87,7 @@
                         <span data-bind="text: '(' + member.wip() + '/' + member.wipMax() + ')'"></span>
                     </p>
 
-                    <ul class="stage-blocks" data-bind="foreach: { data: <%= stageNamesJSON %>, as: 'stage' }">
+                    <ul class="stage-blocks" data-bind="foreach: { data: <%= assignedStageNamesJSON %>, as: 'stage' }">
                         <li class="stage-block">
                             <div class="user-cell-block">
                                 <ul class="card-list" data-bind="
@@ -141,7 +99,7 @@
                                 event: {
                                     dragover: $root.dragAndDrop.ondragover,
                                     drop: $root.dragAndDrop.ondrop.bind(this, member) }">
-                                    <% include _card %>
+                                    <!--<% include _card %>-->
                                 </ul>
 
                                 <a href="#" class="each-all-issues-view-button" data-bind="
