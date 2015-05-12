@@ -1,58 +1,49 @@
 (function (_, util) {
     'use strict';
 
-    var ns = util.namespace('kpp.model'),
+    var model = util.namespace('kpp.model'),
         defaultOptions = { },
         columnKeys = [
             '_id',
             'created_at',
             'userName'
         ],
-        Issue = ns.Issue,
-        stageTypeAssignedKeys = ns.stageTypeAssignedKeys;
+        stageTypeAssignedKeys = model.stageTypeAssignedKeys;
 
-    ns.User = ns.User || User;
+    model.User = model.User || User;
 
     function User(o) {
-        o = o || {};
         this.opts = _.defaults(o || {}, defaultOptions);
-
-        this.init(o);
+        this.init(this.opts);
     }
 
     User.prototype.init = function (o) {
-        _.each(columnKeys, function (key) {
-            this[key] = o[key];
-        }.bind(this));
+        columnKeys.forEach(function (key) { this[key] = ko.observable(o[key]); }, this);
 
-        _.each(stageTypeAssignedKeys, function (key) {
-            this[key] = ko.observableArray([]);
-        }.bind(this));
+        // プロジェクト全体のIssues (オブジェクトを指定して監視する)
+        this.issues = o.issues || ko.observableArray();
 
-        this.wipMax = ko.observable(_.random(4, 5));
-        this.wip = ko.computed(function () {
-            return _.reduce(stageTypeAssignedKeys, function (sum, stageKey) {
-                return this[stageKey]().length + sum;
-            }, 0, this);
+        // 担当Issues
+        this.assignedIssues = ko.computed(function () {
+            return this.issues().filter(function (issue) { return issue.assignee() === this._id(); }, this);
+        }, this, {deferEvaluation: true});
+
+        // this[stage] = 各ステージにある担当Issues
+        stageTypeAssignedKeys.forEach(function (stage) {
+            this[stage] = ko.computed(function () {
+                return this.assignedIssues().filter(function (issue) { return issue.stage() === stage; });
+            }, this, {deferEvaluation: true});
         }, this);
-    };
 
-    User.prototype.assign = function (issue) {
-        this.todo.push(issue);
-        this.sortIssues('todo');
-    };
+        // WIP制限数
+        this.wipMax = ko.observable(_.random(4, 5));
 
-    User.prototype.unassign = function (issue) {
-        _.each(stageTypeAssignedKeys, function (key) {
-            var index = _.findIndex(this[key](), function (x) { return x._id() === issue._id(); });
-            if (index >= 0) {
-                this[key].splice(index, 1);
-            }
-        }.bind(this));
-    };
-
-    User.prototype.sortIssues = function (stage) {
-        this[stage].sort(Issue.sortFunc);
+        // 仕掛数
+        this.wip = ko.computed(function () {
+            return stageTypeAssignedKeys.reduce(function (sum, stage) {
+                return sum + this[stage]().length;
+            }.bind(this), 0);
+        }, this, {deferEvaluation: true});
     };
 
 }(_, window.nakazawa.util));

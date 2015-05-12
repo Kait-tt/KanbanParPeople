@@ -37,8 +37,8 @@
             // else assign
 
             var currentAssignId = issue.assignee();
-            var nextAssignId = member ? member._id : null;
-            var nextAssignUserName = member ? member.userName : null;
+            var nextAssignId = member ? member._id() : null;
+            var nextAssignUserName = member ? member.userName() : null;
 
             if (currentAssignId !== nextAssignId) {
                 that.kanban.selectedIssue(issue);

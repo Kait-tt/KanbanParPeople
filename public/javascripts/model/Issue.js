@@ -1,7 +1,7 @@
 (function (_, util) {
     'use strict';
 
-    var ns = util.namespace('kpp.model'),
+    var model = util.namespace('kpp.model'),
         defaultOptions = { },
         columnKeys = [
             '_id',
@@ -14,18 +14,24 @@
             'stage'
         ];
 
-    ns.Issue = ns.Issue || Issue;
+    model.Issue = model.Issue || Issue;
 
     function Issue(o) {
-        o = o || {};
         this.opts = _.defaults(o || {}, defaultOptions);
-        this.init(o);
+        this.init(this.opts);
     }
 
     Issue.prototype.init = function (o) {
-        _.each(columnKeys, function (key) {
-            this[key] = ko.observable(o[key]);
-        }.bind(this));
+        _.each(columnKeys, function (key) { this[key] = ko.observable(o[key]); }.bind(this));
+
+        // プロジェクトに所属しているMembers (オブジェクトを指定して監視する)
+        this.members = o.members || ko.observableArray();
+
+        // アサインメンバー
+        this.assigneeMember = ko.computed(function () {
+            var userId = this.assignee();
+            return _.find(this.members(), function (x) { return x._id() === userId; });
+        }, this, {deferEvaluation: true});
     };
 
     Issue.sortFunc = function (a, b) {

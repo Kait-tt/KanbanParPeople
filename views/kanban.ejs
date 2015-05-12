@@ -92,7 +92,7 @@
                             <div class="user-cell-block">
                                 <ul class="card-list" data-bind="
                                 foreach: {
-                                    data: member[stage].slice(0, 2),
+                                    data: member[stage]().slice(0, 2),
                                     afterRender: view.MiniMenu.init,
                                     afterAdd: view.effects.slideDown,
                                     beforeRemove: view.effects.slideUp },
@@ -141,7 +141,7 @@
                         <label for="issue-detail-body" class="control-label">
                             <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span> 説明
                         </label>
-                        <textarea class="form-control" rows="3" id="issue-detail-body" placeholder="Body"
+                        <textarea class="form-control" rows="10" id="issue-detail-body" placeholder="Body"
                                   data-bind="value: $root.updateIssueDetailBody"></textarea>
                     </div>
 
@@ -159,7 +159,7 @@
                             <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Assign
                         </label>
                         <p class="form-control-static" id="issue-detail-assign"
-                           data-bind="text: assigneeUserName"></p>
+                           data-bind="text: assigneeMember() ? assigneeMember().userName : null"></p>
                     </div>
 
                     <div>
@@ -320,7 +320,7 @@
         <!-- ko if: $root.viewEachAllIssues -->
         <!-- ko with: $root.viewEachAllIssues() -->
         <div class="each-all-issues-view-inner-area">
-            <h3 class="each-all-issues-view-title" data-bind="text: member.userName + '\'s ' + stage"></h3>
+            <h3 class="each-all-issues-view-title" data-bind="text: member.userName() + '\'s ' + stage"></h3>
 
             <ul class="card-list" data-bind="
             foreach: {
