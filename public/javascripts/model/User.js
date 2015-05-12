@@ -8,7 +8,7 @@
             'created_at',
             'userName'
         ],
-        stageTypes = ns.stageTypes,
+        Issue = ns.Issue,
         stageTypeAssignedKeys = ns.stageTypeAssignedKeys;
 
     ns.User = ns.User || User;
@@ -52,7 +52,7 @@
     };
 
     User.prototype.sortIssues = function (stage) {
-        this[stage].sort(function (a, b) { return a._id() == b._id() ? 0 : (a._id() < b._id() ? -1 : 1); });
+        this[stage].sort(Issue.sortFunc);
     };
 
 }(_, window.nakazawa.util));

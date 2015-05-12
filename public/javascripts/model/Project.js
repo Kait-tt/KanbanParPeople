@@ -4,7 +4,6 @@
     var ns = util.namespace('kpp.model'),
         User = ns.User,
         Issue = ns.Issue,
-        stageTypes = ns.stageTypes,
         stageTypeKeys = ns.stageTypeKeys,
         stageTypeAssignedKeys = ns.stageTypeAssignedKeys,
         defaultOptions = {

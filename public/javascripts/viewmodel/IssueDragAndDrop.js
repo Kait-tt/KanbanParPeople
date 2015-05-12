@@ -1,10 +1,7 @@
 (function (ko, io, util) {
     'use strict';
 
-    var ns = util.namespace('kpp.viewmodel'),
-        model = util.namespace('kpp.model'),
-        Issue = model.Issue,
-        stageTypes = Issue.stageTypes;
+    var ns = util.namespace('kpp.viewmodel');
 
     ns.IssueDragAndDrop = ns.IssueDragAndDrop || IssueDragAndDrop;
 
@@ -28,8 +25,6 @@
         that.ondrop = function (stage, member, obj, event) {
             var issue = that.draggingIssue();
 
-            console.log(stage, member);
-
             event.preventDefault();
 
             that.dropSuccess(stage, member, issue);
@@ -49,7 +44,7 @@
                 that.kanban.selectedIssue(issue);
                 that.kanban.assignUserName(nextAssignUserName);
                 that.kanban.assignIssue();
-                // stage is auto changed to 'todo'
+                // stage changed to 'todo' auto
             } else {
                 var currentStage = issue.stage();
                 var nextStage = stage;

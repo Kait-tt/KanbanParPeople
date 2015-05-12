@@ -87,6 +87,23 @@
                     configurable: true
                 }
             });
+        },
+
+        /**
+         * 汎用比較関数
+         * aとbが等しければ0を返す
+         * bよりaのほうが小さければ-1を返す
+         * bよりaのほうが大きければ1を返す
+         * reverse == trueのとき、-1と1は反転する
+         * @param a
+         * @param b
+         * @param reverse
+         * @returns {number}
+         */
+        comp: function (a, b, reverse) {
+            if (a === b) { return 0; }
+            if (a < b) { return reverse ? 1 : -1; }
+            return reverse ? -1 : 1;
         }
     };
 }(window, _));

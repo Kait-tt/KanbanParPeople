@@ -3,11 +3,7 @@
 
     var ns = util.namespace('kpp.viewmodel'),
         model = util.namespace('kpp.model'),
-        User = model.User,
-        Issue = model.Issue,
-        stageTypes = model.stageTypes,
-        stageTypeKeys = model.stageTypeKeys,
-        stageTypeAssignedKeys = model.stageTypeAssignedKeys;
+        stageTypeKeys = model.stageTypeKeys;
 
     ns.Kanban = ns.Kanban || Kanban;
 
