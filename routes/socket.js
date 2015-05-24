@@ -75,7 +75,7 @@ module.exports = function (server) {
 
         // assign
         socketOn(socket, 'assign', function (req, projectId, fn) {
-            assignIssue(projectId, req.issueId, req.userId, fn);
+            assignIssue(projectId, user.info.token, req.issueId, req.userId, fn);
         });
 
         // update stage
@@ -133,8 +133,8 @@ module.exports = function (server) {
         });
     }
 
-    function assignIssue(projectId, issueId, userId, fn) {
-        Project.assign({id: projectId}, issueId, userId, function (err, project, issue) {
+    function assignIssue(projectId, token, issueId, userId, fn) {
+        Project.assign({id: projectId}, token, issueId, userId, function (err, project, issue) {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('assigned', {issue: issue}, fn);
