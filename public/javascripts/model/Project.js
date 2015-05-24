@@ -37,7 +37,7 @@
         (o.issues || []).forEach(function (issue) { this.addIssue(issue, true); }, this);
 
         // issueはソートされている状態に保つ
-        this.issues.subscribe(function () { this.issues.sort(Issue.sortFunc); }.bind(this));
+        this.issues.subscribe(function () { this.issues.peek().sort(Issue.sortFunc); }.bind(this));
 
         // membersの初期化
         (o.members || []).forEach(function (member) { this.addMember(member, true); }, this);
