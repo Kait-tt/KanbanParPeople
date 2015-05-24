@@ -85,7 +85,7 @@ module.exports = function (server) {
 
         // update issue
         socketOn(socket, 'update-issue-detail', function (req, projectId, fn) {
-            updateIssueDetail(projectId, req.issueId, req.title, req.body, fn);
+            updateIssueDetail(projectId, user.info.token, req.issueId, req.title, req.body, fn);
         });
 
         // 切断
@@ -151,8 +151,8 @@ module.exports = function (server) {
         });
     }
 
-    function updateIssueDetail(projectId, issueId, title, body, fn) {
-        Project.updateIssueDetail({id: projectId}, issueId, title, body, function (err, project, issue) {
+    function updateIssueDetail(projectId, token, issueId, title, body, fn) {
+        Project.updateIssueDetail({id: projectId}, token, issueId, title, body, function (err, project, issue) {
 
             successWrap('updated issue detail', {issue: issue}, fn);
             io.to(projectId).emit('update-issue-detail', {issue: issue, issueId: issueId});
