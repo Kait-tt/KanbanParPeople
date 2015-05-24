@@ -1,8 +1,7 @@
 var socketio = require('socket.io');
 var _ = require('underscore');
 var sessionMiddleware = require('../lib/module/sessionMiddleware');
-var Project = require('../lib/model/Project');
-var Issue = require('../lib/model/Issue');
+var Project = require('../lib/model/project');
 
 module.exports = function (server) {
     var io = socketio.listen(server);

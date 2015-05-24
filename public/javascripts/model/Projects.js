@@ -43,7 +43,7 @@
     };
 
     Projects.sortFunc = function (a, b) {
-        return a._id == b._id ? 0 : (a._id > b._id ? -1 : 1);
+        return util.comp(a._id, b._id, true);
     };
 
 }(_, window.nakazawa.util));

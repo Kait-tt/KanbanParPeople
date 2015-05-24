@@ -4,12 +4,15 @@ var Project = require('../lib/model/project');
 var _  = require('underscore');
 
 var stages = [
-    {name: 'todo', displayName: 'TODO'},
-    {name: 'doing', displayName: 'Doing'},
-    {name: 'review', displayName: 'Review'}
+    {name: 'issue', displayName: 'Issue', assigned: false},
+    {name: 'backlog', displayName: 'Backlog', assigned: false},
+    {name: 'todo', displayName: 'TODO', assigned: true},
+    {name: 'doing', displayName: 'Doing', assigned: true},
+    {name: 'review', displayName: 'Review', assigned: true},
+    {name: 'done', displayName: 'Done', assigned: false}
 ];
 
-var stageNamesJSON = JSON.stringify(_.pluck(stages, 'name'));
+var assignedStageNamesJSON = JSON.stringify(_.pluck(_.where(stages, {assigned: true}), 'name'));
 
 router.get('/:projectId/:projectName', function (req, res, next) {
     var id = req.params.projectId;
@@ -35,7 +38,7 @@ router.get('/:projectId/:projectName', function (req, res, next) {
                 displayTitle: project.name,
                 project: project,
                 stages: stages,
-                stageNamesJSON: stageNamesJSON,
+                assignedStageNamesJSON: assignedStageNamesJSON,
                 logined: logined,
                 mustLogin: mustLogin
             });

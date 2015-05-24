@@ -1,12 +1,10 @@
 (function (_, util) {
     'use strict';
 
-    var ns = util.namespace('kpp.model'),
-        User = ns.User,
-        Issue = ns.Issue,
-        stageTypes = ns.stageTypes,
-        stageTypeKeys = ns.stageTypeKeys,
-        stageTypeAssignedKeys = ns.stageTypeAssignedKeys,
+    var model = util.namespace('kpp.model'),
+        User = model.User,
+        Issue = model.Issue,
+        stageTypeKeys = model.stageTypeKeys,
         defaultOptions = {
             url: '/api/projects'
         },
@@ -21,36 +19,43 @@
             'name'
         ];
 
-    ns.Project = ns.Project || Project;
+    model.Project = model.Project || Project;
 
     function Project(o) {
-        o = o || {};
         this.opts = _.defaults(o || {}, defaultOptions);
-
-        this.init(o);
+        this.init(this.opts);
     }
 
     Project.prototype.init = function (o) {
-        _.each(columnKeys, function (key) {
-            this[key] = o[key];
-        }.bind(this));
-
-        this.stages = _.object(stageTypeKeys.map(function (stageName) {
-            return [stageName, ko.observableArray()];
-        }));
-
-        this.members = ko.observableArray();
-        (o.members || []).forEach(function (member) { this.addMember(member, true); }, this);
+        columnKeys.forEach(function (key) { this[key] = ko.observable(o[key]); }, this);
 
         this.issues = ko.observableArray();
+
+        this.members = ko.observableArray();
+
+        // issuesの初期化
         (o.issues || []).forEach(function (issue) { this.addIssue(issue, true); }, this);
 
-        bindIssuesToMembers(this.members, this.issues);
+        // issueはソートされている状態に保つ
+        this.issues.subscribe(function () { this.issues.sort(Issue.sortFunc); }.bind(this));
 
-        this.url = createUrl(this.create_user ? this.create_user.userName : 'me',
-            this.id, this.name);
+        // membersの初期化
+        (o.members || []).forEach(function (member) { this.addMember(member, true); }, this);
+
+        // this.stages[stageName] = 各ステージにあるIssue
+        this.stages = _.object(stageTypeKeys.map(function (stageName) {
+            var stageArray = ko.computed(function () {
+                return this.issues().filter(function (issue) { return issue.stage() === stageName; });
+            }, this, {deferEvaluation: true});
+            return [stageName, stageArray];
+        }.bind(this)));
+
+        // カンバンボードページのURL
+        this.url = createUrl(this.create_user() ? this.create_user().userName : 'me',
+            this.id(), this.name());
     };
 
+    // プロジェクトを削除する
     Project.prototype.remove = function () {
         return $.ajax({
             url: this.opts.url + '/' + this.id,
@@ -59,6 +64,7 @@
         });
     };
 
+    // プロジェクト情報をサーバから取得する
     Project.prototype.fetch = function (id) {
         return $.ajax({
             url: this.opts.url + '/' + id,
@@ -69,134 +75,82 @@
         }.bind(this));
     };
 
+    // タスクをアサインする
+    // memberId = null で unassigneIssue と同じ
     Project.prototype.assignIssue = function (issueId, memberId) {
-        var issue = _.find(this.issues(), function (x) { return x._id() === issueId; }),
-            member = _.findWhere(this.members(), {_id: memberId}),
-            oldAssigneeMember;
+        var issue = this.getIssue(issueId),
+            member = this.getMember(memberId);
 
         if (!issue) {
-            console.error('issue not found');
+            console.error('issue not found', issueId);
             return false;
         }
 
-        // pull assigned
-        if (issue.assignee()) {
-            oldAssigneeMember = _.findWhere(this.members(), {_id: issue.assignee()});
-            if (oldAssigneeMember) {
-                oldAssigneeMember.unassign(issue);
-            }
-        }
-
-        // assign
-        issue.assignee(memberId);
         if (member) {
-            if (member.assign(issue)) {
-                console.error('cannot assign');
-                return false;
-            }
+            issue.assignee(memberId);
             issue.stage('todo');
         } else {
-            issue.stage('backlog');
+            // member = null <=> unassign
+            this.unassignIssue(issueId);
         }
     };
 
+    // タスクのアサインを解除する
+    Project.prototype.unassignIssue = function (issueId) {
+        var issue = this.getIssue(issueId);
+        if (!issue) {
+            console.error('issue not found');
+            return false;
+        }
+
+        issue.assignee(null);
+        issue.stage('backlog');
+    };
+
+    // タスクのステージを変更する
     Project.prototype.updateStage = function (issueId, toStage) {
-        var issue = _.find(this.issues(), function (x) { return x._id() === issueId; }),
-            oldStage, member;
+        var issue = this.getIssue(issueId);
 
         if (!issue) {
             console.error('issue not found');
             return false;
         }
 
-        // TODO: assignee check if next stage is in todo, doing, done
-        member = _.findWhere(this.members(), {_id: issue.assignee()});
-        //if (!member) {
-        //    console.error('assigned member not found');
-        //    return false;
-        //}
-
-        oldStage = issue.stage();
         issue.stage(toStage);
-
-        if (member) {
-            member[oldStage].remove(issue);
-            member[toStage].push(issue);
-        }
     };
 
-    // direction true: push, false: unshift
-    Project.prototype.addIssue = function (issue, direction) {
-        var observableIssue = new Issue(issue);
-        // assigneeの名前版
-        observableIssue.assigneeUserName = ko.computed(function () {
-            var userId = observableIssue.assignee();
-            var member = _.find(this.members(), function (x) { return x._id === userId; });
-            return member ? member.userName : null;
-        }, this);
 
-        this.issues[direction ? 'push' : 'unshift'](observableIssue);
+    /*** helper ***/
 
-        this.stages[observableIssue.stage()][direction ? 'push' : 'unshift'](observableIssue);
-        observableIssue.beforeStage = observableIssue.stage();
-        observableIssue.stage.subscribe(function (stage) {
-            this.stages[observableIssue.beforeStage].remove(observableIssue);
-            this.stages[stage].push(observableIssue);
-            this.stages[stage].sort(Issue.sortFunc);
-            observableIssue.beforeStage = stage;
-        }.bind(this));
+    Project.prototype.addIssue = function (issue) {
+        this.issues.push(new Issue(_.extend(issue, {members: this.members})));
     };
 
     Project.prototype.removeIssue = function (issue) {
         this.issues.remove(issue);
     };
 
-    // direction true: push, false: unshift
-    Project.prototype.addMember = function (member, direction) {
-        var observableMember = new User(member.user);
-        this.members[direction ? 'push' : 'unshift'](observableMember);
+    Project.prototype.getIssue = function (issueId) {
+        return _.find(this.issues(), function (x) { return x._id() === issueId; });
+    };
+
+
+    Project.prototype.addMember = function (member) {
+        this.members.push(new User(_.extend(member.user, {issues: this.issues})));
     };
 
     Project.prototype.removeMember = function (member) {
         this.members.remove(member);
     };
 
-    function bindIssuesToMembers(membersObservableArray, issuesObservableArray) {
-        var members = membersObservableArray(),
-            issues = issuesObservableArray();
+    Project.prototype.getMember = function (memberId) {
+        return _.find(this.members(), function (x) { return x._id() === memberId; });
+    };
 
-        members.forEach(function (member) {
-            var userIssues = issues.filter(function (issue) {
-                return issue.assignee() && issue.assignee() === member._id;
-            });
+    Project.prototype.getMemberByName = function (memberName) {
+        return _.find(this.members(), function (x) { return x.userName() === memberName; });
+    };
 
-            stageTypeAssignedKeys.forEach(function (stageName) {
-                userIssues.filter(function (issue) {
-                    return issue.stage() === stageName;
-                }).forEach(function (issue) {
-                    member[stageName].push(issue);
-                });
-
-                // sort init
-                member[stageName].sort(Issue.sortFunc);
-                member[stageName].subscribe(function () {
-                    member[stageName].peek().sort(Issue.sortFunc);
-                });
-            });
-        });
-
-        // issueの追加、削除と連携
-        issuesObservableArray.subscribe(function (changes) {
-            changes.forEach(function (change) {
-                var issue = change.value,
-                    member = _.findWhere(membersObservableArray(), {_id: issue.assignee()});
-
-                if (member) {
-                    member[issue.stage()][change.status === 'added' ? 'unshift' : 'remove'](issue);
-                }
-            });
-        }, null, 'arrayChange');
-    }
 
     function createUrl (userName, projectId, projectName) {
         return '/users/' + userName + '/projects/' + projectId + '/' + projectName;

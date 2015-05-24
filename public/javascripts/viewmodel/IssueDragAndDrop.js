@@ -1,10 +1,7 @@
 (function (ko, io, util) {
     'use strict';
 
-    var ns = util.namespace('kpp.viewmodel'),
-        model = util.namespace('kpp.model'),
-        Issue = model.Issue,
-        stageTypes = Issue.stageTypes;
+    var ns = util.namespace('kpp.viewmodel');
 
     ns.IssueDragAndDrop = ns.IssueDragAndDrop || IssueDragAndDrop;
 
@@ -25,32 +22,29 @@
             return true;
         };
 
-        that.ondrop = function (member, stage, event) {
-            if (!~stageTypes.indexOf(stage)) {
-                stage = 'issue';
-            }
-
-            event.preventDefault();
+        that.ondrop = function (stage, member, obj, event) {
             var issue = that.draggingIssue();
 
-            that.dropSuccess(member, stage, issue);
+            event.preventDefault();
+
+            that.dropSuccess(stage, member, issue);
 
             return true;
         };
 
-        that.dropSuccess = function (member, stage, issue) {
+        that.dropSuccess = function (stage, member, issue) {
             // if same member, change stage
             // else assign
 
             var currentAssignId = issue.assignee();
-            var nextAssignId = member ? member._id : null;
-            var nextAssignUserName = member ? member.userName : null;
+            var nextAssignId = member ? member._id() : null;
+            var nextAssignUserName = member ? member.userName() : null;
 
             if (currentAssignId !== nextAssignId) {
                 that.kanban.selectedIssue(issue);
                 that.kanban.assignUserName(nextAssignUserName);
                 that.kanban.assignIssue();
-                // stage is auto changed to 'todo'
+                // stage changed to 'todo' auto
             } else {
                 var currentStage = issue.stage();
                 var nextStage = stage;
