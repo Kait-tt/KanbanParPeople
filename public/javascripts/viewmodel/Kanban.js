@@ -137,7 +137,7 @@
         that.updateIssueDetail = function () {
             var issue = that.selectedIssue();
 
-            if (issue) {
+            if (!issue) {
                 console.error('issue is not selected');
                 return;
             }
