@@ -51,8 +51,8 @@
         }.bind(this)));
 
         // カンバンボードページのURL
-        this.url = createUrl(this.create_user ? this.create_user.userName : 'me',
-            this.id, this.name);
+        this.url = createUrl(this.create_user() ? this.create_user().userName : 'me',
+            this.id(), this.name());
     };
 
     // プロジェクトを削除する
