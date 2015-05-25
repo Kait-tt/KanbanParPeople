@@ -177,7 +177,7 @@ module.exports.emitters = emitters = {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('removed member', {}, fn);
-            io.to(projectId).emit('remove-member', {member: member});
+            module.exports.io.to(projectId).emit('remove-member', {member: member});
         });
     },
 
@@ -186,7 +186,7 @@ module.exports.emitters = emitters = {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('added member', {member: member}, fn);
-            io.to(projectId).emit('add-member', {member: member});
+            module.exports.io.to(projectId).emit('add-member', {member: member});
         });
     },
 
@@ -195,7 +195,7 @@ module.exports.emitters = emitters = {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('added issue', {issue: issue}, fn);
-            io.to(projectId).emit('add-issue', {issue: issue});
+            module.exports.io.to(projectId).emit('add-issue', {issue: issue});
         });
     },
 
@@ -204,7 +204,7 @@ module.exports.emitters = emitters = {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('removed issue', {issue: issue}, fn);
-            io.to(projectId).emit('remove-issue', {issue: issue});
+            module.exports.io.to(projectId).emit('remove-issue', {issue: issue});
         });
     },
 
@@ -213,7 +213,7 @@ module.exports.emitters = emitters = {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('assigned', {issue: issue}, fn);
-            io.to(projectId).emit('assign', {issue: issue, issueId: issueId, memberId: userId});
+            module.exports.io.to(projectId).emit('assign', {issue: issue, issueId: issueId, memberId: userId});
         });
     },
 
@@ -222,7 +222,7 @@ module.exports.emitters = emitters = {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('updated stage', {issue: issue}, fn);
-            io.to(projectId).emit('update-stage', {issue: issue, issueId: issueId, toStage: toStage});
+            module.exports.io.to(projectId).emit('update-stage', {issue: issue, issueId: issueId, toStage: toStage});
         });
     },
 
@@ -230,7 +230,7 @@ module.exports.emitters = emitters = {
         Project.updateIssueDetail({id: projectId}, token, issueId, title, body, function (err, project, issue) {
 
             successWrap('updated issue detail', {issue: issue}, fn);
-            io.to(projectId).emit('update-issue-detail', {issue: issue, issueId: issueId});
+            module.exports.io.to(projectId).emit('update-issue-detail', {issue: issue, issueId: issueId});
         });
     }
 };
