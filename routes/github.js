@@ -12,7 +12,6 @@ var _ = require('underscore');
 
 var routes = {
     issues: {
-        // issue 作成
         opened: function (project, req, res) {
             GitHub.serializeIssue(req.body.issue, function (err, issue) {
                 if (err) {
@@ -24,14 +23,37 @@ var routes = {
                 }
             });
         },
-        // issue stage to done
         closed: function (project, req, res) {
             var issue = _.find(project.issues, function (issue) {
-                return issue.github && issue.github.num === req.body.issue.num;
+                return issue.github && Number(issue.github.number) === req.body.issue.number;
             });
 
-            socket.emitters.removeIssue(project.id, null, issue._id, _.noop);
-            res.status(200).json({});
+            if (issue) {
+                socket.emitters.removeIssue(project.id, null, issue._id, _.noop);
+                res.status(200).json({});
+            } else {
+                res.status(400).json({message: 'issue not found'});
+            }
+        },
+        assigned: function (project, req, res) {
+            var issue = _.find(project.issues, function (issue) {
+                return issue.github && Number(issue.github.number) === req.body.issue.number;
+            });
+
+            if (!issue) {
+                res.status(400).json({message: 'issue not found'});
+                return;
+            }
+
+            User.findOrCreate(req.body.issue.assignee.login, function (err, user) {
+                if (err) {
+                    console.error(err);
+                    res.status(500).json({message: err.message});
+                } else {
+                    socket.emitters.assignIssue(project.id, null, issue._id, user._id, _.noop);
+                    res.status(200).json({});
+                }
+            });
         }
     }
 };
@@ -41,7 +63,7 @@ router.post('/:projectId', function (req, res) {
     var action = req.body && req.body.action;
 
     // projetの特定
-    Project.findOne({id: req.params.projectId}, function (err, project) {
+    Project.findPopulated({id: req.params.projectId}, {one: true}, function (err, project) {
         if (err) {
             console.error(err);
             res.status(500).json({message: err.message});
