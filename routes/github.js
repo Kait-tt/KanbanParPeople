@@ -6,22 +6,32 @@ var Project = require('../lib/model/project');
 var User = require('../lib/model/user');
 var GitHub = require('../lib/model/github');
 var stages = require('../lib/model/stages');
+var _ = require('underscore');
 
 // GitHub Webhooks のルーティング
 
 var routes = {
     issues: {
         // issue 作成
-        opened: function (projectId, req, res) {
+        opened: function (project, req, res) {
             GitHub.serializeIssue(req.body.issue, function (err, issue) {
                 if (err) {
                     console.error(err);
                     res.status(500).json({message: err.message});
                 } else {
-                    socket.emitters.addIssue(projectId, null, issue, function (){ });
+                    socket.emitters.addIssue(project.id, null, issue, _.noop);
                     res.status(200).json({});
                 }
             });
+        },
+        // issue stage to done
+        closed: function (project, req, res) {
+            var issue = _.find(project.issues, function (issue) {
+                return issue.github && issue.github.num === req.body.issue.num;
+            });
+
+            socket.emitters.removeIssue(project.id, null, issue._id, _.noop);
+            res.status(200).json({});
         }
     }
 };
@@ -38,6 +48,7 @@ router.post('/:projectId', function (req, res) {
             return;
         }
         if (!project) {
+            console.error('project not found: ' + req.params.projectId);
             res.status(400).json({message: 'project not found'});
             return;
         }
@@ -45,9 +56,10 @@ router.post('/:projectId', function (req, res) {
         // ルーティング
         if (!~Object.keys(routes).indexOf(type) ||
             !~Object.keys(routes[type]).indexOf(action)) {
+            console.error('routing not matched: ' + type + ' ' + action);
             res.status(400).end();
         } else {
-            routes[type][action](project.id, req, res);
+            routes[type][action](project, req, res);
         }
     });
 });
