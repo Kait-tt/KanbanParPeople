@@ -4,6 +4,7 @@ var socket = require('./socket');
 var async = require('async');
 var Project = require('../lib/model/project');
 var User = require('../lib/model/user');
+var GitHub = require('../lib/model/github');
 var stages = require('../lib/model/stages');
 
 // GitHub Webhooks のルーティング
@@ -12,18 +13,7 @@ var routes = {
     issues: {
         // issue 作成
         opened: function (req, res) {
-            var issue = {
-                title: req.body.issue.title,
-                body: req.body.issue.body,
-                assignee: null,
-                stage: null,
-                github: {
-                    number: req.body.issue.number,
-                    url: req.body.issue.url
-                },
-                created_at: new Date(req.body.issue.created_at),
-                updated_at: new Date(req.body.issue.updated_at)
-            };
+            var issue;
             var projectId;
 
             async.series([
@@ -41,27 +31,12 @@ var routes = {
                         }
                     });
                 },
-                // assignee
+                // issue
                 function (next) {
-                    var assignee = req.body.issue.assignee;
-                    if (!assignee) { next(null); return; }
-
-                    User.findOrCreate(assignee.login, function (err, user) {
-                        if (err) { next(err); }
-                        else {
-                            issue.assignee = user._id;
-                            next(null);
-                        }
+                    GitHub.serializeIssue(req.body.issue, function (err, data) {
+                        issue = data;
+                        next(err);
                     });
-                },
-                // state
-                function (next) {
-                    if (req.body.issue.state === 'open') {
-                        issue.stage = issue.assignee ? stages.todo : stages.issue;
-                    } else {
-                        issue.stage = stages.done;
-                    }
-                    next(null);
                 }
             ], function (err) {
                 if (err && err.message === 'project not found') {
