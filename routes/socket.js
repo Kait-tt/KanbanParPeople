@@ -74,7 +74,7 @@ function socketRouting(server) {
 
         // issueの追加
         socketOn(socket, 'add-issue', function (req, projectId, fn) {
-            emitters.addIssue(projectId, user.info.token, req.title, req.body, fn);
+            emitters.addIssue(projectId, user.info.token, {title: req.title, body: req.body}, fn);
         });
 
         // issueの削除
@@ -190,8 +190,8 @@ module.exports.emitters = emitters = {
         });
     },
 
-    addIssue: function (projectId, token, title, body, fn) {
-        Project.addIssue({id: projectId}, token, {title: title, body: body}, function (err, project, issue) {
+    addIssue: function (projectId, token, params, fn) {
+        Project.addIssue({id: projectId}, token, params, function (err, project, issue) {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('added issue', {issue: issue}, fn);
