@@ -3,8 +3,17 @@ var _ = require('underscore');
 var sessionMiddleware = require('../lib/module/sessionMiddleware');
 var Project = require('../lib/model/project');
 
-module.exports = function (server) {
-    var io = socketio.listen(server);
+var io;
+var emitters;
+
+module.exports = {
+    socket: socketRouting,
+    emitters: null,
+    io: null
+};
+
+function socketRouting(server) {
+    module.exports.io = io = socketio.listen(server);
     var users = {};
 
     io.use(function (socket, next) {
@@ -55,37 +64,37 @@ module.exports = function (server) {
 
         // memberの追放
         socketOn(socket, 'remove-member', function (req, projectId, fn) {
-            removeMember(projectId, req.userName, fn);
+            emitters.removeMember(projectId, req.userName, fn);
         });
 
         // memberの追加
         socketOn(socket, 'add-member', function (req, projectId, fn) {
-            addMember(projectId, req.userName, fn);
+            emitters.addMember(projectId, req.userName, fn);
         });
 
         // issueの追加
         socketOn(socket, 'add-issue', function (req, projectId, fn) {
-            addIssue(projectId, user.info.token, req.title, req.body, fn);
+            emitters.addIssue(projectId, user.info.token, req.title, req.body, fn);
         });
 
         // issueの削除
         socketOn(socket, 'remove-issue', function (req, projectId, fn) {
-            removeIssue(projectId, user.info.token, req.issueId, fn);
+            emitters.removeIssue(projectId, user.info.token, req.issueId, fn);
         });
 
         // assign
         socketOn(socket, 'assign', function (req, projectId, fn) {
-            assignIssue(projectId, user.info.token, req.issueId, req.userId, fn);
+            emitters.assignIssue(projectId, user.info.token, req.issueId, req.userId, fn);
         });
 
         // update stage
         socketOn(socket, 'update-stage', function (req, projectId, fn) {
-            updateStage(projectId, req.issueId, req.toStage, fn);
+            emitters.updateStage(projectId, req.issueId, req.toStage, fn);
         });
 
         // update issue
         socketOn(socket, 'update-issue-detail', function (req, projectId, fn) {
-            updateIssueDetail(projectId, user.info.token, req.issueId, req.title, req.body, fn);
+            emitters.updateIssueDetail(projectId, user.info.token, req.issueId, req.title, req.body, fn);
         });
 
         // 切断
@@ -95,69 +104,7 @@ module.exports = function (server) {
         });
     });
 
-    /**** emitter and function *****/
-
-    function removeMember(projectId, targetUserName, fn) {
-        Project.removeMember({id: projectId}, targetUserName, function (err, project, member) {
-            if (err) { serverErrorWrap(err, {}, fn); return; }
-
-            successWrap('removed member', {}, fn);
-            io.to(projectId).emit('remove-member', {member: member});
-        });
-    }
-
-    function addMember(projectId, targetUserName, fn) {
-        Project.addMember({id: projectId}, targetUserName, function (err, project, member) {
-            if (err) { serverErrorWrap(err, {}, fn); return; }
-
-            successWrap('added member', {member: member}, fn);
-            io.to(projectId).emit('add-member', {member: member});
-        });
-    }
-
-    function addIssue(projectId, token, title, body, fn) {
-        Project.addIssue({id: projectId}, token, {title: title, body: body}, function (err, project, issue) {
-            if (err) { serverErrorWrap(err, {}, fn); return; }
-
-            successWrap('added issue', {issue: issue}, fn);
-            io.to(projectId).emit('add-issue', {issue: issue});
-        });
-    }
-
-    function removeIssue(projectId, token, issueId, fn) {
-        Project.removeIssue({id: projectId}, token, issueId, function (err, project, issue) {
-            if (err) { serverErrorWrap(err, {}, fn); return; }
-
-            successWrap('removed issue', {issue: issue}, fn);
-            io.to(projectId).emit('remove-issue', {issue: issue});
-        });
-    }
-
-    function assignIssue(projectId, token, issueId, userId, fn) {
-        Project.assign({id: projectId}, token, issueId, userId, function (err, project, issue) {
-            if (err) { serverErrorWrap(err, {}, fn); return; }
-
-            successWrap('assigned', {issue: issue}, fn);
-            io.to(projectId).emit('assign', {issue: issue, issueId: issueId, memberId: userId});
-        });
-    }
-
-    function updateStage(projectId, issueId, toStage, fn) {
-        Project.updateStage({id: projectId}, issueId, toStage, function (err, project, issue) {
-            if (err) { serverErrorWrap(err, {}, fn); return; }
-
-            successWrap('updated stage', {issue: issue}, fn);
-            io.to(projectId).emit('update-stage', {issue: issue, issueId: issueId, toStage: toStage});
-        });
-    }
-
-    function updateIssueDetail(projectId, token, issueId, title, body, fn) {
-        Project.updateIssueDetail({id: projectId}, token, issueId, title, body, function (err, project, issue) {
-
-            successWrap('updated issue detail', {issue: issue}, fn);
-            io.to(projectId).emit('update-issue-detail', {issue: issue, issueId: issueId});
-        });
-    }
+    /**** room *****/
 
     function joinProjectRoom(socket, projectRoomId) {
         socket.join(projectRoomId);
@@ -175,30 +122,6 @@ module.exports = function (server) {
     }
 
     /**** helper *****/
-
-    function serverErrorWrap(err, otherParam, fn) {
-        console.error('server error: ', err);
-        console.error(err.stack);
-        fn(_.extend({
-            status: 'server error',
-            message: err.message
-        }, otherParam || {}));
-    }
-
-    function userErrorWrap(message, otherParam, fn) {
-        console.error('user error: ' + message);
-        fn(_.extend({
-            status: 'error',
-            message: message
-        }, otherParam || {}));
-    }
-
-    function successWrap(message, otherParam, fn) {
-        fn(_.extend({
-            status: 'success',
-            message: message
-        }, otherParam || {}));
-    }
 
     function socketOn(socket, eventName, callback) {
         socket.on(eventName, function (req, fn) {
@@ -246,4 +169,94 @@ module.exports = function (server) {
 
         return true;
     }
+}
+
+module.exports.emitters = emitters = {
+    removeMember: function (projectId, targetUserName, fn) {
+        Project.removeMember({id: projectId}, targetUserName, function (err, project, member) {
+            if (err) { serverErrorWrap(err, {}, fn); return; }
+
+            successWrap('removed member', {}, fn);
+            io.to(projectId).emit('remove-member', {member: member});
+        });
+    },
+
+    addMember: function (projectId, targetUserName, fn) {
+        Project.addMember({id: projectId}, targetUserName, function (err, project, member) {
+            if (err) { serverErrorWrap(err, {}, fn); return; }
+
+            successWrap('added member', {member: member}, fn);
+            io.to(projectId).emit('add-member', {member: member});
+        });
+    },
+
+    addIssue: function (projectId, token, title, body, fn) {
+        Project.addIssue({id: projectId}, token, {title: title, body: body}, function (err, project, issue) {
+            if (err) { serverErrorWrap(err, {}, fn); return; }
+
+            successWrap('added issue', {issue: issue}, fn);
+            io.to(projectId).emit('add-issue', {issue: issue});
+        });
+    },
+
+    removeIssue: function (projectId, token, issueId, fn) {
+        Project.removeIssue({id: projectId}, token, issueId, function (err, project, issue) {
+            if (err) { serverErrorWrap(err, {}, fn); return; }
+
+            successWrap('removed issue', {issue: issue}, fn);
+            io.to(projectId).emit('remove-issue', {issue: issue});
+        });
+    },
+
+    assignIssue: function (projectId, token, issueId, userId, fn) {
+        Project.assign({id: projectId}, token, issueId, userId, function (err, project, issue) {
+            if (err) { serverErrorWrap(err, {}, fn); return; }
+
+            successWrap('assigned', {issue: issue}, fn);
+            io.to(projectId).emit('assign', {issue: issue, issueId: issueId, memberId: userId});
+        });
+    },
+
+    updateStage: function (projectId, issueId, toStage, fn) {
+        Project.updateStage({id: projectId}, issueId, toStage, function (err, project, issue) {
+            if (err) { serverErrorWrap(err, {}, fn); return; }
+
+            successWrap('updated stage', {issue: issue}, fn);
+            io.to(projectId).emit('update-stage', {issue: issue, issueId: issueId, toStage: toStage});
+        });
+    },
+
+    updateIssueDetail: function (projectId, token, issueId, title, body, fn) {
+        Project.updateIssueDetail({id: projectId}, token, issueId, title, body, function (err, project, issue) {
+
+            successWrap('updated issue detail', {issue: issue}, fn);
+            io.to(projectId).emit('update-issue-detail', {issue: issue, issueId: issueId});
+        });
+    }
 };
+
+/*** helper ***/
+
+function serverErrorWrap(err, otherParam, fn) {
+    console.error('server error: ', err);
+    console.error(err.stack);
+    fn(_.extend({
+        status: 'server error',
+        message: err.message
+    }, otherParam || {}));
+}
+
+function userErrorWrap(message, otherParam, fn) {
+    console.error('user error: ' + message);
+    fn(_.extend({
+        status: 'error',
+        message: message
+    }, otherParam || {}));
+}
+
+function successWrap(message, otherParam, fn) {
+    fn(_.extend({
+        status: 'success',
+        message: message
+    }, otherParam || {}));
+}

@@ -78,11 +78,6 @@ router.post('/projects', function (req, res) {
         });
 });
 
-// create issue
-router.post('/projects/:projectId/issues', function (req, res) {
-    req.status(201).json({message: 'OK'});
-});
-
 function serverError(res, err) {
     res.status(500).json({
         message: 'server error.',
