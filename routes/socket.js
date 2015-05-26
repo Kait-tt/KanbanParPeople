@@ -2,6 +2,7 @@ var socketio = require('socket.io');
 var _ = require('underscore');
 var sessionMiddleware = require('../lib/module/sessionMiddleware');
 var Project = require('../lib/model/project');
+var stages = require('../lib/model/stages');
 
 var io;
 var emitters;
@@ -89,7 +90,7 @@ function socketRouting(server) {
 
         // update stage
         socketOn(socket, 'update-stage', function (req, projectId, fn) {
-            emitters.updateStage(projectId, req.issueId, req.toStage, fn);
+            emitters.updateStage(projectId, user.info.token, req.issueId, req.toStage, fn);
         });
 
         // update issue
@@ -209,20 +210,35 @@ module.exports.emitters = emitters = {
     },
 
     assignIssue: function (projectId, token, issueId, userId, fn) {
-        Project.assign({id: projectId}, token, issueId, userId, function (err, project, issue) {
+        Project.findIssueById(projectId, issueId, function (err, beforeIssue, project) {
             if (err) { serverErrorWrap(err, {}, fn); return; }
+            var beforeStage = beforeIssue.stage;
 
-            successWrap('assigned', {issue: issue}, fn);
-            module.exports.io.to(projectId).emit('assign', {issue: issue, issueId: issueId, memberId: userId});
+            project.assign(token, issueId, userId, function (err, project, issue) {
+                if (err) { serverErrorWrap(err, {}, fn); return; }
+
+                successWrap('assigned', {issue: issue}, fn);
+                module.exports.io.to(projectId).emit('assign', {issue: issue, issueId: issueId, memberId: userId});
+
+                // stageが変わっていたら通知
+                if (beforeStage !== issue.stage) {
+                    emitters.updateStage(projectId, token, issueId, issue.stage, _.noop);
+                }
+            });
         });
     },
 
-    updateStage: function (projectId, issueId, toStage, fn) {
+    updateStage: function (projectId, token, issueId, toStage, fn) {
         Project.updateStage({id: projectId}, issueId, toStage, function (err, project, issue) {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('updated stage', {issue: issue}, fn);
             module.exports.io.to(projectId).emit('update-stage', {issue: issue, issueId: issueId, toStage: toStage});
+
+            // issue, backlogs, done は assignee を外す
+            if (_.contains([stages.issue, stages.backlog, stages.done], toStage) && issue.assignee) {
+                emitters.assignIssue(projectId, token, issueId, null, _.noop);
+            }
         });
     },
 

@@ -88,7 +88,6 @@
 
         if (member) {
             issue.assignee(memberId);
-            issue.stage('todo');
         } else {
             // member = null <=> unassign
             this.unassignIssue(issueId);
@@ -104,7 +103,6 @@
         }
 
         issue.assignee(null);
-        issue.stage('backlog');
     };
 
     // タスクのステージを変更する
