@@ -45,6 +45,11 @@
             MiniMenu.init();
             ko.applyBindings(alert, $('.alerts')[0]);
             ko.applyBindings(vm);
+            $('.switch').bootstrapSwitch()
+                .on('switchChange.bootstrapSwitch', function (e, state) {
+                    // checkboxとgithub.syncを同期
+                    project.github().sync(state);
+                });
         });
 
     function getProjectId() {

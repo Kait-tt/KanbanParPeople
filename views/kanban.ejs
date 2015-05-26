@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/kanban.css'/>
+    <link rel='stylesheet' href='/vendor/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css'/>
 </head>
 <body>
 
@@ -12,7 +13,16 @@
 <div class="main" data-bind="visible: true" style="display: none">
     <div class="project-meta">
         <h1 class="project-name"><%= displayTitle %></h1>
-        <button type="button" class="btn btn-sm btn-default project-settings-button">
+        <div class="sync-status">
+            <!-- ko if: $root.project.github().sync -->
+            <span class="label label-primary">同期中</span>
+            <!-- /ko -->
+            <!-- ko ifnot: $root.project.github().sync -->
+            <span class="label label-default">非同期</span>
+            <!-- /ko -->
+        </div>
+        <button type="button" class="btn btn-sm btn-default project-settings-button"
+                data-toggle="modal" data-target="#project-settings-modal">
             <span class="glyphicon glyphicon-cog" area-hidden="true"></span> Settings
         </button>
     </div>
@@ -312,6 +322,53 @@
     </div>
 </div>
 
+<!-- Project Settings Modal -->
+<div class="modal fade" id="project-settings-modal" tabindex="-1" role="dialog" aria-labelledby="project-settings-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="project-settings-modal-label">Project settings</h4>
+            </div>
+            <div class="modal-body">
+                <!-- ko with: $root.project -->
+                <form class="form">
+                    <div class="form-group">
+                        <label for="project-settings-name" class="control-label">
+                            <span class="glyphicon glyphicon-blackboard"> Name</span>
+                        </label>
+                        <p class="form-control-static" id="project-settings-name" data-bind="text: name"></p>
+                    </div>
+
+                    <!-- ko if: github() -->
+                    <div class="form-group">
+                        <label for="project-settings-github-link" class="control-label">
+                            <span class="glyphicon glyphicon-link"> GitHub</span>
+                        </label>
+                        <p><a class="form-control-static" id="project-settings-github-link" target="_blank" data-bind="
+                            text: github().userName() + '/' + github().repoName(),
+                            attr: { href: github().url } "></a></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="project-settings-github-sync-enabled" class="control-label">
+                            <span class="glyphicon glyphicon-blackboard"> 同期</span>
+                        </label>
+                        <p>
+                            <input class="switch" id="project-settings-github-sync-enabled" type="checkbox"
+                                    data-size="mini" data-bind="checked: github().sync">
+                        </p>
+                    </div>
+                    <!-- /ko -->
+                </form>
+                <!-- /ko -->
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- view all issues -->
 <div class="each-all-issues-view-area-wrap" data-bind="css: { show: $root.viewEachAllIssues }">
     <div class="each-all-issues-view-area-back"
@@ -340,6 +397,7 @@
 <script src="/vendor/jquery/dist/jquery.min.js"></script>
 <script src="/vendor/jquery.easing/js/jquery.easing.min.js"></script>
 <script src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/vendor/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script>
 <script src="/vendor/underscore/underscore-min.js"></script>
 <script src="/vendor/knockoutjs/dist/knockout.js"></script>
 <script src="/socket.io/socket.io.js"></script>

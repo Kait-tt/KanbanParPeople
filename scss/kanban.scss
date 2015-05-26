@@ -351,8 +351,14 @@ div.user-block-area {
 
   .project-name {
     font-size: 24px;
-    margin: 0 20px 0 0;
+    margin: 0 5px 0 0;
     display: inline-block;
+    vertical-align: bottom;
+  }
+
+  .sync-status {
+    margin: 0 10px 0 0;
+    display: inline-block
   }
 
   .project-settings-button {

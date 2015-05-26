@@ -17,6 +17,12 @@
             'issues',
             'members',
             'name'
+        ],
+        githubColumnKeys = [
+            'userName',
+            'repoName',
+            'url',
+            'sync'
         ];
 
     model.Project = model.Project || Project;
@@ -28,6 +34,10 @@
 
     Project.prototype.init = function (o) {
         columnKeys.forEach(function (key) { this[key] = ko.observable(o[key]); }, this);
+        if (!this.github()) { this.github({}); }
+        githubColumnKeys.forEach(function (key) {
+            this.github()[key] = ko.observable(o.github ? o.github[key] : null);
+        }, this);
 
         this.issues = ko.observableArray();
 
