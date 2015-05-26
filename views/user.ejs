@@ -17,8 +17,11 @@
         <div class="projects">
             <h2>Projects</h2>
             <div class="project-buttons">
+                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#create-project-modal">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Create
+                </button>
                 <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#import-project-modal">
-                    <span class="glyphicon glyphicon-import" aria-hidden="true"></span> Import Project
+                    <span class="glyphicon glyphicon-import" aria-hidden="true"></span> Import
                 </button>
             </div>
             <ul class="projects" data-bind="foreach: {
@@ -59,6 +62,34 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-danger" data-dismiss="modal"
                             data-bind="click: $root.removeProject">Remove</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- Create Project Modal -->
+<div class="modal fade" id="create-project-modal" tabindex="-1" role="dialog" aria-labelledby="create-project-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="create-project-modal-label">Create Project</h4>
+            </div>
+            <form class="form">
+                <div class="modal-body">
+                    <p>
+                        新しいプロジェクトを作成します。
+                    </p>
+                    <div class="form-group">
+                        <label for="create-repository-name" class="control-label">プロジェクト名</label>
+                        <input type="text" class="form-control" id="create-repository-name" placeholder="Project Name" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success" data-dismiss="modal">Create</button>
                 </div>
             </form>
 
