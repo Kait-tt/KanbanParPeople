@@ -86,16 +86,22 @@
                     afterAdd: view.effects.slideDown,
                     beforeRemove: view.effects.slideUp }">
                 <li class="user-block" data-bind="css: { 'wip-limited': member.isWipLimited }">
-                    <p class="user-name">
-                        <!--<button type="button" class="close" aria-label="Close" data-bind="click: $root.removeMember">-->
-                            <!--<span aria-hidden="true">&times;</span>-->
-                        <!--</button>-->
-                        <a href="#" class="user-settings-button">
-                            <span class="glyphicon glyphicon-cog" area-hidden="true"></span>
-                        </a>
-                        <span data-bind="text: userName"></span>
-                        <span data-bind="text: '(' + member.wip() + '/' + member.wip_limit() + ')'"></span>
-                    </p>
+                    <div class="user-label-area">
+                        <p class="user-name">
+                            <!--<button type="button" class="close" aria-label="Close" data-bind="click: $root.removeMember">-->
+                                <!--<span aria-hidden="true">&times;</span>-->
+                            <!--</button>-->
+                            <a href="#" class="user-settings-button">
+                                <span class="glyphicon glyphicon-cog" area-hidden="true"></span>
+                            </a>
+                            <span data-bind="text: userName"></span>
+                            <span data-bind="text: '(' + member.wip() + '/' + member.wip_limit() + ')'"></span>
+                        </p>
+
+                        <p class="wip-limited-message alert-danger" data-bind="visible: member.isWipLimited">
+                            <span class="glyphicon glyphicon-warning-sign"></span>WIP制限に達しています。
+                        </p>
+                    </div>
 
                     <ul class="stage-blocks" data-bind="foreach: { data: <%= assignedStageNamesJSON %>, as: 'stage' }">
                         <li class="stage-block">
@@ -115,7 +121,7 @@
                                 <a href="#" class="each-all-issues-view-button" data-bind="
                                 click: $root.decideViewEachAllIssues.bind(this, member, stage),
                                 visible: member[stage]().length > 2">
-                                    view all issues... <span class="badge" data-bind="text: member[stage]().length"></span>
+                                    全てのタスクを表示 <span class="badge" data-bind="text: member[stage]().length"></span>
                                 </a>
                             </div>
                         </li>
