@@ -68,7 +68,7 @@
     // プロジェクトを削除する
     Project.prototype.remove = function () {
         return $.ajax({
-            url: this.opts.url + '/' + this.id,
+            url: this.opts.url + '/' + this.id(),
             type: 'delete',
             dataType: 'json'
         });
