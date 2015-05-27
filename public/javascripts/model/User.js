@@ -6,7 +6,8 @@
         columnKeys = [
             '_id',
             'created_at',
-            'userName'
+            'userName',
+            'wip_limit'
         ],
         stageTypeAssignedKeys = model.stageTypeAssignedKeys;
 
@@ -34,9 +35,6 @@
                 return this.assignedIssues().filter(function (issue) { return issue.stage() === stage; });
             }, this, {deferEvaluation: true});
         }, this);
-
-        // WIP制限数
-        this.wipMax = ko.observable(_.random(4, 5));
 
         // 仕掛数
         this.wip = ko.computed(function () {

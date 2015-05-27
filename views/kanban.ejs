@@ -94,7 +94,7 @@
                             <span class="glyphicon glyphicon-cog" area-hidden="true"></span>
                         </a>
                         <span data-bind="text: userName"></span>
-                        <span data-bind="text: '(' + member.wip() + '/' + member.wipMax() + ')'"></span>
+                        <span data-bind="text: '(' + member.wip() + '/' + member.wip_limit() + ')'"></span>
                     </p>
 
                     <ul class="stage-blocks" data-bind="foreach: { data: <%= assignedStageNamesJSON %>, as: 'stage' }">
