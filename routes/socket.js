@@ -103,6 +103,11 @@ function socketRouting(server) {
             emitters.updateIssueDetail(projectId, user.info.token, req.issueId, req.title, req.body, fn);
         });
 
+        // update issue priority
+        socketOn(socket, 'update-issue-priority', function (req, projectId, fn) {
+            emitters.updateIssuePriority(projectId, req.issueId, req.toPriority, fn);
+        });
+
         // 切断
         socket.on('disconnect', function () {
             console.log('disconnected: ' + socket.id);
@@ -261,6 +266,14 @@ module.exports.emitters = emitters = {
 
             successWrap('updated issue detail', {issue: issue}, fn);
             module.exports.io.to(projectId).emit('update-issue-detail', {issue: issue, issueId: issueId});
+        });
+    },
+
+    updateIssuePriority: function (projectId, issueId, toPriority, fn) {
+        Project.updateIssuePriority({id: projectId}, issueId, toPriority, function (err, project, issue, toPriority) {
+
+            successWrap('updated issue priority', {issue: issue, toPriority: toPriority}, fn);
+            module.exports.io.to(projectId).emit('update-issue-priority', {issue: issue, issueId: issueId, toPriority: toPriority});
         });
     }
 };

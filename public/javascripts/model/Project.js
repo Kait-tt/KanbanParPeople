@@ -124,7 +124,7 @@
         issue.stage(toStage);
     };
 
-    Project.prototype.updatePriorityIssue = function (issueId, toPriority) {
+    Project.prototype.updateIssuePriority = function (issueId, toPriority) {
         if (toPriority >= this.issues().length) {
             console.error('invalid priority');
             return false;

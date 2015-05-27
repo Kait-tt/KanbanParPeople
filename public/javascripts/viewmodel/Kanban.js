@@ -86,7 +86,7 @@
 
         // メンバーを削除する
         that.removeMember = function (member) {
-            that.socket.emit('remove-member', {userName: member.userName()}, _.noop);
+            that.socket.emit('remove-member', {userName: member.userName()});
         };
 
         // メンバー設定を更新する
@@ -97,7 +97,7 @@
                 return;
             }
 
-            that.socket.emit('update-member', {userName: member.userName(), wipLimit: that.settingsWipLimit()}, _.noop);
+            that.socket.emit('update-member', {userName: member.userName(), wipLimit: that.settingsWipLimit()});
         };
 
         // Issueと追加する
@@ -184,6 +184,11 @@
             });
         };
 
+        // タスクの優先順位を変更する
+        that.updateIssuePriority = function (issue, toPriority) {
+            that.socket.emit('update-issue-priority', {issueId: issue._id(), toPriority: toPriority});
+        };
+
         // ソケット通信のイベント設定、デバッグ設定を初期化する
         function initSocket () {
             that.socket = io.connect();
@@ -230,13 +235,17 @@
                     targetIssue[key](req.issue[key]);
                 });
             });
+
+            that.socket.on('update-issue-priority', function (req) {
+                that.project.updateIssuePriority(req.issue._id, req.toPriority);
+            });
         }
 
         // ソケットのデバッグ出力を有効にする
         // on/emit時の内容をコンソールに出力する
         function initSocketDebugMode () {
             var onKeys = ['connect', 'add-member', 'update-member', 'remove-member', 'add-issue', 'remove-issue',
-                'assign', 'update-stage', 'update-issue-detail'];
+                'assign', 'update-stage', 'update-issue-detail', 'update-issue-priority'];
 
             // debug on event
             onKeys.forEach(function (key) {

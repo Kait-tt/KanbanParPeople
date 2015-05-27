@@ -54,25 +54,27 @@
             var currentAssignId = issue.assignee();
             var nextAssignId = member ? member._id() : null;
             var nextAssignUserName = member ? member.userName() : null;
+
             var currentPriority = that.kanban.issues.indexOf(issue);
             var nextPriority = overIssue ? that.kanban.issues.indexOf(overIssue) : null;
 
-            if (nextPriority !== null && currentPriority !== nextPriority) {
-                that.kanban.project.updatePriorityIssue(issue._id(), nextPriority);
+            var currentStage = issue.stage();
+            var nextStage = stage;
+
+            if (currentStage !== nextStage) {
+                that.kanban.updateStage(issue, nextStage);
             }
 
             if (currentAssignId !== nextAssignId) {
                 that.kanban.selectedIssue(issue);
                 that.kanban.assignUserName(nextAssignUserName);
                 that.kanban.assignIssue();
-                // stage changed to 'todo' auto
-            } else {
-                var currentStage = issue.stage();
-                var nextStage = stage;
+            }
 
-                if (currentStage !== nextStage) {
-                    that.kanban.updateStage(issue, nextStage);
-                }
+            if (currentStage === nextStage &&
+                currentAssignId === nextAssignId &&
+                nextPriority !== null && currentPriority !== nextPriority) {
+                that.kanban.updateIssuePriority(issue, nextPriority);
             }
         };
     }
