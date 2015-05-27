@@ -63,7 +63,7 @@
                         afterAdd: view.effects.slideDown,
                         beforeRemove: view.effects.slideUp },
                     event: {
-                        dragover: $root.dragAndDrop.ondragover,
+                        dragover: $root.dragAndDrop.ondragover.bind(null, '<%= stage.name %>', null),
                         drop: $root.dragAndDrop.ondrop.bind(null, '<%= stage.name %>', null) }">
                         <% include _card %>
                     </ul>
@@ -85,7 +85,7 @@
                     as: 'member',
                     afterAdd: view.effects.slideDown,
                     beforeRemove: view.effects.slideUp }">
-                <li class="user-block" data-bind="css: {'wip-limited': member.wipLimited}">
+                <li class="user-block" data-bind="css: { 'wip-limited': member.isWipLimited }">
                     <p class="user-name">
                         <!--<button type="button" class="close" aria-label="Close" data-bind="click: $root.removeMember">-->
                             <!--<span aria-hidden="true">&times;</span>-->
@@ -107,7 +107,7 @@
                                     afterAdd: view.effects.slideDown,
                                     beforeRemove: view.effects.slideUp },
                                 event: {
-                                    dragover: $root.dragAndDrop.ondragover,
+                                    dragover: $root.dragAndDrop.ondragover.bind(null, stage, member),
                                     drop: $root.dragAndDrop.ondrop.bind(null, stage, member) }">
                                     <% include _card %>
                                 </ul>

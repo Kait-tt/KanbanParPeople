@@ -17,8 +17,10 @@
             return true;
         };
 
-        that.ondragover = function (data, event) {
-            event.preventDefault();
+        that.ondragover = function (stage, member, data, event) {
+            if (!(member && member.isWipLimited())) {
+                event.preventDefault();
+            }
             return true;
         };
 

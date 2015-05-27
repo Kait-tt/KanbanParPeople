@@ -44,7 +44,7 @@
         }, this, {deferEvaluation: true});
 
         // 仕掛数MAX
-        this.wipLimited = ko.computed(function () {
+        this.isWipLimited = ko.computed(function () {
             return this.wip() >= this.wip_limit();
         }, this);
     };
