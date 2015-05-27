@@ -15,10 +15,10 @@
         <h1 class="project-name"><%= displayTitle %></h1>
         <div class="sync-status">
             <!-- ko if: $root.project.github().sync -->
-            <span class="label label-primary">同期中</span>
+            <span class="label label-primary">同期ON</span>
             <!-- /ko -->
             <!-- ko ifnot: $root.project.github().sync -->
-            <span class="label label-default">非同期</span>
+            <span class="label label-default">同期OFF</span>
             <!-- /ko -->
         </div>
         <button type="button" class="btn btn-sm btn-default project-settings-button"
