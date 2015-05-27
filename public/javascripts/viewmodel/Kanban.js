@@ -45,6 +45,18 @@
             that.updateIssueDetailBody(issue ? issue.body() : null);
         });
 
+        // 選択しているメンバー
+        that.selectedMember = ko.observable();
+
+        // 編集用の仮のWIP制限
+        that.settingsWipLimit = ko.observable();
+
+        that.selectedMember.subscribe(function (member) {
+            if (member) {
+                that.settingsWipLimit(member.wip_limit());
+            }
+        });
+
         // アサイン可能なメンバー
         that.canAssignMembers = ko.computed(function () {
             return that.members().filter(function (member) {
