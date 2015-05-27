@@ -144,11 +144,18 @@
 
 
     Project.prototype.addMember = function (member) {
-        this.members.push(new User(_.extend(member.user, {issues: this.issues})));
+        this.members.push(new User(_.extend(member.user, {issues: this.issues, wipLimit: member.wipLimit})));
     };
 
     Project.prototype.removeMember = function (member) {
         this.members.remove(member);
+    };
+
+    Project.prototype.updateMember = function (member, params) {
+        // wip update
+        if (params && params.wipLimit) {
+            member.wipLimit(params.wipLimit);
+        }
     };
 
     Project.prototype.getMember = function (memberId) {

@@ -7,7 +7,7 @@
             '_id',
             'created_at',
             'userName',
-            'wip_limit'
+            'wipLimit'
         ],
         stageTypeAssignedKeys = model.stageTypeAssignedKeys;
 
@@ -45,7 +45,7 @@
 
         // 仕掛数MAX
         this.isWipLimited = ko.computed(function () {
-            return this.wip() >= this.wip_limit();
+            return this.wip() >= this.wipLimit();
         }, this);
     };
 

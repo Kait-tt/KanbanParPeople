@@ -1,4 +1,4 @@
-(function (ko, io, util) {
+(function (ko, io, _, util) {
     'use strict';
 
     var viewmodel = util.namespace('kpp.viewmodel'),
@@ -53,7 +53,7 @@
 
         that.selectedMember.subscribe(function (member) {
             if (member) {
-                that.settingsWipLimit(member.wip_limit());
+                that.settingsWipLimit(member.wipLimit());
             }
         });
 
@@ -86,7 +86,18 @@
 
         // メンバーを削除する
         that.removeMember = function (member) {
-            that.socket.emit('remove-member', {userName: member.userName()}, function (res) { });
+            that.socket.emit('remove-member', {userName: member.userName()}, _.noop);
+        };
+
+        // メンバー設定を更新する
+        that.updateMember = function () {
+            var member = that.selectedMember();
+            if (!member) {
+                console.error('unselected member');
+                return;
+            }
+
+            that.socket.emit('update-member', {userName: member.userName(), wipLimit: that.settingsWipLimit()}, _.noop);
         };
 
         // Issueと追加する
@@ -105,7 +116,7 @@
 
         // Issueを削除する
         that.removeIssue = function (issue) {
-            that.socket.emit('remove-issue', {issueId: issue._id()}, function (res) { });
+            that.socket.emit('remove-issue', {issueId: issue._id()}, _.noop);
         };
 
         // タスクをアサインする
@@ -190,6 +201,11 @@
                 that.project.removeMember(targetMember);
             });
 
+            that.socket.on('update-member', function (req) {
+                var targetMember = that.project.getMember(req.member.user._id);
+                that.project.updateMember(targetMember, req.member);
+            });
+
             that.socket.on('add-issue', function (req) {
                 that.project.addIssue(req.issue);
             });
@@ -219,7 +235,7 @@
         // ソケットのデバッグ出力を有効にする
         // on/emit時の内容をコンソールに出力する
         function initSocketDebugMode () {
-            var onKeys = ['connect', 'add-member', 'remove-member', 'add-issue', 'remove-issue',
+            var onKeys = ['connect', 'add-member', 'update-member', 'remove-member', 'add-issue', 'remove-issue',
                 'assign', 'update-stage', 'update-issue-detail'];
 
             // debug on event
@@ -247,4 +263,4 @@
         }
     }
 
-}(ko, io, window.nakazawa.util));
+}(ko, io, _, window.nakazawa.util));

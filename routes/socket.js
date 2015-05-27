@@ -73,6 +73,11 @@ function socketRouting(server) {
             emitters.addMember(projectId, req.userName, fn);
         });
 
+        // memberの更新
+        socketOn(socket, 'update-member', function (req, projectId, fn) {
+            emitters.updateMember(projectId, user.info.token, req.userName, {wipLimit: req.wipLimit}, fn);
+        });
+
         // issueの追加
         socketOn(socket, 'add-issue', function (req, projectId, fn) {
             emitters.addIssue(projectId, user.info.token, {title: req.title, body: req.body}, fn);
@@ -188,6 +193,15 @@ module.exports.emitters = emitters = {
 
             successWrap('added member', {member: member}, fn);
             module.exports.io.to(projectId).emit('add-member', {member: member});
+        });
+    },
+
+    updateMember: function (projectId, token, targetUserName, updateParams, fn) {
+        Project.updateMember({id: projectId}, targetUserName, updateParams, function (err, project, member) {
+            if (err) { serverErrorWrap(err, {}, fn); return; }
+
+            successWrap('updated member', {member: member}, fn);
+            module.exports.io.to(projectId).emit('update-member', {member: member});
         });
     },
 
