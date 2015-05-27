@@ -42,6 +42,11 @@
                 return sum + this[stage]().length;
             }.bind(this), 0);
         }, this, {deferEvaluation: true});
+
+        // 仕掛数MAX
+        this.wipLimited = ko.computed(function () {
+            return this.wip() >= this.wip_limit();
+        }, this);
     };
 
 }(_, window.nakazawa.util));

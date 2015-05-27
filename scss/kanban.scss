@@ -150,6 +150,10 @@ div.user-block-area {
       z-index: 5;
       @include box-shadow(2px 2px 2px 0px rgba(#000, .1));
 
+      &.wip-limited {
+        border: 2px solid #d9534f;
+      }
+
       .user-name {
         font-size: 12px;
         height: 12px + 17;

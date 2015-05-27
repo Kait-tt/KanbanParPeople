@@ -85,7 +85,7 @@
                     as: 'member',
                     afterAdd: view.effects.slideDown,
                     beforeRemove: view.effects.slideUp }">
-                <li class="user-block">
+                <li class="user-block" data-bind="css: {'wip-limited': member.wipLimited}">
                     <p class="user-name">
                         <!--<button type="button" class="close" aria-label="Close" data-bind="click: $root.removeMember">-->
                             <!--<span aria-hidden="true">&times;</span>-->
