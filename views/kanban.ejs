@@ -61,10 +61,7 @@
                         data: $root.stages.<%= stage.name %>,
                         afterRender: view.MiniMenu.init,
                         afterAdd: view.effects.slideDown,
-                        beforeRemove: view.effects.slideUp },
-                    event: {
-                        dragover: $root.dragAndDrop.ondragover.bind(null, '<%= stage.name %>', null),
-                        drop: $root.dragAndDrop.ondrop.bind(null, '<%= stage.name %>', null) }">
+                        beforeRemove: view.effects.slideUp }">
                         <% include _card %>
                     </ul>
                 <% } %>
@@ -113,10 +110,7 @@
                                     data: member[stage]().slice(0, 2),
                                     afterRender: view.MiniMenu.init,
                                     afterAdd: view.effects.slideDown,
-                                    beforeRemove: view.effects.slideUp },
-                                event: {
-                                    dragover: $root.dragAndDrop.ondragover.bind(null, stage, member),
-                                    drop: $root.dragAndDrop.ondrop.bind(null, stage, member) }">
+                                    beforeRemove: view.effects.slideUp }">
                                     <% include _card %>
                                 </ul>
 

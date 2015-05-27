@@ -34,8 +34,4 @@
         }, this, {deferEvaluation: true});
     };
 
-    Issue.sortFunc = function (a, b) {
-        return util.comp(a.created_at(), b.created_at(), true);
-    };
-
 }(_, window.nakazawa.util));

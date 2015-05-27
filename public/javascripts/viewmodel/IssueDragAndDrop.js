@@ -17,30 +17,49 @@
             return true;
         };
 
-        that.ondragover = function (stage, member, data, event) {
-            if (!(member && member.isWipLimited())) {
+        that.ondragover = function (overIssue, event) {
+            var assignee = overIssue.assignee();
+            var overMember = null;
+            if (assignee) {
+                overMember = that.kanban.project.getMember(assignee);
+            }
+
+            if (!(overMember && overMember.isWipLimited())) {
                 event.preventDefault();
             }
             return true;
         };
 
-        that.ondrop = function (stage, member, obj, event) {
+        // カードの上にドロップ
+        that.ondrop = function (overIssue, event) {
             var issue = that.draggingIssue();
 
             event.preventDefault();
 
-            that.dropSuccess(stage, member, issue);
+            var assignee = overIssue.assignee();
+            var overMember = null;
+            if (assignee) {
+                overMember = that.kanban.project.getMember(assignee);
+            }
+
+            that.dropSuccess(overIssue.stage(), overMember, overIssue, issue);
 
             return true;
         };
 
-        that.dropSuccess = function (stage, member, issue) {
+        that.dropSuccess = function (stage, member, overIssue, issue) {
             // if same member, change stage
             // else assign
 
             var currentAssignId = issue.assignee();
             var nextAssignId = member ? member._id() : null;
             var nextAssignUserName = member ? member.userName() : null;
+            var currentPriority = that.kanban.issues.indexOf(issue);
+            var nextPriority = overIssue ? that.kanban.issues.indexOf(overIssue) : null;
+
+            if (nextPriority !== null && currentPriority !== nextPriority) {
+                that.kanban.project.updatePriorityIssue(issue._id(), nextPriority);
+            }
 
             if (currentAssignId !== nextAssignId) {
                 that.kanban.selectedIssue(issue);

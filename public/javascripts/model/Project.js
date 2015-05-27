@@ -46,9 +46,6 @@
         // issuesの初期化
         (o.issues || []).forEach(function (issue) { this.addIssue(issue, true); }, this);
 
-        // issueはソートされている状態に保つ
-        this.issues.subscribe(function () { this.issues.peek().sort(Issue.sortFunc); }.bind(this));
-
         // membersの初期化
         (o.members || []).forEach(function (member) { this.addMember(member, true); }, this);
 
@@ -125,6 +122,25 @@
         }
 
         issue.stage(toStage);
+    };
+
+    Project.prototype.updatePriorityIssue = function (issueId, toPriority) {
+        if (toPriority >= this.issues().length) {
+            console.error('invalid priority');
+            return false;
+        }
+
+        var issue = this.getIssue(issueId);
+        if (!issue) {
+            console.error('issue not found');
+            return false;
+        }
+
+        var beforePriority = this.issues.indexOf(issue);
+        var nextPriority = toPriority + (beforePriority >= toPriority ? 1 : 0);
+
+        this.issues.splice(beforePriority, 1);
+        this.issues.splice(nextPriority, 0, issue);
     };
 
 

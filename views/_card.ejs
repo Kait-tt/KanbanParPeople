@@ -1,4 +1,9 @@
-<div class="card" draggable="true" data-bind="event: { dragstart: $root.dragAndDrop.ondragstart }">
+<div class="card" draggable="true" data-bind="
+    event: {
+        dragstart: $root.dragAndDrop.ondragstart,
+        dragover: $root.dragAndDrop.ondragover,
+        drop: $root.dragAndDrop.ondrop
+    }">
     <div class="mini-menu">
         <div class="mini-menu-default">
             <button type="button" class="btn btn-sm btn-default">
