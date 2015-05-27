@@ -1,4 +1,4 @@
-(function (ko, io, util) {
+(function (ko, util) {
     'use strict';
 
     var ns = util.namespace('kpp.viewmodel');
@@ -58,4 +58,4 @@
         };
     }
 
-}(ko, io, window.nakazawa.util));
+}(ko, window.nakazawa.util));

@@ -45,6 +45,13 @@
             that.updateIssueDetailBody(issue ? issue.body() : null);
         });
 
+        // アサイン可能なメンバー
+        that.canAssignMembers = ko.computed(function () {
+            return that.members().filter(function (member) {
+                return !member.isWipLimited();
+            });
+        }, that, {deferEvaluation: true});
+
         that.init = function (project) {
             that.project = project;
             that.members = project.members;

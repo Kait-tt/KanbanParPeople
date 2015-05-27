@@ -303,7 +303,7 @@
                         </label>
 
                         <select class="form-control" id="assign-issue-user"
-                                data-bind="options: $root.members(),
+                                data-bind="options: $root.canAssignMembers,
                                 optionsText: 'userName',
                                 optionsValue: 'userName',
                                 value: $root.assignUserName,
