@@ -85,8 +85,19 @@
         };
 
         // メンバーを削除する
-        that.removeMember = function (member) {
-            that.socket.emit('remove-member', {userName: member.userName()});
+        that.removeMember = function () {
+            var member = that.selectedMember();
+            if (!member) {
+                console.error('unselected member');
+                return;
+            }
+
+            that.socket.emit('remove-member', {userName: member.userName()}, function (res) {
+                if (res.status === 'success') {
+                    // モーダルを閉じる
+                    $('.modal').modal('hide');
+                }
+            });
         };
 
         // メンバー設定を更新する

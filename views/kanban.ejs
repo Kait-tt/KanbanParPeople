@@ -85,9 +85,6 @@
                 <li class="user-block" data-bind="css: { 'wip-limited': member.isWipLimited }">
                     <div class="user-label-area">
                         <p class="user-name">
-                            <!--<button type="button" class="close" aria-label="Close" data-bind="click: $root.removeMember">-->
-                                <!--<span aria-hidden="true">&times;</span>-->
-                            <!--</button>-->
                             <a href="#" class="user-settings-button"
                                data-toggle="modal" data-target="#user-settings-modal"
                                data-bind="click: $root.selectedMember">
@@ -386,35 +383,41 @@
             <!-- ko with: $root.selectedMember -->
             <form class="form">
                 <div class="modal-body">
-                        <div class="form-group">
-                            <label for="user-settings-name" class="control-label">
-                                <span class="glyphicon glyphicon-blackboard"> Name</span>
-                            </label>
-                            <p class="form-control-static" id="project-settings-user" data-bind="text: userName"></p>
-                        </div>
+                    <div class="form-group">
+                        <label for="user-settings-name" class="control-label">
+                            <span class="glyphicon glyphicon-blackboard"> Name</span>
+                        </label>
+                        <p class="form-control-static" id="project-settings-user" data-bind="text: userName"></p>
+                    </div>
 
-                        <div class="form-group">
-                            <label for="user-settings-wip" class="control-label">
-                                <span class="glyphicon glyphicon-credit-card" aria-hidden="true"> 仕掛タスク数</span>
-                            </label>
-                            <p class="form-control-static" id="user-settings-wip">
-                                <span data-bind="text: wip() + '/' + $root.settingsWipLimit()"></span>
-                            </p>
-                            <p class="alert alert-warning" data-bind="visible: wip() >= $root.settingsWipLimit()">
-                                <span class="glyphicon glyphicon-warning-sign"></span> WIP制限に達しています。
-                            </p>
-                        </div>
+                    <div class="form-group">
+                        <label for="user-settings-wip" class="control-label">
+                            <span class="glyphicon glyphicon-credit-card" aria-hidden="true"> 仕掛タスク数</span>
+                        </label>
+                        <p class="form-control-static" id="user-settings-wip">
+                            <span data-bind="text: wip() + '/' + $root.settingsWipLimit()"></span>
+                        </p>
+                        <p class="alert alert-warning" data-bind="visible: wip() >= $root.settingsWipLimit()">
+                            <span class="glyphicon glyphicon-warning-sign"></span> WIP制限に達しています。
+                        </p>
+                    </div>
 
-                        <div class="form-group">
-                            <label for="user-settings-wip-limit" class="control-label">
-                                <span class="glyphicon glyphicon-credit-card" aria-hidden="true"> WIP制限数</span>
-                            </label>
-                            <input type="number" class="form-control" id="user-settings-wip-limit" placeholder="WIP Limit" min="0"
-                                   data-bind="value: $root.settingsWipLimit, valueUpdate: 'input'" required>
-                            <p class="alert alert-danger" data-bind="visible: wip() > $root.settingsWipLimit()">
-                                <span class="glyphicon glyphicon-warning-sign"></span> WIP制限を超過しています
-                            </p>
-                        </div>
+                    <div class="form-group">
+                        <label for="user-settings-wip-limit" class="control-label">
+                            <span class="glyphicon glyphicon-credit-card" aria-hidden="true"> WIP制限数</span>
+                        </label>
+                        <input type="number" class="form-control" id="user-settings-wip-limit" placeholder="WIP Limit" min="0"
+                               data-bind="value: $root.settingsWipLimit, valueUpdate: 'input'" required>
+                        <p class="alert alert-danger" data-bind="visible: wip() > $root.settingsWipLimit()">
+                            <span class="glyphicon glyphicon-warning-sign"></span> WIP制限を超過しています
+                        </p>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="button" class="btn btn-danger remove-member-button" data-bind="click: $root.removeMember">
+                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete
+                        </button>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
