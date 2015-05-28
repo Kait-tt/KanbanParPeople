@@ -215,7 +215,9 @@ module.exports.emitters = emitters = {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('added issue', {issue: issue}, fn);
-            module.exports.io.to(projectId).emit('add-issue', {issue: issue});
+            if (issue) {
+                module.exports.io.to(projectId).emit('add-issue', {issue: issue});
+            }
         });
     },
 
@@ -224,7 +226,9 @@ module.exports.emitters = emitters = {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('removed issue', {issue: issue}, fn);
-            module.exports.io.to(projectId).emit('remove-issue', {issue: issue});
+            if (issue) {
+                module.exports.io.to(projectId).emit('remove-issue', {issue: issue});
+            }
         });
     },
 
@@ -237,11 +241,13 @@ module.exports.emitters = emitters = {
                 if (err) { serverErrorWrap(err, {}, fn); return; }
 
                 successWrap('assigned', {issue: issue}, fn);
-                module.exports.io.to(projectId).emit('assign', {issue: issue, issueId: issueId, memberId: userId});
+                if (issue) {
+                    module.exports.io.to(projectId).emit('assign', {issue: issue, issueId: issueId, memberId: userId});
 
-                // stageが変わっていたら通知
-                if (beforeStage !== issue.stage) {
-                    emitters.updateStage(projectId, token, issueId, issue.stage, _.noop);
+                    // stageが変わっていたら通知
+                    if (beforeStage !== issue.stage) {
+                        emitters.updateStage(projectId, token, issueId, issue.stage, _.noop);
+                    }
                 }
             });
         });
