@@ -44,10 +44,11 @@
         this.members = ko.observableArray();
 
         // issuesの初期化
-        (o.issues || []).forEach(function (issue) { this.addIssue(issue, true); }, this);
+        (o.issues || []).reverse();
+        (o.issues || []).forEach(function (issue) { this.addIssue(issue); }, this);
 
         // membersの初期化
-        (o.members || []).forEach(function (member) { this.addMember(member, true); }, this);
+        (o.members || []).forEach(function (member) { this.addMember(member); }, this);
 
         // this.stages[stageName] = 各ステージにあるIssue
         this.stages = _.object(stageTypeKeys.map(function (stageName) {
@@ -147,7 +148,7 @@
     /*** helper ***/
 
     Project.prototype.addIssue = function (issue) {
-        this.issues.push(new Issue(_.extend(issue, {members: this.members})));
+        this.issues.unshift(new Issue(_.extend(issue, {members: this.members})));
     };
 
     Project.prototype.removeIssue = function (issue) {
