@@ -165,8 +165,8 @@
                 toIndex = stageTypeKeys.indexOf(currentStage) + step,
                 toStage;
 
-            if (_.inRange(toIndex, 0, stageTypeKeys.length)) {
-                throw new Error('cannot change stage', toIndex);
+            if (!_.inRange(toIndex, 0, stageTypeKeys.length)) {
+                throw new Error('cannot change stage: ' +  toIndex);
             }
 
             toStage = stageTypeKeys[toIndex];
@@ -176,17 +176,13 @@
 
         // タスクのステージを変更する
         that.updateStage = function (issue, toStage, /* option */userId) {
-            that.socket.emit('update-stage', {issueId: issue._id(), toStage: toStage, userId: userId ? userId : issue.userId});
+            that.socket.emit('update-stage', {issueId: issue._id(), toStage: toStage, userId: userId ? userId : issue.assignee()});
         };
 
         // タスクのタイトル/説明を更新する
         that.updateIssueDetail = function () {
             var issue = that.selectedIssue();
-
-            if (!issue) {
-                console.error('issue is not selected');
-                return;
-            }
+            if (!issue) { throw new Error('issue is not selected'); }
 
             that.socket.emit('update-issue-detail', {
                 issueId: issue._id(),

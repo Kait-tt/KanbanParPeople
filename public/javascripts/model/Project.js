@@ -100,10 +100,7 @@
         }
 
         var issue = this.getIssue(issueId);
-        if (!issue) {
-            console.error('issue not found');
-            return false;
-        }
+        if (!issue) { throw new Error('issue not found'); }
 
         var beforePriority = this.issues.indexOf(issue);
         var nextPriority = toPriority + (beforePriority >= toPriority ? 1 : 0);
