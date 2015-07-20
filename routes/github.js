@@ -45,15 +45,23 @@ var routes = {
                 return;
             }
 
-            User.findOrCreate(req.body.issue.assignee.login, function (err, user) {
-                if (err) {
-                    console.error(err);
-                    res.status(500).json({message: err.message});
-                } else {
-                    socket.emitters.assignIssue(project.id, null, issue._id, user._id, _.noop);
-                    res.status(200).json({});
-                }
-            });
+            if (!req.body.issue.assignee) {
+                // unassigned
+                socket.emitters.assignIssue(project.id, null, issue._id, stages.backlog, null, _.noop);
+                res.status(200).json({});
+            } else {
+                // assigned
+                User.findOrCreate(req.body.issue.assignee.login, function (err, user) {
+                    if (err) {
+                        console.error(err);
+                        res.status(500).json({message: err.message});
+                    } else {
+                        socket.emitters.assignIssue(project.id, null, issue._id, stages.todo, user._id, _.noop);
+                        res.status(200).json({});
+                    }
+                });
+            }
+
         }
     }
 };

@@ -3,7 +3,8 @@
 
     var viewmodel = util.namespace('kpp.viewmodel'),
         model = util.namespace('kpp.model'),
-        stageTypeKeys = model.stageTypeKeys;
+        stageTypeKeys = model.stageTypeKeys,
+        stages = model.stageTypes;
 
     viewmodel.Kanban = viewmodel.Kanban || Kanban;
 
@@ -137,7 +138,11 @@
 
             if (!issue) { throw new Error('issue is not selected.'); }
 
-            that.socket.emit('assign', {issueId: issue._id(), userId: user ? user._id() : null}, function () {
+            that.socket.emit('update-stage', {
+                issueId: issue._id(),
+                userId: user ? user._id() : null,
+                toStage: user ? stages.todo.name : stages.backlog.name
+            }, function () {
                 // reset form
                 that.selectedIssue(null);
                 that.assignUserName(null);
@@ -170,8 +175,8 @@
         };
 
         // タスクのステージを変更する
-        that.updateStage = function (issue, toStage) {
-            that.socket.emit('update-stage', {issueId: issue._id(), toStage: toStage});
+        that.updateStage = function (issue, toStage, /* option */userId) {
+            that.socket.emit('update-stage', {issueId: issue._id(), toStage: toStage, userId: userId ? userId : issue.userId});
         };
 
         // タスクのタイトル/説明を更新する
@@ -231,12 +236,8 @@
                 that.project.removeIssue(targetIssue);
             });
 
-            that.socket.on('assign', function (req) {
-                that.project.assignIssue(req.issueId, req.memberId);
-            });
-
             that.socket.on('update-stage', function (req) {
-                that.project.updateStage(req.issueId, req.toStage);
+                that.project.updateStage(req.issueId, req.toStage, req.assignee);
             });
 
             that.socket.on('update-issue-detail', function (req) {
