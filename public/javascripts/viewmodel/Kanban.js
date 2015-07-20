@@ -71,7 +71,6 @@
             that.stages = project.stages;
 
             initSocket();
-            initSocketDebugMode();
         };
 
         // メンバーを追加する
@@ -136,6 +135,8 @@
             var issue = that.selectedIssue(),
                 user = that.project.getMemberByName(that.assignUserName());
 
+            if (!issue) { throw new Error('issue is not selected.'); }
+
             that.socket.emit('assign', {issueId: issue._id(), userId: user ? user._id() : null}, function () {
                 // reset form
                 that.selectedIssue(null);
@@ -159,9 +160,8 @@
                 toIndex = stageTypeKeys.indexOf(currentStage) + step,
                 toStage;
 
-            if (toIndex < 0 || toIndex >= stageTypeKeys.length) {
-                console.error('cannot change stage', toIndex);
-                return false;
+            if (_.inRange(toIndex, 0, stageTypeKeys.length)) {
+                throw new Error('cannot change stage', toIndex);
             }
 
             toStage = stageTypeKeys[toIndex];
@@ -202,7 +202,7 @@
 
         // ソケット通信のイベント設定、デバッグ設定を初期化する
         function initSocket () {
-            that.socket = io.connect();
+            that.socket = new model.Socket();
 
             that.socket.on('connect', function () {
                 that.socket.emit('join-project-room', {projectId: that.project.id()});
@@ -250,36 +250,8 @@
             that.socket.on('update-issue-priority', function (req) {
                 that.project.updateIssuePriority(req.issue._id, req.toPriority);
             });
-        }
 
-        // ソケットのデバッグ出力を有効にする
-        // on/emit時の内容をコンソールに出力する
-        function initSocketDebugMode () {
-            var onKeys = ['connect', 'add-member', 'update-member', 'remove-member', 'add-issue', 'remove-issue',
-                'assign', 'update-stage', 'update-issue-detail', 'update-issue-priority'];
-
-            // debug on event
-            onKeys.forEach(function (key) {
-                that.socket.on(key, function(res) {
-                    console.log('on: ' + key, res);
-                });
-            });
-
-            // debug on emit
-            (function (f) {
-                that.socket.emit = function (key, req, fn) {
-                    var callback = function (res) {
-                        console.log('callback: ' + key, res);
-                        if (fn) {
-                            fn.apply(this, arguments);
-                        }
-                    };
-
-                    console.log('emit: ' + key, req);
-
-                    f.call(that.socket, key, req, callback);
-                };
-            }(that.socket.emit));
+            that.socket.initSocketDebugMode();
         }
     }
 
