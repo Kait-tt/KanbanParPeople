@@ -176,7 +176,7 @@
 
         // タスクのステージを変更する
         that.updateStage = function (issue, toStage, /* option */userId) {
-            that.socket.emit('update-stage', {issueId: issue._id(), toStage: toStage, userId: userId ? userId : issue.assignee()});
+            that.socket.emit('update-stage', {issueId: issue._id(), toStage: toStage, userId: userId !== undefined ? userId : issue.assignee()});
         };
 
         // タスクのタイトル/説明を更新する
