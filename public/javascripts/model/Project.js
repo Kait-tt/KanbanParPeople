@@ -83,46 +83,14 @@
         }.bind(this));
     };
 
-    // タスクをアサインする
-    // memberId = null で unassigneIssue と同じ
-    Project.prototype.assignIssue = function (issueId, memberId) {
+    // タスクのステージ、アサインを変更する
+    Project.prototype.updateStage = function (issueId, toStage, memberId) {
         var issue = this.getIssue(issueId),
             member = this.getMember(memberId);
-
-        if (!issue) {
-            console.error('issue not found', issueId);
-            return false;
-        }
-
-        if (member) {
-            issue.assignee(memberId);
-        } else {
-            // member = null <=> unassign
-            this.unassignIssue(issueId);
-        }
-    };
-
-    // タスクのアサインを解除する
-    Project.prototype.unassignIssue = function (issueId) {
-        var issue = this.getIssue(issueId);
-        if (!issue) {
-            console.error('issue not found');
-            return false;
-        }
-
-        issue.assignee(null);
-    };
-
-    // タスクのステージを変更する
-    Project.prototype.updateStage = function (issueId, toStage) {
-        var issue = this.getIssue(issueId);
-
-        if (!issue) {
-            console.error('issue not found');
-            return false;
-        }
+        if (!issue) { throw new Error('issue not found'); }
 
         issue.stage(toStage);
+        issue.assignee(member ? memberId : null);
     };
 
     Project.prototype.updateIssuePriority = function (issueId, toPriority) {
@@ -132,10 +100,7 @@
         }
 
         var issue = this.getIssue(issueId);
-        if (!issue) {
-            console.error('issue not found');
-            return false;
-        }
+        if (!issue) { throw new Error('issue not found'); }
 
         var beforePriority = this.issues.indexOf(issue);
         var nextPriority = toPriority + (beforePriority >= toPriority ? 1 : 0);

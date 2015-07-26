@@ -3,7 +3,8 @@
 
     var viewmodel = util.namespace('kpp.viewmodel'),
         model = util.namespace('kpp.model'),
-        stageTypeKeys = model.stageTypeKeys;
+        stageTypeKeys = model.stageTypeKeys,
+        stages = model.stageTypes;
 
     viewmodel.Kanban = viewmodel.Kanban || Kanban;
 
@@ -71,7 +72,6 @@
             that.stages = project.stages;
 
             initSocket();
-            initSocketDebugMode();
         };
 
         // メンバーを追加する
@@ -136,7 +136,13 @@
             var issue = that.selectedIssue(),
                 user = that.project.getMemberByName(that.assignUserName());
 
-            that.socket.emit('assign', {issueId: issue._id(), userId: user ? user._id() : null}, function () {
+            if (!issue) { throw new Error('issue is not selected.'); }
+
+            that.socket.emit('update-stage', {
+                issueId: issue._id(),
+                userId: user ? user._id() : null,
+                toStage: user ? stages.todo.name : stages.backlog.name
+            }, function () {
                 // reset form
                 that.selectedIssue(null);
                 that.assignUserName(null);
@@ -159,9 +165,8 @@
                 toIndex = stageTypeKeys.indexOf(currentStage) + step,
                 toStage;
 
-            if (toIndex < 0 || toIndex >= stageTypeKeys.length) {
-                console.error('cannot change stage', toIndex);
-                return false;
+            if (!_.inRange(toIndex, 0, stageTypeKeys.length)) {
+                throw new Error('cannot change stage: ' +  toIndex);
             }
 
             toStage = stageTypeKeys[toIndex];
@@ -170,18 +175,14 @@
         };
 
         // タスクのステージを変更する
-        that.updateStage = function (issue, toStage) {
-            that.socket.emit('update-stage', {issueId: issue._id(), toStage: toStage});
+        that.updateStage = function (issue, toStage, /* option */userId) {
+            that.socket.emit('update-stage', {issueId: issue._id(), toStage: toStage, userId: userId !== undefined ? userId : issue.assignee()});
         };
 
         // タスクのタイトル/説明を更新する
         that.updateIssueDetail = function () {
             var issue = that.selectedIssue();
-
-            if (!issue) {
-                console.error('issue is not selected');
-                return;
-            }
+            if (!issue) { throw new Error('issue is not selected'); }
 
             that.socket.emit('update-issue-detail', {
                 issueId: issue._id(),
@@ -202,7 +203,7 @@
 
         // ソケット通信のイベント設定、デバッグ設定を初期化する
         function initSocket () {
-            that.socket = io.connect();
+            that.socket = new model.Socket();
 
             that.socket.on('connect', function () {
                 that.socket.emit('join-project-room', {projectId: that.project.id()});
@@ -231,12 +232,8 @@
                 that.project.removeIssue(targetIssue);
             });
 
-            that.socket.on('assign', function (req) {
-                that.project.assignIssue(req.issueId, req.memberId);
-            });
-
             that.socket.on('update-stage', function (req) {
-                that.project.updateStage(req.issueId, req.toStage);
+                that.project.updateStage(req.issueId, req.toStage, req.assignee);
             });
 
             that.socket.on('update-issue-detail', function (req) {
@@ -250,36 +247,8 @@
             that.socket.on('update-issue-priority', function (req) {
                 that.project.updateIssuePriority(req.issue._id, req.toPriority);
             });
-        }
 
-        // ソケットのデバッグ出力を有効にする
-        // on/emit時の内容をコンソールに出力する
-        function initSocketDebugMode () {
-            var onKeys = ['connect', 'add-member', 'update-member', 'remove-member', 'add-issue', 'remove-issue',
-                'assign', 'update-stage', 'update-issue-detail', 'update-issue-priority'];
-
-            // debug on event
-            onKeys.forEach(function (key) {
-                that.socket.on(key, function(res) {
-                    console.log('on: ' + key, res);
-                });
-            });
-
-            // debug on emit
-            (function (f) {
-                that.socket.emit = function (key, req, fn) {
-                    var callback = function (res) {
-                        console.log('callback: ' + key, res);
-                        if (fn) {
-                            fn.apply(this, arguments);
-                        }
-                    };
-
-                    console.log('emit: ' + key, req);
-
-                    f.call(that.socket, key, req, callback);
-                };
-            }(that.socket.emit));
+            that.socket.initSocketDebugMode();
         }
     }
 

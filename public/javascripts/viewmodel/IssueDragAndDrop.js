@@ -48,12 +48,8 @@
         };
 
         that.dropSuccess = function (stage, member, overIssue, issue) {
-            // if same member, change stage
-            // else assign
-
             var currentAssignId = issue.assignee();
             var nextAssignId = member ? member._id() : null;
-            var nextAssignUserName = member ? member.userName() : null;
 
             var currentPriority = that.kanban.issues.indexOf(issue);
             var nextPriority = overIssue ? that.kanban.issues.indexOf(overIssue) : null;
@@ -61,14 +57,8 @@
             var currentStage = issue.stage();
             var nextStage = stage;
 
-            if (currentStage !== nextStage) {
-                that.kanban.updateStage(issue, nextStage);
-            }
-
-            if (currentAssignId !== nextAssignId) {
-                that.kanban.selectedIssue(issue);
-                that.kanban.assignUserName(nextAssignUserName);
-                that.kanban.assignIssue();
+            if (currentAssignId !== nextAssignId || currentStage !== nextStage) {
+                that.kanban.updateStage(issue, nextStage, nextAssignId);
             }
 
             if (currentStage === nextStage &&
