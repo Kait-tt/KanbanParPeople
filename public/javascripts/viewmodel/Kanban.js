@@ -171,7 +171,17 @@
 
             toStage = stageTypeKeys[toIndex];
 
-            that.updateStage(issue, toStage);
+            // check assign
+            // 担当者が必要なステージから必要ないステージへ移行した際には
+            // 担当者を外す
+            var currentStageDetail = stages[currentStage];
+            var toStageDetail = stages[toStage];
+            var assign = undefined;
+            if (currentStageDetail.assigned && !toStageDetail.assigned) {
+                assign = null; // unassign
+            }
+
+            that.updateStage(issue, toStage, assign);
         };
 
         // タスクのステージを変更する
