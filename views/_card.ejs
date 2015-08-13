@@ -21,7 +21,9 @@
 
             <li>
                 <button type="button" class="btn btn-sm btn-default"
-                        data-bind="click: $root.nextStage, css: {disabled: stage() === 'backlog' || stage() === 'done'}">
+                        data-bind="click: $root.nextStage,
+                            css: {disabled: stage() === 'backlog' || stage() === 'done'},
+                            attr: {disabled: stage() === 'backlog' || stage() === 'done'}">
                     <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
                 </button>
             </li>
@@ -43,7 +45,9 @@
 
             <li>
                 <button type="button" class="btn btn-sm btn-default"
-                        data-bind="click: $root.prevStage, css: {disabled: stage() === 'issue'}">
+                        data-bind="click: $root.prevStage,
+                            css: {disabled: stage() === 'issue' || stage() === 'done'},
+                            attr: {disabled: stage() === 'issue' || stage() === 'done'}">
                     <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
                 </button>
             </li>
