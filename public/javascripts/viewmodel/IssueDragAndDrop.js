@@ -51,8 +51,7 @@
             var currentAssignId = issue.assignee();
             var nextAssignId = member ? member._id() : null;
 
-            var currentPriority = that.kanban.issues.indexOf(issue);
-            var nextPriority = overIssue ? that.kanban.issues.indexOf(overIssue) : null;
+            var needUpdatePriority = overIssue && String(overIssue._id()) !== String(issue._id());
 
             var currentStage = issue.stage();
             var nextStage = stage;
@@ -63,8 +62,8 @@
 
             if (currentStage === nextStage &&
                 currentAssignId === nextAssignId &&
-                nextPriority !== null && currentPriority !== nextPriority) {
-                that.kanban.updateIssuePriority(issue, nextPriority);
+                needUpdatePriority) {
+                that.kanban.updateIssuePriority(issue, overIssue);
             }
         };
     }

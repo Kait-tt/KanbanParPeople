@@ -100,7 +100,7 @@ function socketRouting(server) {
 
         // update issue priority
         socketOn(socket, 'update-issue-priority', function (req, projectId, fn) {
-            emitters.updateIssuePriority(projectId, req.issueId, req.toPriority, fn);
+            emitters.updateIssuePriority(projectId, req.issueId, req.insertBeforeOfIssueId, fn);
         });
 
         // 切断
@@ -245,11 +245,11 @@ module.exports.emitters = emitters = {
         });
     },
 
-    updateIssuePriority: function (projectId, issueId, toPriority, fn) {
-        Project.updateIssuePriority({id: projectId}, issueId, toPriority, function (err, project, issue, toPriority) {
+    updateIssuePriority: function (projectId, issueId, insertBeforeOfIssueId, fn) {
+        Project.updateIssuePriority({id: projectId}, issueId, insertBeforeOfIssueId, function (err, project, issue, insertBeforeOfIssueId) {
 
-            successWrap('updated issue priority', {issue: issue, toPriority: toPriority}, fn);
-            module.exports.io.to(projectId).emit('update-issue-priority', {issue: issue, issueId: issueId, toPriority: toPriority});
+            successWrap('updated issue priority', {issue: issue, insertBeforeOfIssueId: insertBeforeOfIssueId}, fn);
+            module.exports.io.to(projectId).emit('update-issue-priority', {issue: issue, issueId: issueId, insertBeforeOfIssueId: insertBeforeOfIssueId});
         });
     }
 };

@@ -197,8 +197,9 @@
         };
 
         // タスクの優先順位を変更する
-        that.updateIssuePriority = function (issue, toPriority) {
-            that.socket.emit('update-issue-priority', {issueId: issue._id(), toPriority: toPriority});
+        that.updateIssuePriority = function (issue, insertBeforeOfIssue) {
+            var insertBeforeOfIssueId =  insertBeforeOfIssue ? insertBeforeOfIssue._id() : null;
+            that.socket.emit('update-issue-priority', {issueId: issue._id(), insertBeforeOfIssueId: insertBeforeOfIssueId});
         };
 
         // ソケット通信のイベント設定、デバッグ設定を初期化する
@@ -245,7 +246,7 @@
             });
 
             that.socket.on('update-issue-priority', function (req) {
-                that.project.updateIssuePriority(req.issue._id, req.toPriority);
+                that.project.updateIssuePriority(req.issue._id, req.insertBeforeOfIssueId);
             });
 
             that.socket.initSocketDebugMode();

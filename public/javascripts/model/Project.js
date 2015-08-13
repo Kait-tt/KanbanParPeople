@@ -93,20 +93,17 @@
         issue.assignee(member ? memberId : null);
     };
 
-    Project.prototype.updateIssuePriority = function (issueId, toPriority) {
-        if (toPriority >= this.issues().length) {
-            console.error('invalid priority');
-            return false;
-        }
-
+    Project.prototype.updateIssuePriority = function (issueId, insertBeforeOfIssueId) {
         var issue = this.getIssue(issueId);
         if (!issue) { throw new Error('issue not found'); }
 
-        var beforePriority = this.issues.indexOf(issue);
-        var nextPriority = toPriority + (beforePriority >= toPriority ? 1 : 0);
+        var insertBeforeOfIssue = null;
+        if (insertBeforeOfIssueId) {
+            insertBeforeOfIssue = this.getIssue(insertBeforeOfIssueId);
+            if (!insertBeforeOfIssue) { throw new Error('issue not found'); }
+        }
 
-        this.issues.splice(beforePriority, 1);
-        this.issues.splice(nextPriority, 0, issue);
+        util.moveToBefore(this.issues, issue, insertBeforeOfIssue);
     };
 
 

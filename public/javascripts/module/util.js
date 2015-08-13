@@ -104,6 +104,20 @@
             if (a === b) { return 0; }
             if (a < b) { return reverse ? 1 : -1; }
             return reverse ? -1 : 1;
+        },
+
+        moveToBefore: function (ary, target, beforeOf) {
+            // remove
+            ary.splice(ary.indexOf(target), 1);
+
+            // insert
+            if (!beforeOf) {
+                ary.push(target);
+            } else {
+                ary.splice(ary.indexOf(beforeOf), 0, target);
+            }
+
+            return ary;
         }
     };
 }(window, _));
