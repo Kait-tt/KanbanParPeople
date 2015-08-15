@@ -106,6 +106,18 @@
             return reverse ? -1 : 1;
         },
 
+        /**
+         * DOMイベントバブルを無効にする
+         *
+         * @param {Event} e イベントオブジェクト
+         * @returns {boolean} falseを返してキャンセルする
+         */
+        cancelBubble: function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        },
+
         moveToBefore: function (ary, target, beforeOf) {
             // remove
             ary.splice(ary.indexOf(target), 1);

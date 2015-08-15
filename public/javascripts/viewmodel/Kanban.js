@@ -212,6 +212,34 @@
             that.socket.emit('update-issue-priority', {issueId: issue._id(), insertBeforeOfIssueId: insertBeforeOfIssueId});
         };
 
+        // events
+        that.onClickIssueDetail = function (issue, e) {
+            that.selectedIssue(issue);
+            $($(e.target.parentElement).attr('data-target')).modal('show');
+            return util.cancelBubble(e);
+        };
+
+        that.onClickIssueNextStage = function (issue, e) {
+            that.nextStage(issue);
+            return util.cancelBubble(e);
+        };
+
+        that.onClickIssuePrevStage = function (issue, e) {
+            that.prevStage(issue);
+            return util.cancelBubble(e);
+        };
+
+        that.onClickIssueRemove = function (issue, e) {
+            that.removeIssue(issue);
+            return util.cancelBubble(e);
+        };
+
+        that.onClickIssueAssign = function (issue, e) {
+            that.selectedIssue(issue);
+            $($(e.target.parentElement).attr('data-target')).modal('show');
+            return util.cancelBubble(e);
+        };
+
         // ソケット通信のイベント設定、デバッグ設定を初期化する
         function initSocket () {
             that.socket = new model.Socket();

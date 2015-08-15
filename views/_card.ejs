@@ -15,14 +15,14 @@
             <li>
                 <button type="button" class="btn btn-sm btn-default"
                         data-toggle="modal" data-target="#issue-detail-modal"
-                        data-bind="click: $root.selectedIssue">
+                        data-bind="click: $root.onClickIssueDetail">
                     <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
                 </button>
             </li>
 
             <li>
                 <button type="button" class="btn btn-sm btn-default"
-                        data-bind="click: $root.nextStage,
+                        data-bind="click: $root.onClickIssueNextStage,
                             css: {disabled: stage() === 'backlog' || stage() === 'done'},
                             attr: {disabled: stage() === 'backlog' || stage() === 'done'}">
                     <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
@@ -31,7 +31,7 @@
 
             <li>
                 <button type="button" class="btn btn-sm btn-default"
-                        data-bind="click: $root.removeIssue">
+                        data-bind="click: $root.onClickIssueRemove">
                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                 </button>
             </li>
@@ -39,14 +39,14 @@
             <li>
                 <button type="button" class="btn btn-sm btn-default"
                         data-toggle="modal" data-target="#assign-issue-modal"
-                        data-bind="click: $root.selectedIssue">
+                        data-bind="click: $root.onClickIssueAssign">
                     <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                 </button>
             </li>
 
             <li>
                 <button type="button" class="btn btn-sm btn-default"
-                        data-bind="click: $root.prevStage,
+                        data-bind="click: $root.onClickIssuePrevStage,
                             css: {disabled: stage() === 'issue' || stage() === 'done'},
                             attr: {disabled: stage() === 'issue' || stage() === 'done'}">
                     <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
