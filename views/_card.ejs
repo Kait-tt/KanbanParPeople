@@ -1,4 +1,5 @@
-<div class="card" draggable="true" data-bind="
+<div class="card" draggable="true" data-toggle="modal" data-target="#issue-detail-modal" data-bind="
+    click: $root.selectedIssue,
     event: {
         dragstart: $root.dragAndDrop.ondragstart,
         dragover: $root.dragAndDrop.ondragover,
