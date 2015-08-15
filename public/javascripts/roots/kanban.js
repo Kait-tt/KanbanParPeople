@@ -6,6 +6,10 @@
         view = util.namespace('kpp.view'),
         alert = new (util.namespace('util.viewmodel')).Alert(),
         effects = view.effects,
+        scroller = new view.Scroller({
+            selectors: ['body', '.main', '.stage-block'],
+            cancelSelectors: ['.card']
+        }),
         project = new model.Project(),
         kanban = new viewmodel.Kanban(),
         MiniMenu = view.MiniMenu,
