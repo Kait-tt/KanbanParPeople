@@ -62,7 +62,7 @@ var routes = {
             if (!issue) {
                 return res.status(400).json({message: 'issue not found'});
             }
-            
+
             socket.emitters.updateIssue(project.id, null, issue._id, stages.backlog, null, _.noop);
             res.status(200).json({});
         }

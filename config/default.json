@@ -9,6 +9,7 @@
     "clientID": "",
     "clientSecret": "",
     "callbackURL": "http://127.0.0.1:3000/auth/github/callback",
+    "hookURL": "http://127.0.0.1:3000/github/:id",
     "test": {
       "token": "",
       "user": "",
