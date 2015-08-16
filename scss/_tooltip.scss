@@ -1,0 +1,10 @@
+$tooltip-alert-color: #8a6d3b;
+
+.tooltip-warning + .tooltip.top {
+  .tooltip-inner {
+    background-color: $tooltip-alert-color;
+  }
+  .tooltip-arrow {
+    border-top-color: $tooltip-alert-color;
+  }
+}
