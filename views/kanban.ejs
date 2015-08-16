@@ -354,8 +354,15 @@
                             <span class="glyphicon glyphicon-blackboard"> 同期</span>
                         </label>
                         <p>
-                            <input class="switch" id="project-settings-github-sync-enabled" type="checkbox"
-                                    data-size="mini" data-bind="checked: github().sync">
+                            <!--<input class="switch" id="project-settings-github-sync-enabled" type="checkbox"-->
+                                   <!--data-size="mini" data-bind="checked: github().sync">-->
+                            <!-- ko if: $root.project.github().sync -->
+                            <span class="label label-primary">同期ON</span>
+                            <!-- /ko -->
+                            <!-- ko ifnot: $root.project.github().sync -->
+                            <span class="label label-default">同期OFF</span>
+                            <!-- /ko -->
+                            <span class="text-warning">現在システム上で変更できません。変更をしたい場合は管理者へお問い合わせください。</span>
                         </p>
                     </div>
                     <!-- /ko -->
