@@ -27,6 +27,9 @@
         'Projectの削除に成功しました',
         'Projectの削除に失敗しました');
 
+
+    $('[data-toggle="tooltip"]').tooltip();
+
     projects.fetch()
         .done(function () {
             effects.applyBindings(global);
