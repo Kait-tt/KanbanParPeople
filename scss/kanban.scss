@@ -9,9 +9,6 @@ $card_padding: 6px;
 $block_width: 300px;
 $block_padding: 10px;
 
-$block_width: 300px;
-$block_padding: 10px;
-
 $name-block_width: 240px;
 $name-block_padding-left: 60px;
 $name-block_padding-right: 10px;
@@ -24,27 +21,53 @@ $user-height: $user_height + 15;
 
 $issue-block_right-margin: 60px;
 
+$three-stage-blocks-padding: 40px;
+
 .blocks {
   position: relative;
-  width: $block_width * 6 + $issue-block_right-margin * 2 + 30 + $block_padding * 4;
+  width: 2040px;
   padding: 10px 20px;
   margin: 0;
+  height: 95%;
+  &::after{
+    clear: both;
+    display: table-cell;
+    content: '';
+  }
 }
 
 .stage-blocks {
   position: relative;
-  letter-spacing: -.40em;
+  // letter-spacing: -.40em;
   list-style-type: none;
+  height: 100%;
+}
+
+#three-stage-blocks{
+  float: left;
+  width: ($block_width + $block_padding * 2) * 3 + $three-stage-blocks-padding;
+  vertical-align: top;
+  overflow: auto;
+  padding: 0 $three-stage-blocks-padding;
+  margin:0 -20px;
+  max-height: 100%;
+  margin-right: $issue-block_right-margin;
+  position: relative;
+  
+  #inner-stage-blocks{
+  }
 }
 
 .stage-block {
-  display: inline-block;
+  float: left;
+  // display: inline-block;
   letter-spacing: normal;
   width: $block_width;
   padding: $block_padding;
+  max-height: 100%;
   margin: 0;
   vertical-align: top;
-
+  overflow: auto;
   &:nth-child(odd) {
     background: $background-second-color;
   }
@@ -100,7 +123,6 @@ $issue-block_right-margin: 60px;
 
   &#review-block {
     @include border-radius(0 5px 5px 0);
-    margin-right: $issue-block_right-margin;
   }
 
   &#done-block {
@@ -128,8 +150,8 @@ $issue-block_right-margin: 60px;
 
 div.user-block-area {
   position: absolute;
-  top: 0;
-  margin: 80px 0 0 $block_width * 2 + $issue-block_right-margin / 2;
+  top: 60px;
+  margin: 0 (-$three-stage-blocks-padding);
 
   .user-area-header {
     height: 40px;
@@ -143,7 +165,7 @@ div.user-block-area {
     li.user-block {
       position: relative;
       background-color: rgba(242, 242, 242, 0.60);
-      width: $block_width * 3 + 50px + 10px + 5px;
+      width: $block_width * 3 + $three-stage-blocks-padding * 2;
       height: $user_height + 15;
       border-radius: 20px;
       margin-bottom: $user_margin-bottom;
