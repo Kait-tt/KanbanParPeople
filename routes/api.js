@@ -5,7 +5,7 @@ var GitHub = require('../lib/model/github');
 
 // Get Projects
 router.get('/projects', function (req, res) {
-    Project.findPopulated({userName: req.username}, {}, function (err, projects) {
+    Project.findPopulatedByMemberName(req.user.username, function (err, projects) {
         if (err) { return serverError(res, err); }
         res.status(200).json({ message: 'OK', projects: projects });
     });
