@@ -30,98 +30,105 @@
     <div class="blocks">
         <ul class="stage-blocks">
             <% stages.forEach(function (stage) { %>
+                <% if(stage.name == 'todo'){ %>
+                    <li id="three-stage-blocks">
+                        <ul class="inner-stage-blocks">
+                        
+                <% } %>
+                <li id="<%= stage.name %>-block" class="stage-block">
+                    <h2 class="stage-title">
+                        <%= stage.displayName %><span class="badge" data-bind="text: $root.stages.<%= stage.name %>().length"></span>
+                    </h2>
 
-            <li id="<%= stage.name %>-block" class="stage-block">
-                <h2 class="stage-title">
-                    <%= stage.displayName %><span class="badge" data-bind="text: $root.stages.<%= stage.name %>().length"></span>
-                </h2>
+                    <% if (stage.name === 'issue') { %>
+                        <div class="block-header issue-block-header">
+                            <button type="button" class="btn btn-sm btn-default"
+                                    data-toggle="modal" data-target="#add-issue-modal">
+                                <span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span> Add task
+                            </button>
+                        </div>
+                    <% } else { %>
+                        <div class="block-header block-header-dummy"></div>
+                    <% } %>
 
-                <% if (stage.name === 'issue') { %>
-                    <div class="block-header issue-block-header">
+                    <% if (stage.assigned) { %>
+                        <ul class="cell-block" data-bind="foreach: {
+                            data: members,
+                            afterRender: view.MiniMenu.init,
+                            afterAdd: view.effects.slideDown,
+                            beforeRemove: view.effects.slideUp }">
+                            <li class="dummy-user-cell-block"></li>
+                        </ul>
+                    <% } else { %>
+                        <ul class="cell-block" data-bind="
+                        foreach: {
+                            data: $root.stages.<%= stage.name %>,
+                            afterRender: view.MiniMenu.init,
+                            afterAdd: view.effects.slideDown,
+                            beforeRemove: view.effects.slideUp }">
+                            <% include _card %>
+                        </ul>
+                    <% } %>
+                </li>
+                <% if(stage.name == 'review'){ %>
+                    </ul>
+                    <div class="user-block-area">
+                    <div class="block-header user-area-header">
                         <button type="button" class="btn btn-sm btn-default"
-                                data-toggle="modal" data-target="#add-issue-modal">
-                            <span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span> Add task
+                                data-toggle="modal" data-target="#add-member-modal">
+                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Add member
                         </button>
                     </div>
-                <% } else { %>
-                    <div class="block-header block-header-dummy"></div>
-                <% } %>
 
-                <% if (stage.assigned) { %>
-                    <ul class="cell-block" data-bind="foreach: {
-                        data: members,
-                        afterRender: view.MiniMenu.init,
-                        afterAdd: view.effects.slideDown,
-                        beforeRemove: view.effects.slideUp }">
-                        <li class="dummy-user-cell-block"></li>
-                    </ul>
-                <% } else { %>
-                    <ul class="cell-block" data-bind="
-                    foreach: {
-                        data: $root.stages.<%= stage.name %>,
-                        afterRender: view.MiniMenu.init,
-                        afterAdd: view.effects.slideDown,
-                        beforeRemove: view.effects.slideUp }">
-                        <% include _card %>
-                    </ul>
-                <% } %>
-            </li>
-            <% }); %>
-        </ul>
+                    <ul class="user-blocks" data-bind="foreach: {
+                            data: members,
+                            as: 'member',
+                            afterAdd: view.effects.slideDown,
+                            beforeRemove: view.effects.slideUp }">
+                        <li class="user-block" data-bind="css: { 'wip-limited': member.isWipLimited }">
+                            <div class="user-label-area">
+                                <p class="user-name">
+                                    <a href="#" class="user-settings-button"
+                                       data-toggle="modal" data-target="#user-settings-modal"
+                                       data-bind="click: $root.selectedMember">
+                                        <span class="glyphicon glyphicon-cog" area-hidden="true"></span>
+                                    </a>
+                                    <span data-bind="text: userName"></span>
+                                    <span data-bind="text: '(' + member.wip() + '/' + member.wipLimit() + ')'"></span>
+                                </p>
 
-        <div class="user-block-area">
-            <div class="block-header user-area-header">
-                <button type="button" class="btn btn-sm btn-default"
-                        data-toggle="modal" data-target="#add-member-modal">
-                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Add member
-                </button>
-            </div>
-
-            <ul class="user-blocks" data-bind="foreach: {
-                    data: members,
-                    as: 'member',
-                    afterAdd: view.effects.slideDown,
-                    beforeRemove: view.effects.slideUp }">
-                <li class="user-block" data-bind="css: { 'wip-limited': member.isWipLimited }">
-                    <div class="user-label-area">
-                        <p class="user-name">
-                            <a href="#" class="user-settings-button"
-                               data-toggle="modal" data-target="#user-settings-modal"
-                               data-bind="click: $root.selectedMember">
-                                <span class="glyphicon glyphicon-cog" area-hidden="true"></span>
-                            </a>
-                            <span data-bind="text: userName"></span>
-                            <span data-bind="text: '(' + member.wip() + '/' + member.wipLimit() + ')'"></span>
-                        </p>
-
-                        <p class="wip-limited-message alert-warning" data-bind="visible: member.isWipLimited">
-                            <span class="glyphicon glyphicon-warning-sign"></span>WIP制限に達しています。
-                        </p>
-                    </div>
-
-                    <ul class="stage-blocks" data-bind="foreach: { data: <%= assignedStageNamesJSON %>, as: 'stage' }">
-                        <li class="stage-block">
-                            <div class="user-cell-block">
-                                <ul class="card-list" data-bind="
-                                foreach: {
-                                    data: member[stage]().slice(0, 2),
-                                    afterRender: view.MiniMenu.init,
-                                    afterAdd: view.effects.slideDown,
-                                    beforeRemove: view.effects.slideUp }">
-                                    <% include _card %>
-                                </ul>
-
-                                <a href="#" class="each-all-issues-view-button" data-bind="
-                                click: $root.decideViewEachAllIssues.bind(this, member, stage),
-                                visible: member[stage]().length > 2">
-                                    全てのタスクを表示 <span class="badge" data-bind="text: member[stage]().length"></span>
-                                </a>
+                                <p class="wip-limited-message alert-warning" data-bind="visible: member.isWipLimited">
+                                    <span class="glyphicon glyphicon-warning-sign"></span>WIP制限に達しています。
+                                </p>
                             </div>
+
+                            <ul class="stage-blocks" data-bind="foreach: { data: <%= assignedStageNamesJSON %>, as: 'stage' }">
+                                <li class="stage-block">
+                                    <div class="user-cell-block">
+                                        <ul class="card-list" data-bind="
+                                        foreach: {
+                                            data: member[stage]().slice(0, 2),
+                                            afterRender: view.MiniMenu.init,
+                                            afterAdd: view.effects.slideDown,
+                                            beforeRemove: view.effects.slideUp }">
+                                            <% include _card %>
+                                        </ul>
+
+                                        <a href="#" class="each-all-issues-view-button" data-bind="
+                                        click: $root.decideViewEachAllIssues.bind(this, member, stage),
+                                        visible: member[stage]().length > 2">
+                                            全てのタスクを表示 <span class="badge" data-bind="text: member[stage]().length"></span>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
-                </li>
-            </ul>
-        </div>
+                </div>
+                    </li>
+                <% } %>
+            <% }); %>
+        </ul>
 
     </div>
 
