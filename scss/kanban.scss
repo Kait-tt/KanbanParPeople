@@ -34,14 +34,18 @@ $three-stage-blocks-padding: 40px;
     display: table-cell;
     content: '';
   }
+  >.stage-blocks {
+    position: relative;
+    // letter-spacing: -.40em;
+    list-style-type: none;
+    height: 100%;
+    > .stage-block{
+      padding-top: 50px;
+    }
+  }
 }
 
-.stage-blocks {
-  position: relative;
-  // letter-spacing: -.40em;
-  list-style-type: none;
-  height: 100%;
-}
+
 
 #three-stage-blocks{
   float: left;
@@ -52,15 +56,13 @@ $three-stage-blocks-padding: 40px;
   margin:0 -20px;
   max-height: 100%;
   margin-right: $issue-block_right-margin;
-  position: relative;
-  
-  #inner-stage-blocks{
-  }
+  // position: relative;
+  left: 30px;
+  overflow: hidden;
 }
 
 .stage-block {
   float: left;
-  // display: inline-block;
   letter-spacing: normal;
   width: $block_width;
   padding: $block_padding;
@@ -82,7 +84,8 @@ $three-stage-blocks-padding: 40px;
     margin-top: 8px;
     margin-bottom: 14px;
     color: #222;
-
+    position: absolute;
+    top: 10px;
     .badge {
       position: absolute;
       display: inline-block;
@@ -151,12 +154,15 @@ $three-stage-blocks-padding: 40px;
 div.user-block-area {
   position: absolute;
   top: 60px;
+  width: 1000px;
+  overflow: auto;
+  height: 95%;
   margin: 0 (-$three-stage-blocks-padding);
 
   .user-area-header {
     height: 40px;
-    margin: 0;
-    padding: 0 20px;
+    margin: 0 20px;
+    padding: 0 50px;
   }
 
   ul.user-blocks {
