@@ -9,7 +9,8 @@
         todo:    {name: 'todo', assigned: true},
         doing:   {name: 'doing', assigned: true},
         review:  {name: 'review', assigned: true},
-        done:    {name: 'done', assigned: false}
+        done:    {name: 'done', assigned: false},
+        archive:    {name: 'archive', assigned: false}
     };
 
     ns.stageTypeKeys = Object.keys(ns.stageTypes);

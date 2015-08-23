@@ -4,9 +4,9 @@ var Project = require('../lib/model/project');
 var stageTypes = require('../lib/model/stageTypes');
 var _  = require('lodash');
 
-var stages = _.values(stageTypes);
+var stages = _.where(_.values(stageTypes), {visible: true});
 var assignedStageNamesJSON = JSON.stringify(_.pluck(_.where(stages, {assigned: true}), 'name'));
-    
+
 router.get('/:projectId/:projectName', function (req, res, next) {
     var id = req.params.projectId;
     var projectName = req.params.projectName;
