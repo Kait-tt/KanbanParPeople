@@ -30,8 +30,7 @@
             that.opts.selectors.forEach(function (selector) {
                 $('body')
                     .delegate(selector, 'mousedown', that.onMousedown)
-                    .delegate(selector, 'mouseup', that.onMouseup)
-                    .delegate(selector, 'mousemove', that.onMousemove)
+                    .delegate(selector, 'mouseup', that.onMouseup);
             });
 
             // cancel
@@ -41,6 +40,9 @@
                     .delegate(selector, 'mouseup', that.cancel)
                     .delegate(selector, 'mousemove', that.cancel);
             });
+
+            // move event
+            $(window).mousemove(that.onMousemove);
         };
 
         that.cancel = function () {
