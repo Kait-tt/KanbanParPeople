@@ -125,7 +125,7 @@
             });
         };
 
-        // Issueを削除する
+        // Issueを削除する (archive)
         that.removeIssue = function (issue) {
             that.socket.emit('remove-issue', {issueId: issue._id()}, _.noop);
         };

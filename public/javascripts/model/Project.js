@@ -5,6 +5,7 @@
         User = model.User,
         Issue = model.Issue,
         stageTypeKeys = model.stageTypeKeys,
+        stageTypes = model.stageTypes,
         defaultOptions = {
             url: '/api/projects'
         },
@@ -114,7 +115,7 @@
     };
 
     Project.prototype.removeIssue = function (issue) {
-        this.issues.remove(issue);
+        issue.stage(stageTypes.archive.name);
     };
 
     Project.prototype.getIssue = function (issueId) {
