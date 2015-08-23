@@ -37,22 +37,24 @@
             that.opts.cancelSelectors.forEach(function (selector) {
                 $('body')
                     .delegate(selector, 'mousedown', that.cancel)
-                    .delegate(selector, 'mouseup', that.cancel)
-                    .delegate(selector, 'mousemove', that.cancel);
+                    .delegate(selector, 'mouseup', that.cancel);
             });
 
             // move event
             $(window).mousemove(that.onMousemove);
         };
 
-        that.cancel = function () {
+        that.cancel = function (e) {
+            e.canceled = true;
             that.isClicked = false;
             that.beforeX = null;
         };
 
         that.onMousedown = function (e) {
-            that.isClicked = true;
-            that.beforeX = e.screenX;
+            if (!e.canceled && e.button === 0) { // 左クリックのみ作動
+                that.isClicked = true;
+                that.beforeX = e.screenX;
+            }
         };
 
         that.onMouseup = that.cancel;
