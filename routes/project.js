@@ -1,19 +1,12 @@
 var express = require('express');
 var router = express.Router();
 var Project = require('../lib/model/project');
-var _  = require('underscore');
+var stageTypes = require('../lib/model/stageTypes');
+var _  = require('lodash');
 
-var stages = [
-    {name: 'issue', displayName: 'Issue', assigned: false},
-    {name: 'backlog', displayName: 'Backlog', assigned: false},
-    {name: 'todo', displayName: 'TODO', assigned: true},
-    {name: 'doing', displayName: 'Doing', assigned: true},
-    {name: 'review', displayName: 'Review', assigned: true},
-    {name: 'done', displayName: 'Done', assigned: false}
-];
-
+var stages = _.values(stageTypes);
 var assignedStageNamesJSON = JSON.stringify(_.pluck(_.where(stages, {assigned: true}), 'name'));
-
+    
 router.get('/:projectId/:projectName', function (req, res, next) {
     var id = req.params.projectId;
     var projectName = req.params.projectName;
