@@ -13,38 +13,55 @@ var _ = require('underscore');
 var routes = {
     issues: {
         opened: function (project, req, res) {
+            // exists
+            if (GitHub.findIssueByNumber(project, req.body.issue.number)) {
+                return res.status(0).json({});
+            }
+
             GitHub.serializeIssue(req.body.issue, function (err, issue) {
                 if (err) {
                     console.error(err);
                     res.status(500).json({message: err.message});
-                } else {
-                    socket.emitters.addIssue(project.id, null, issue, _.noop);
-                    res.status(200).json({});
+                    return;
                 }
+
+                socket.emitters.addIssue(project.id, null, issue, _.noop);
+                res.status(200).json({});
             });
         },
         closed: function (project, req, res) {
-            var issue = _.find(project.issues, function (issue) {
-                return issue.github && Number(issue.github.number) === req.body.issue.number;
-            });
-
-            if (issue) {
-                socket.emitters.removeIssue(project.id, null, issue._id, _.noop);
-                res.status(200).json({});
-            } else {
-                res.status(400).json({message: 'issue not found'});
+            var issue = GitHub.findIssueByNumber(project, req.body.issue.number);
+            if (!issue) {
+                return res.status(500).json({message: 'issue not found'});
             }
+
+            // 変更の必要がなければ何もしない
+            if (issue.stage === stages.archive || issue.stage === stages.done) {
+                return res.status(200).json({});
+            }
+
+            socket.emitters.removeIssue(project.id, null, issue._id, _.noop);
+            res.status(200).json({});
         },
         assigned: function (project, req, res) {
-            var issue = _.find(project.issues, function (issue) {
-                return issue.github && Number(issue.github.number) === req.body.issue.number;
-            });
-
+            var issue = GitHub.findIssueByNumber(project, req.body.issue.number);
             if (!issue) {
-                return res.status(400).json({message: 'issue not found'});
+                return res.status(500).json({message: 'issue not found'});
             }
 
-            User.findOrCreate(req.body.issue.assignee.login, function (err, user) {
+            var toAssignee = req.body.issue.assignee.login;
+
+            // 変更の必要がなければ何もしない
+            if (issue.assignee) {
+                User.findById(issue.assignee, function (err, user) {
+                    if (err) { return res.status(500).json({message: err.message}); }
+                    if (user.userName === toAssignee) {
+                        res.status(200).json({});
+                    }
+                });
+            }
+
+            User.findOrCreate(toAssignee, function (err, user) {
                 if (err) {
                     console.error(err);
                     res.status(500).json({message: err.message});
@@ -55,12 +72,14 @@ var routes = {
             });
         },
         unassigned: function (project, req, res) {
-            var issue = _.find(project.issues, function (issue) {
-                return issue.github && Number(issue.github.number) === req.body.issue.number;
-            });
-
+            var issue = GitHub.findIssueByNumber(project, req.body.issue.number);
             if (!issue) {
-                return res.status(400).json({message: 'issue not found'});
+                return res.status(500).json({message: 'issue not found'});
+            }
+
+            // 変更が必要なければ何もしない
+            if (issue.assignee === null) {
+                return res.status(200).json({});
             }
 
             socket.emitters.updateIssue(project.id, null, issue._id, stages.backlog, null, _.noop);
