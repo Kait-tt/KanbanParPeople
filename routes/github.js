@@ -59,6 +59,7 @@ var routes = {
                         res.status(200).json({});
                     }
                 });
+                return;
             }
 
             User.findOrCreate(toAssignee, function (err, user) {
