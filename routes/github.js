@@ -66,7 +66,7 @@ var routes = {
                     console.error(err);
                     res.status(500).json({message: err.message});
                 } else {
-                    socket.emitters.updateIssue(project.id, null, issue._id, stages.todo, user._id, _.noop);
+                    socket.emitters.updateStage(project.id, null, issue._id, stages.todo, user._id, _.noop);
                     res.status(200).json({});
                 }
             });
@@ -82,7 +82,7 @@ var routes = {
                 return res.status(200).json({});
             }
 
-            socket.emitters.updateIssue(project.id, null, issue._id, stages.backlog, null, _.noop);
+            socket.emitters.updateStage(project.id, null, issue._id, stages.backlog, null, _.noop);
             res.status(200).json({});
         }
     }
