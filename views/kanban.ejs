@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title><%= title %></title>
+    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,700' rel='stylesheet' type='text/css'>
     <link rel='stylesheet' href='/stylesheets/kanban.css'/>
     <link rel='stylesheet' href='/vendor/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css'/>
 </head>
@@ -10,10 +11,10 @@
 
 <% include _header %>
 
-<div class="main" data-bind="visible: true" style="display: none">
-    <div class="project-meta">
-        <h1 class="project-name"><%= displayTitle %></h1>
-        <div class="sync-status">
+<div id="toolbar" class="navbar-inverse">
+    <div class="navbar-collapse collapse">
+        <h1 class="navbar-text" id="project-name"><span ><a href="./"><%= displayTitle %></span></a></h1>
+        <div class="sync-status navbar-text">
             <!-- ko if: $root.project.github().sync -->
             <span class="label label-primary">同期ON</span>
             <!-- /ko -->
@@ -21,13 +22,20 @@
             <span class="label label-default">同期OFF</span>
             <!-- /ko -->
         </div>
-        <button type="button" class="btn btn-sm btn-default project-settings-button"
-                data-toggle="modal" data-target="#project-settings-modal">
-            <span class="glyphicon glyphicon-cog" area-hidden="true"></span> Settings
-        </button>
+        <div class="btn-group navbar-left" role="group" id="toolbar-btn-group">
+          <button type="button" class="btn btn-default navbar-btn" 
+                                    data-toggle="modal" data-target="#add-issue-modal"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <span class="sr-only">Add task</span></button>
+          <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#add-member-modal"><span class="glyphicon glyphicon-user"></span> <span class="sr-only">Add member</span></button>
+          <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#project-settings-modal"><span class="glyphicon glyphicon-cog"></span> <span class="sr-only">Settings</span></button>
+        </div>
     </div>
+</div>
 
-    <div class="blocks">
+<div id="main" class="main" data-bind="visible: true" style="display: none" v-class="open: isOpen">
+    <div id="issue-toggle-wrapper">
+        <button v-on="click: toggleIssue"><span class="glyphicon" v-class="glyphicon-chevron-left: isOpen, glyphicon-chevron-right: !isOpen"></span></button>
+    </div>
+    <div class="blocks" v-class="open: isOpen">
         <ul class="stage-blocks">
             <% stages.forEach(function (stage) { %>
                 <% if(stage.name == 'todo'){ %>
@@ -39,17 +47,6 @@
                     <h2 class="stage-title">
                         <%= stage.displayName %><span class="badge" data-bind="text: $root.stages.<%= stage.name %>().length"></span>
                     </h2>
-
-                    <% if (stage.name === 'issue') { %>
-                        <div class="block-header issue-block-header">
-                            <button type="button" class="btn btn-sm btn-default"
-                                    data-toggle="modal" data-target="#add-issue-modal">
-                                <span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span> Add task
-                            </button>
-                        </div>
-                    <% } else { %>
-                        <div class="block-header block-header-dummy"></div>
-                    <% } %>
 
                     <% if (stage.assigned) { %>
                         <ul class="cell-block" data-bind="foreach: {
@@ -73,12 +70,6 @@
                 <% if(stage.name == 'review'){ %>
                     </ul>
                     <div class="user-block-area">
-                        <div class="block-header user-area-header">
-                            <button type="button" class="btn btn-sm btn-default"
-                                    data-toggle="modal" data-target="#add-member-modal">
-                                <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Add member
-                            </button>
-                        </div>
 
                         <ul class="user-blocks" data-bind="foreach: {
                                 data: members,
@@ -479,6 +470,7 @@
 <script src="/vendor/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script>
 <script src="/vendor/lodash/lodash.min.js"></script>
 <script src="/vendor/knockoutjs/dist/knockout.js"></script>
+<script src="/vendor/vue/dist/vue.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 
 <script src="/javascripts/module/util.js"></script>
