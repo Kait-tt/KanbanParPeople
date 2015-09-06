@@ -47,6 +47,9 @@
         this.isWipLimited = ko.computed(function () {
             return this.wip() >= this.wipLimit();
         }, this);
+
+        // 可視
+        this.visible = ko.observable(true);
     };
 
 }(_, window.nakazawa.util));

@@ -61,7 +61,7 @@
                             afterRender: view.MiniMenu.init,
                             afterAdd: view.effects.slideDown,
                             beforeRemove: view.effects.slideUp }">
-                            <li class="dummy-user-cell-block"></li>
+                            <li class="dummy-user-cell-block" data-bind="visible: visible"></li>
                         </ul>
                     <% } else { %>
                         <ul class="cell-block" data-bind="
@@ -89,7 +89,7 @@
                             as: 'member',
                             afterAdd: view.effects.slideDown,
                             beforeRemove: view.effects.slideUp }">
-                        <li class="user-block" data-bind="css: { 'wip-limited': member.isWipLimited }">
+                        <li class="user-block" data-bind="css: { 'wip-limited': member.isWipLimited }, visible: member.visible">
                             <div class="user-label-area">
                                 <p class="user-name">
                                     <a href="#" class="user-settings-button"
@@ -405,6 +405,7 @@
                             <th>Name</th>
                             <th>WIP</th>
                             <th>Order</th>
+                            <th>Visible</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -421,6 +422,9 @@
                                         <span class="glyphicon glyphicon-triangle-bottom" data-bind="click: $root.updateMemberOrderDown"></span>
                                     </button>
                                 </div>
+                            </td>
+                            <td>
+                                <input type="checkbox" data-bind="checked: visible">
                             </td>
                         </tr>
                         <!-- /ko -->
