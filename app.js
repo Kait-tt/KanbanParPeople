@@ -13,7 +13,7 @@ var sessionMiddleware = require('./lib/module/sessionMiddleware');
 var app = express();
 
 // mongoose
-if (app.get('env') === 'test') {
+if (app.get('env') !== 'test') {
     // テスト時は別でDBを用意するのでここでは開かない
     mongoose.connect(config.mongo.url);
 }

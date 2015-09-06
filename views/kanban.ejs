@@ -25,6 +25,10 @@
                 data-toggle="modal" data-target="#project-settings-modal">
             <span class="glyphicon glyphicon-cog" area-hidden="true"></span> Settings
         </button>
+        <button type="button" class="btn btn-sm btn-default members-settings-button"
+                data-toggle="modal" data-target="#members-settings-modal">
+            <span class="glyphicon glyphicon-cog" area-hidden="true"></span> Members
+        </button>
     </div>
 
     <div class="blocks">
@@ -374,6 +378,54 @@
                     </div>
                     <!-- /ko -->
                 </form>
+                <!-- /ko -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-success" data-dismiss="modal"
+                        data-bind="click: $root.updateUserSettings">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Members Settings Modal -->
+<div class="modal fade" id="members-settings-modal" tabindex="-1" role="dialog" aria-labelledby="members-settings-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="members-settings-modal-label">Members settings</h4>
+            </div>
+            <div class="modal-body">
+                <!-- ko with: $root.project -->
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>WIP</th>
+                            <th>Order</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- ko foreach: members -->
+                        <tr>
+                            <td data-bind="text: userName"></td>
+                            <td data-bind="text: wip() + '/' + wipLimit()"></td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-xs btn-default" data-bind="click: $root.updateMemberOrderUp">
+                                        <span class="glyphicon glyphicon-triangle-top"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-xs btn-default">
+                                        <span class="glyphicon glyphicon-triangle-bottom" data-bind="click: $root.updateMemberOrderDown"></span>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- /ko -->
+                    </tbody>
+                </table>
                 <!-- /ko -->
             </div>
             <div class="modal-footer">

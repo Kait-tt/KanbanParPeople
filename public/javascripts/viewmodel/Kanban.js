@@ -103,12 +103,29 @@
         // メンバー設定を更新する
         that.updateMember = function () {
             var member = that.selectedMember();
-            if (!member) {
-                console.error('unselected member');
-                return;
-            }
+            if (!member) { return console.error('unselected member'); }
 
             that.socket.emit('update-member', {userName: member.userName(), wipLimit: that.settingsWipLimit()});
+        };
+
+        that.updateMemberOrderUp = function (member) {
+            var members = that.members();
+            var idx = members.indexOf(member);
+            if (idx === 0) { return console.log(member.userName() + ' is already top'); }
+            that.updateMemberOrder(member, members[idx - 1]);
+        };
+
+        that.updateMemberOrderDown = function (member) {
+            var members = that.members();
+            var idx = members.indexOf(member);
+            if (idx === members.length - 1) { return console.log(member.userName() + ' is already bottom'); }
+            that.updateMemberOrder(member, (idx + 2) === members.length ? null : members[idx + 2]);
+        };
+
+        // タスクの優先順位を変更する
+        that.updateMemberOrder = function (member, insertBeforeOfMember) {
+            var insertBeforeOfUserName =  insertBeforeOfMember ? insertBeforeOfMember.userName() : null;
+            that.socket.emit('update-member-order', {userName: member.userName(), insertBeforeOfUserName: insertBeforeOfUserName});
         };
 
         // Issueと追加する
@@ -260,6 +277,10 @@
             that.socket.on('update-member', function (req) {
                 var targetMember = that.project.getMember(req.member.user._id);
                 that.project.updateMember(targetMember, req.member);
+            });
+
+            that.socket.on('update-member-order', function (req) {
+                that.project.updateMemberOrder(req.userName, req.insertBeforeOfUserName);
             });
 
             that.socket.on('add-issue', function (req) {

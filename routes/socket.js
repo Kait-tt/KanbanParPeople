@@ -78,6 +78,10 @@ function socketRouting(server) {
             emitters.updateMember(projectId, user.info.token, req.userName, {wipLimit: req.wipLimit}, fn);
         });
 
+        socketOn(socket, 'update-member-order', function (req, projectId, fn) {
+            emitters.updateMemberOrder(projectId, req.userName, req.insertBeforeOfUserName, fn);
+        });
+
         // issueの追加
         socketOn(socket, 'add-issue', function (req, projectId, fn) {
             emitters.addIssue(projectId, user.info.token, {title: req.title, body: req.body}, fn);
@@ -202,6 +206,15 @@ module.exports.emitters = emitters = {
 
             successWrap('updated member', {member: member}, fn);
             module.exports.io.to(projectId).emit('update-member', {member: member});
+        });
+    },
+
+    updateMemberOrder: function (projectId, userName, insertBeforeOfUserName, fn) {
+        Project.updateIssuePriority({id: projectId}, userName, insertBeforeOfUserName, function (err, project, member, insertBeforeOfMember) {
+
+            successWrap('updated member order', {issue: member, insertBeforeOfMember: insertBeforeOfMember}, fn);
+            module.exports.io.to(projectId).emit('update-member-order', {member: member, userName: userName,
+                insertBeforeOfMember: insertBeforeOfMember, insertBeforeOfUserName: insertBeforeOfUserName, project: project});
         });
     },
 

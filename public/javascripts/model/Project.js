@@ -107,6 +107,19 @@
         util.moveToBefore(this.issues, issue, insertBeforeOfIssue);
     };
 
+    Project.prototype.updateMemberOrder = function (userName, insertBeforeOfUserName) {
+        var member = this.getMemberByName(userName);
+        if (!member) { throw new Error('member not found'); }
+
+        var insertBeforeOfMember = null;
+        if (insertBeforeOfUserName) {
+            insertBeforeOfMember = this.getMemberByName(insertBeforeOfUserName);
+            if (!insertBeforeOfMember) { throw new Error('member not found'); }
+        }
+
+        util.moveToBefore(this.members, member, insertBeforeOfMember);
+    };
+
 
     /*** helper ***/
 
@@ -124,7 +137,7 @@
 
 
     Project.prototype.addMember = function (member) {
-        this.members.push(new User(_.extend(member.user, {issues: this.issues, wipLimit: member.wipLimit})));
+        this.members.unshift(new User(_.extend(member.user, {issues: this.issues, wipLimit: member.wipLimit})));
     };
 
     Project.prototype.removeMember = function (member) {
