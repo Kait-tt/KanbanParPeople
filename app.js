@@ -10,8 +10,13 @@ var mongoose = require('mongoose');
 var config = require('config');
 var sessionMiddleware = require('./lib/module/sessionMiddleware');
 
+var app = express();
+
 // mongoose
-mongoose.connect(config.mongo.url);
+if (app.get('env') === 'test') {
+    // テスト時は別でDBを用意するのでここでは開かない
+    mongoose.connect(config.mongo.url);
+}
 
 // Passport session setup.
 passport.serializeUser(function(user, done) {
@@ -37,7 +42,6 @@ passport.use(new GitHubStrategy({
     }
 ));
 
-var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

@@ -15,14 +15,14 @@ var routes = {
         opened: function (project, req, res) {
             // exists
             if (GitHub.findIssueByNumber(project, req.body.issue.number)) {
-                return res.status(0).json({});
+                console.error('issue already exists: ' + req.body.issue.number);
+                return res.status(500).json({});
             }
 
             GitHub.serializeIssue(req.body.issue, function (err, issue) {
                 if (err) {
                     console.error(err);
-                    res.status(500).json({message: err.message});
-                    return;
+                    return res.status(500).json({message: err.message});
                 }
 
                 socket.emitters.addIssue(project.id, null, issue, _.noop);
@@ -46,35 +46,45 @@ var routes = {
         assigned: function (project, req, res) {
             var issue = GitHub.findIssueByNumber(project, req.body.issue.number);
             if (!issue) {
+                console.error('issue not found: ' + req.body.issue.number);
                 return res.status(500).json({message: 'issue not found'});
             }
 
             var toAssignee = req.body.issue.assignee.login;
 
-            // 変更の必要がなければ何もしない
             if (issue.assignee) {
                 User.findById(issue.assignee, function (err, user) {
-                    if (err) { return res.status(500).json({message: err.message}); }
+                    if (err) {
+                        console.error(err.message);
+                        return res.status(500).json({message: err.message});
+                    }
+                    // 変更の必要がなければ何もしない
                     if (user.userName === toAssignee) {
+                        console.log('already assigned');
+                        res.status(200).json({message: 'already assigned'});
+                    }
+                    // assign
+                    console.log('replace assign');
+                    socket.emitters.updateStage(project.id, null, issue._id, stages.todo, user._id, _.noop);
+                    res.status(200).json({});
+                });
+            } else {
+                User.findOrCreate(toAssignee, function (err, user) {
+                    if (err) {
+                        console.error(err);
+                        res.status(500).json({message: err.message});
+                    } else {
+                        console.log('assign: ' + JSON.stringify({issue: issue._id, user: user._id}));
+                        socket.emitters.updateStage(project.id, null, issue._id, stages.todo, user._id, _.noop);
                         res.status(200).json({});
                     }
                 });
-                return;
             }
-
-            User.findOrCreate(toAssignee, function (err, user) {
-                if (err) {
-                    console.error(err);
-                    res.status(500).json({message: err.message});
-                } else {
-                    socket.emitters.updateStage(project.id, null, issue._id, stages.todo, user._id, _.noop);
-                    res.status(200).json({});
-                }
-            });
         },
         unassigned: function (project, req, res) {
             var issue = GitHub.findIssueByNumber(project, req.body.issue.number);
             if (!issue) {
+                console.error('issue not found: ' + req.body.issue.number);
                 return res.status(500).json({message: 'issue not found'});
             }
 
