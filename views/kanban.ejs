@@ -35,15 +35,14 @@
     <div id="issue-toggle-wrapper">
         <button v-on="click: toggleIssue"><span class="glyphicon" v-class="glyphicon-chevron-left: isOpen, glyphicon-chevron-right: !isOpen"></span></button>
     </div>
-    <div class="blocks" v-class="open: isOpen">
+    <div class="blocks">
         <ul class="stage-blocks">
             <% stages.forEach(function (stage) { %>
                 <% if(stage.name == 'todo'){ %>
                     <li id="three-stage-blocks">
                         <ul class="inner-stage-blocks">
-                        
                 <% } %>
-                <li id="<%= stage.name %>-block" class="stage-block">
+                <li id="<%= stage.name %>-block" class="stage-block" <% if(stage.name == 'issue') %>v-class="open: isOpen" <% ; %>>
                     <h2 class="stage-title">
                         <%= stage.displayName %><span class="badge" data-bind="text: $root.stages.<%= stage.name %>().length"></span>
                     </h2>
