@@ -43,6 +43,20 @@ var routes = {
             socket.emitters.removeIssue(project.id, null, issue._id, _.noop);
             res.status(200).json({});
         },
+        reopen: function (project, req, res) {
+            var issue = GitHub.findIssueByNumber(project, req.body.issue.number);
+            if (!issue) {
+                return res.status(500).json({message: 'issue not found'});
+            }
+
+            // 変更の必要がなければ何もしない
+            if (issue.stage !== stages.archive && issue.stage !== stages.done) {
+                return res.status(200).json({});
+            }
+
+            socket.emitters.updateStage(project.id, null, issue._id, stages.Issue, null, _.noop);
+            res.status(200).json({});
+        },
         assigned: function (project, req, res) {
             var issue = GitHub.findIssueByNumber(project, req.body.issue.number);
             if (!issue) {
