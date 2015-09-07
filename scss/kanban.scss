@@ -157,6 +157,9 @@ body{
   overflow: visible;
   background-color: #fefefe;
   box-shadow: 0 0 10px #c0c0c0;
+  &#issue-block, &#backlog-block, &#done-block{
+    height: 100%;
+  }
   &:nth-child(odd) {
     // background: $background-second-color;
   }
@@ -214,10 +217,12 @@ body{
   }
 
   .cell-block {
-    padding: $stage-block-horizontal-margin $stage-block-horizontal-margin 1em;
-    margin: -$stage-block-horizontal-margin (-$stage-block-horizontal-margin) 0;
+    $offset: 20px;
+    padding: $stage-block-horizontal-margin + 10px $stage-block-horizontal-margin + $offset 1em;
+    margin: -$stage-block-horizontal-margin + 10px (-$stage-block-horizontal-margin - $offset) 0;
     list-style-type: none;
     overflow: auto;
+    height: calc(100% - 60px);
     .dummy-user-cell-block {
       height: $user-height + 14;
       margin-bottom: $user_margin-bottom;
