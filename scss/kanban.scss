@@ -86,12 +86,12 @@ body{
     border: none;
     border-right: 1px solid $toggle-button-border-color;
     background-color: transparent;
-    cursor: pointer;
     outline: none;
     color: #fff;
     text-shadow: 0 0 10px #999;
     transition: all .2s ease-in-out;
     background-color: $toggle-button-bg-color;
+    box-shadow: 1px 0 10px #999;
     &:hover{
       background-color: darken($toggle-button-bg-color, 5%);
       text-shadow: 0 0 15px #888;
@@ -114,10 +114,10 @@ body{
   transition: all .3s ease-in-out;
   position: relative;
   float: left;
-  margin-left: -($block_width + $stage-block-horizontal-margin);
+  // margin-left: -($block_width + $stage-block-horizontal-margin);
   height: 100%;
   &.open{
-    margin-left: $stage-block-horizontal-margin;
+    // margin-left: $stage-block-horizontal-margin;
   }
   &::after{
     clear: both;
@@ -132,7 +132,13 @@ body{
   }
 }
 
-
+#issue-block{
+  transition: margin-left .2s ease-in-out;
+  margin-left: -$block_width;
+  &.open{
+    margin-left: $stage-block-horizontal-margin * 2;
+  }
+}
 
 #three-stage-blocks{
   float: left;
@@ -208,11 +214,10 @@ body{
   }
 
   .cell-block {
-    padding: 0 0 1em;
-    margin: 0 auto;
+    padding: $stage-block-horizontal-margin $stage-block-horizontal-margin 1em;
+    margin: -$stage-block-horizontal-margin (-$stage-block-horizontal-margin) 0;
     list-style-type: none;
-    overflow-x: visible;
-    overflow-y: auto;
+    overflow: auto;
     .dummy-user-cell-block {
       height: $user-height + 14;
       margin-bottom: $user_margin-bottom;
@@ -228,14 +233,16 @@ body{
 }
 
 div.user-block-area {
+  $offset: 10px;
   position: absolute;
   top: 70px;
   // width: 1000px;
   width: $block_width * 3 + $stage-block-horizontal-margin * 6;
   overflow: auto;
+  // overflow: visible;
   height: calc(100% - 70px);
-  margin: 0 $stage-block-horizontal-margin;
-
+  margin: 0 ($stage-block-horizontal-margin - $offset);
+  padding: 0 $offset;
   .user-area-header {
     height: 40px;
     margin: 0 20px;
@@ -300,10 +307,11 @@ div.user-block-area {
       }
 
       .stage-blocks {
+        margin:0  (-$stage-block-horizontal-margin);
         .stage-block {
           background-color: inherit;
           box-shadow: none;
-          margin: 0;
+          margin: 0 $stage-block-horizontal-margin;
           .user-cell-block {
             margin: 20px 0 0 0;
             padding: 0;
