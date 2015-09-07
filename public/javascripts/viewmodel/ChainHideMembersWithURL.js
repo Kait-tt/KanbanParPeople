@@ -15,9 +15,20 @@
             project.members().forEach(function (member) {
                 member.visible.subscribe(that.onUpdateVisible.bind(that, member));
             });
-            project.members.subscribe(function (member) {
-                member.visible.subscribe(that.onUpdateVisible.bind(that, member));
-            });
+            project.members.subscribe(function (changes) {
+                changes.forEach(function (change) {
+                    var member = change.value;
+                    if (change.status === 'added') {
+                        if (!member.chainHideMembersWithURL_membersChangeSubscribe) {
+                            member.chainHideMembersWithURL_membersChangeSubscribe = member.visible.subscribe(that.onUpdateVisible.bind(that, member));
+                        }
+                    } else {
+                        if (member.chainHideMembersWithURL_membersChangeSubscribe) {
+                            member.chainHideMembersWithURL_membersChangeSubscribe.dispose();
+                        }
+                    }
+                });
+            }, null, 'arrayChange');
         };
 
         // メンバーの可視/不可視が変更されたらURLも更新する
