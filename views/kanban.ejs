@@ -182,7 +182,7 @@
                            data-bind="text: assigneeMember() ? assigneeMember().userName : null"></p>
                     </div>
 
-                    <div data-bind="enable: github && github().url">
+                    <div data-bind="if: github && github().url">
                         <a data-bind="attr: { href: github().url }">
                             <span class="glyphicon glyphicon-link" aria-hidden="true"></span> GitHub
                         </a>
