@@ -182,8 +182,8 @@
                            data-bind="text: assigneeMember() ? assigneeMember().userName : null"></p>
                     </div>
 
-                    <div>
-                        <a data-bind="attr: { href: github && github.url }">
+                    <div data-bind="enable: github && github().url">
+                        <a data-bind="attr: { href: github().url }">
                             <span class="glyphicon glyphicon-link" aria-hidden="true"></span> GitHub
                         </a>
                     </div>
@@ -431,6 +431,11 @@
                     </tbody>
                 </table>
                 <!-- /ko -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-success" data-dismiss="modal"
+                        data-bind="click: $root.updateUserSettings">Update</button>
             </div>
         </div>
     </div>
