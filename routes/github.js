@@ -43,7 +43,7 @@ var routes = {
             socket.emitters.removeIssue(project.id, null, issue._id, _.noop);
             res.status(200).json({});
         },
-        reopen: function (project, req, res) {
+        reopened: function (project, req, res) {
             var issue = GitHub.findIssueByNumber(project, req.body.issue.number);
             if (!issue) {
                 return res.status(500).json({message: 'issue not found'});
@@ -54,7 +54,7 @@ var routes = {
                 return res.status(200).json({});
             }
 
-            socket.emitters.updateStage(project.id, null, issue._id, stages.Issue, null, _.noop);
+            socket.emitters.updateStage(project.id, null, issue._id, stages.issue, null, _.noop);
             res.status(200).json({});
         },
         assigned: function (project, req, res) {
