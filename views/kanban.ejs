@@ -430,6 +430,20 @@
                         <!-- /ko -->
                     </tbody>
                 </table>
+
+                <!-- Member Add -->
+
+                <form class="form">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="add-member-username" placeholder="User Name"
+                               data-bind="value: addMemberUserName" required>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default btn-success" type="button">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true" data-bind="click: addMember"></span> Add
+                            </button>
+                        </span>
+                    </div>
+                </form>
                 <!-- /ko -->
             </div>
         </div>
