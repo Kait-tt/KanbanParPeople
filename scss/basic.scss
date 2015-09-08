@@ -1,6 +1,7 @@
 // bootstrap icon path
 $icon-font-path: "../vendor/bootstrap/fonts/";
 
+@import "override";
 @import "../node_modules/bootstrap-sass/assets/stylesheets/_bootstrap";
 @import "common";
 @import "alert";
