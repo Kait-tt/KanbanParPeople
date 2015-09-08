@@ -152,6 +152,9 @@ body{
     height: 100%;
     > .stage-block{
       height: 100%;
+      .cell-block{
+        overflow: visible;
+      }
     }
   }
 }
@@ -178,12 +181,7 @@ body{
     font-family: 'Titillium Web', sans-serif;
     font-weight: bold;
     .badge {
-      position: absolute;
-      display: inline-block;
-      vertical-align: top;
-      margin-left: 4px;
-      background: #999999;
-      font-size: 11px;
+      vertical-align: 3px;
     }
   }
 
@@ -224,8 +222,8 @@ body{
     padding: $stage-block-horizontal-margin + 10px $stage-block-horizontal-margin + $offset 1em;
     margin: -$stage-block-horizontal-margin + 10px (-$stage-block-horizontal-margin - $offset) 0;
     list-style-type: none;
-    overflow: auto;
     height: calc(100% - 60px);
+    overflow: auto;
     .dummy-user-cell-block {
       height: $user-height + 14;
       margin-bottom: $user_margin-bottom;
@@ -263,9 +261,13 @@ div.user-block-area {
     li.user-block {
       position: relative;
       width: $block_width * 3 + $stage-block-horizontal-margin * 4;
-      height: $user_height + 15;
-      margin-bottom: $user_margin-bottom;
+      min-height: 175px;
       z-index: 5;
+      &::after{
+        clear: both;
+        display: table-cell;
+        content: '';
+      }
       .user-label-area {
         font-size: 1.2rem;
         background-color: $ribbon-bg-color;
@@ -310,13 +312,18 @@ div.user-block-area {
       }
 
       .stage-blocks {
-        margin:0  (-$stage-block-horizontal-margin);
+        margin:20px (-$stage-block-horizontal-margin);
+        &::after{
+          clear: both;
+          display: block;
+          content: '';
+        }
         .stage-block {
           background-color: inherit;
           box-shadow: none;
           margin: 0 $stage-block-horizontal-margin;
           .user-cell-block {
-            margin: 20px 0 0 0;
+            margin: 0;
             padding: 0;
           }
         }
@@ -326,7 +333,6 @@ div.user-block-area {
 }
 
 .user-cell-block {
-  height: $user_height - $user_padding-height * 2;
   margin-bottom: $user_margin-bottom;
   padding-top: $user_padding-height;
   padding-bottom: $user_padding-height;
@@ -339,16 +345,16 @@ div.user-block-area {
   }
 
   .each-all-issues-view-button {
-    position: relative;
-    display: inline-block;
-    color: #999999;
-    float: right;
-    margin: 4px 21px 0 0;
-    padding: 0;
-
-    .badge {
-      background: #999999;
-      font-size: 11px;
+    display: block;
+    text-align: center;
+    padding: 1rem 0;
+    text-decoration: none;
+    box-shadow: 0 0 10px #ccc;
+    border: 1px solid #fff;
+    background-color: #fff;
+    transition: all .2s ease;
+    &:hover{
+      background-color: #f0f0f0;
     }
   }
 }
