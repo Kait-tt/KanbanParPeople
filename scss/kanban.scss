@@ -146,6 +146,17 @@ body{
   overflow: auto;
   max-height: 100%;
   overflow: hidden;
+  height: 100%;
+  .inner-stage-blocks{
+    overflow: hidden;
+    height: 100%;
+    > .stage-block{
+      height: 100%;
+      .cell-block{
+        overflow: visible;
+      }
+    }
+  }
 }
 
 .stage-block {
@@ -160,14 +171,6 @@ body{
   &#issue-block, &#backlog-block, &#done-block{
     height: 100%;
   }
-  &:nth-child(odd) {
-    // background: $background-second-color;
-  }
-
-  &:nth-child(even) {
-    // background: $background-first-color;
-  }
-
   .stage-title {
     font-size: 2rem;
     margin: 0 0 1em;
@@ -178,12 +181,7 @@ body{
     font-family: 'Titillium Web', sans-serif;
     font-weight: bold;
     .badge {
-      position: absolute;
-      display: inline-block;
-      vertical-align: top;
-      margin-left: 4px;
-      background: #999999;
-      font-size: 11px;
+      vertical-align: 3px;
     }
   }
 
@@ -199,6 +197,9 @@ body{
   }
 
   &#issue-block {
+    &.folded{
+      overflow: hidden;
+    }
     .issue-block-header {
       padding-left: 21px;
     }
@@ -221,8 +222,8 @@ body{
     padding: $stage-block-horizontal-margin + 10px $stage-block-horizontal-margin + $offset 1em;
     margin: -$stage-block-horizontal-margin + 10px (-$stage-block-horizontal-margin - $offset) 0;
     list-style-type: none;
-    overflow: auto;
     height: calc(100% - 60px);
+    overflow: auto;
     .dummy-user-cell-block {
       height: $user-height + 14;
       margin-bottom: $user_margin-bottom;
@@ -260,33 +261,39 @@ div.user-block-area {
     li.user-block {
       position: relative;
       width: $block_width * 3 + $stage-block-horizontal-margin * 4;
-      height: $user_height + 15;
-      margin-bottom: $user_margin-bottom;
+      min-height: 175px;
       z-index: 5;
-      &.wip-limited {
-        border: 2px solid #d9534f;
+      &::after{
+        clear: both;
+        display: table-cell;
+        content: '';
       }
-
       .user-label-area {
-        .user-name {
-          font-size: 1.2rem;
-          background-color: $ribbon-bg-color;
-          color: #fff;
-          padding: 7px 8px 6px;
-          position: relative;
-          box-shadow: 0 1px 1px #ccc;
-          $ribbon-size: 10px;
-          $ribbon-offset: 20px;
+        font-size: 1.2rem;
+        background-color: $ribbon-bg-color;
+        color: #fff;
+        padding: 7px 8px 6px;
+        position: relative;
+        box-shadow: 0 1px 1px #ccc;
+        $ribbon-size: 10px;
+        $ribbon-offset: 20px;
+        &::before{
+          content: '';
+          width: 0;
+          height: 0;
+          border: $ribbon-size solid transparent;
+          border-top-color: darken($ribbon-bg-color, 0%);
+          position: absolute;
+          right: $ribbon-offset;
+          bottom: -($ribbon-size * 2);
+        }
+        &.wip-limited{
+          background-color: $ribbon-bg-color--wip-limited;
           &::before{
-            content: '';
-            width: 0;
-            height: 0;
-            border: $ribbon-size solid transparent;
-            border-top-color: darken($ribbon-bg-color, 0%);
-            position: absolute;
-            right: $ribbon-offset;
-            bottom: -($ribbon-size * 2);
+            border-top-color: darken($ribbon-bg-color--wip-limited, 0%);
           }
+        }
+        .user-name {
           .close {
             font-size: 14px;
             float: none;
@@ -299,26 +306,24 @@ div.user-block-area {
             }
           }
         }
-
-
-        .wip-limited-message {
-          font-size: 12px;
-          display: inline-block;
-
-          .glyphicon {
-            margin-right: 4px;
-          }
+        .wip-limited-message{
+          margin-left: 1rem;
         }
       }
 
       .stage-blocks {
-        margin:0  (-$stage-block-horizontal-margin);
+        margin:20px (-$stage-block-horizontal-margin);
+        &::after{
+          clear: both;
+          display: block;
+          content: '';
+        }
         .stage-block {
           background-color: inherit;
           box-shadow: none;
           margin: 0 $stage-block-horizontal-margin;
           .user-cell-block {
-            margin: 20px 0 0 0;
+            margin: 0;
             padding: 0;
           }
         }
@@ -328,7 +333,6 @@ div.user-block-area {
 }
 
 .user-cell-block {
-  height: $user_height - $user_padding-height * 2;
   margin-bottom: $user_margin-bottom;
   padding-top: $user_padding-height;
   padding-bottom: $user_padding-height;
@@ -341,16 +345,16 @@ div.user-block-area {
   }
 
   .each-all-issues-view-button {
-    position: relative;
-    display: inline-block;
-    color: #999999;
-    float: right;
-    margin: 4px 21px 0 0;
-    padding: 0;
-
-    .badge {
-      background: #999999;
-      font-size: 11px;
+    display: block;
+    text-align: center;
+    padding: 1rem 0;
+    text-decoration: none;
+    box-shadow: 0 0 10px #ccc;
+    border: 1px solid #fff;
+    background-color: #fff;
+    transition: all .2s ease;
+    &:hover{
+      background-color: #f0f0f0;
     }
   }
 }
