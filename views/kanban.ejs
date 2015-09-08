@@ -42,7 +42,7 @@
                     <li id="three-stage-blocks">
                         <ul class="inner-stage-blocks">
                 <% } %>
-                <li id="<%= stage.name %>-block" class="stage-block" <% if(stage.name == 'issue') %>v-class="open: isOpen" <% ; %>>
+                <li id="<%= stage.name %>-block" class="stage-block" <% if(stage.name == 'issue') %>v-class="open: isOpen, folded : !isOpen" <% ; %>>
                     <h2 class="stage-title">
                         <%= stage.displayName %><span class="badge" data-bind="text: $root.stages.<%= stage.name %>().length"></span>
                     </h2>
@@ -75,9 +75,9 @@
                                 as: 'member',
                                 afterAdd: view.effects.slideDown,
                                 beforeRemove: view.effects.slideUp }">
-                            <li class="user-block" data-bind="css: { 'wip-limited': member.isWipLimited }">
-                                <div class="user-label-area">
-                                    <p class="user-name">
+                            <li class="user-block">
+                                <div class="user-label-area" data-bind="css: { 'wip-limited': member.isWipLimited }">
+                                    <span class="user-name">
                                         <a href="#" class="user-settings-button"
                                            data-toggle="modal" data-target="#user-settings-modal"
                                            data-bind="click: $root.selectedMember">
@@ -85,11 +85,10 @@
                                         </a>
                                         <span data-bind="text: userName"></span>
                                         <span data-bind="text: '(' + member.wip() + '/' + member.wipLimit() + ')'"></span>
-                                    </p>
-
-                                    <p class="wip-limited-message alert-warning" data-bind="visible: member.isWipLimited">
-                                        <span class="glyphicon glyphicon-warning-sign"></span>WIP制限に達しています。
-                                    </p>
+                                    </span>
+                                    <small class="wip-limited-message" data-bind="visible: member.isWipLimited">
+                                        <span class="glyphicon glyphicon-warning-sign"></span> WIP制限に達しています。
+                                    </small>
                                 </div>
 
                                 <ul class="stage-blocks" data-bind="foreach: { data: <%= assignedStageNamesJSON %>, as: 'stage' }">
