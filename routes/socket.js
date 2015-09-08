@@ -210,7 +210,8 @@ module.exports.emitters = emitters = {
     },
 
     updateMemberOrder: function (projectId, userName, insertBeforeOfUserName, fn) {
-        Project.updateIssuePriority({id: projectId}, userName, insertBeforeOfUserName, function (err, project, member, insertBeforeOfMember) {
+        Project.updateMemberOrder({id: projectId}, userName, insertBeforeOfUserName, function (err, project, member, insertBeforeOfMember) {
+            if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('updated member order', {issue: member, insertBeforeOfMember: insertBeforeOfMember}, fn);
             module.exports.io.to(projectId).emit('update-member-order', {member: member, userName: userName,

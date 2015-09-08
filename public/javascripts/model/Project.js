@@ -49,7 +49,7 @@
         (o.issues || []).forEach(function (issue) { this.addIssue(issue); }, this);
 
         // membersの初期化
-        (o.members || []).forEach(function (member) { this.addMember(member); }, this);
+        (o.members || []).forEach(function (member) { this.addMember(member, {reverse: true}); }, this);
 
         // this.stages[stageName] = 各ステージにあるIssue
         this.stages = _.object(stageTypeKeys.map(function (stageName) {
@@ -136,8 +136,8 @@
     };
 
 
-    Project.prototype.addMember = function (member) {
-        this.members.unshift(new User(_.extend(member.user, {issues: this.issues, wipLimit: member.wipLimit})));
+    Project.prototype.addMember = function (member, o) {
+        this.members[(o && o.reverse) ? 'push' : 'unshift'](new User(_.extend(member.user, {issues: this.issues, wipLimit: member.wipLimit})));
     };
 
     Project.prototype.removeMember = function (member) {
