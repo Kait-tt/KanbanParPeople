@@ -10,7 +10,7 @@
         };
 
     /**
-     * ドラッグアンドドロップで画面をスクロールするView
+     * 背景ドラッグで画面をスクロールするView
      *
      */
     ns.Scroller = ns.Scroller || Scroller;
@@ -28,20 +28,18 @@
 
             // scroll event
             that.opts.selectors.forEach(function (selector) {
-                $('body')
-                    .delegate(selector, 'mousedown', that.onMousedown)
-                    .delegate(selector, 'mouseup', that.onMouseup);
+                $('body').delegate(selector, 'mousedown', that.onMousedown);
             });
 
             // cancel
             that.opts.cancelSelectors.forEach(function (selector) {
-                $('body')
-                    .delegate(selector, 'mousedown', that.cancel)
-                    .delegate(selector, 'mouseup', that.cancel);
+                $('body').delegate(selector, 'mousedown', that.cancel);
             });
 
             // move event
             $(window).mousemove(that.onMousemove);
+
+            $(window).mouseup(that.cancel);
         };
 
         that.cancel = function (e) {
