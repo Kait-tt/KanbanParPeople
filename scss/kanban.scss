@@ -146,6 +146,14 @@ body{
   overflow: auto;
   max-height: 100%;
   overflow: hidden;
+  height: 100%;
+  .inner-stage-blocks{
+    overflow: hidden;
+    height: 100%;
+    > .stage-block{
+      height: 100%;
+    }
+  }
 }
 
 .stage-block {
@@ -160,14 +168,6 @@ body{
   &#issue-block, &#backlog-block, &#done-block{
     height: 100%;
   }
-  &:nth-child(odd) {
-    // background: $background-second-color;
-  }
-
-  &:nth-child(even) {
-    // background: $background-first-color;
-  }
-
   .stage-title {
     font-size: 2rem;
     margin: 0 0 1em;
@@ -199,6 +199,9 @@ body{
   }
 
   &#issue-block {
+    &.folded{
+      overflow: hidden;
+    }
     .issue-block-header {
       padding-left: 21px;
     }
@@ -263,30 +266,32 @@ div.user-block-area {
       height: $user_height + 15;
       margin-bottom: $user_margin-bottom;
       z-index: 5;
-      &.wip-limited {
-        border: 2px solid #d9534f;
-      }
-
       .user-label-area {
-        .user-name {
-          font-size: 1.2rem;
-          background-color: $ribbon-bg-color;
-          color: #fff;
-          padding: 7px 8px 6px;
-          position: relative;
-          box-shadow: 0 1px 1px #ccc;
-          $ribbon-size: 10px;
-          $ribbon-offset: 20px;
+        font-size: 1.2rem;
+        background-color: $ribbon-bg-color;
+        color: #fff;
+        padding: 7px 8px 6px;
+        position: relative;
+        box-shadow: 0 1px 1px #ccc;
+        $ribbon-size: 10px;
+        $ribbon-offset: 20px;
+        &::before{
+          content: '';
+          width: 0;
+          height: 0;
+          border: $ribbon-size solid transparent;
+          border-top-color: darken($ribbon-bg-color, 0%);
+          position: absolute;
+          right: $ribbon-offset;
+          bottom: -($ribbon-size * 2);
+        }
+        &.wip-limited{
+          background-color: $ribbon-bg-color--wip-limited;
           &::before{
-            content: '';
-            width: 0;
-            height: 0;
-            border: $ribbon-size solid transparent;
-            border-top-color: darken($ribbon-bg-color, 0%);
-            position: absolute;
-            right: $ribbon-offset;
-            bottom: -($ribbon-size * 2);
+            border-top-color: darken($ribbon-bg-color--wip-limited, 0%);
           }
+        }
+        .user-name {
           .close {
             font-size: 14px;
             float: none;
@@ -299,15 +304,8 @@ div.user-block-area {
             }
           }
         }
-
-
-        .wip-limited-message {
-          font-size: 12px;
-          display: inline-block;
-
-          .glyphicon {
-            margin-right: 4px;
-          }
+        .wip-limited-message{
+          margin-left: 1rem;
         }
       }
 
