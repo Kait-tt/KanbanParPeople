@@ -27,7 +27,7 @@
         </button>
         <button type="button" class="btn btn-sm btn-default members-settings-button"
                 data-toggle="modal" data-target="#members-settings-modal">
-            <span class="glyphicon glyphicon-cog" area-hidden="true"></span> Members
+            <span class="glyphicon glyphicon-user" area-hidden="true"></span> Members
         </button>
     </div>
 
@@ -77,12 +77,7 @@
                 <% if(stage.name == 'review'){ %>
                     </ul>
                     <div class="user-block-area">
-                    <div class="block-header user-area-header">
-                        <button type="button" class="btn btn-sm btn-default"
-                                data-toggle="modal" data-target="#add-member-modal">
-                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Add member
-                        </button>
-                    </div>
+                    <div class="block-header user-area-header"></div>
 
                     <ul class="user-blocks" data-bind="foreach: {
                             data: members,
@@ -194,39 +189,6 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-success" data-dismiss="modal"
                             data-bind="click: $root.updateIssueDetail">Update</button>
-                </div>
-            </form>
-
-        </div>
-    </div>
-</div>
-
-<!-- Add Member Modal -->
-<div class="modal fade" id="add-member-modal" tabindex="-1" role="dialog" aria-labelledby="add-member-modal-label" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="add-member-modal-label">Add Member</h4>
-            </div>
-            <form class="form">
-                <div class="modal-body">
-                    <p>
-                        メンバーを追加します。<br>
-                        追加するメンバー情報を入力してください。
-                    </p>
-                    <div class="form-group">
-                        <label for="add-member-username" class="control-label">
-                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span> GitHubのユーザ名
-                        </label>
-                        <input type="text" class="form-control" id="add-member-username" placeholder="GitHub User Name"
-                               data-bind="value: addMemberUserName" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-success" data-dismiss="modal"
-                            data-bind="click: addMember">Add</button>
                 </div>
             </form>
 
@@ -432,18 +394,18 @@
                 </table>
 
                 <!-- Member Add -->
-
                 <form class="form">
                     <div class="input-group">
                         <input type="text" class="form-control" id="add-member-username" placeholder="User Name"
-                               data-bind="value: addMemberUserName" required>
+                               data-bind="value: $root.addMemberUserName" required>
                         <span class="input-group-btn">
-                            <button class="btn btn-default btn-success" type="button">
-                                <span class="glyphicon glyphicon-plus" aria-hidden="true" data-bind="click: addMember"></span> Add
+                            <button class="btn btn-default btn-success" type="submit" data-bind="click: $root.addMember">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Add
                             </button>
                         </span>
                     </div>
                 </form>
+
                 <!-- /ko -->
             </div>
         </div>
