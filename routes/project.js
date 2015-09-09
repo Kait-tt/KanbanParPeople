@@ -10,15 +10,14 @@ var assignedStageNamesJSON = JSON.stringify(_.pluck(_.where(stages, {assigned: t
 router.get('/:projectId/:projectName', function (req, res, next) {
     var id = req.params.projectId;
     var projectName = req.params.projectName;
-    var userName = req.params.user;
     var mustLogin = req.params.mustLogin === '1';
     var logined = req.isAuthenticated && req.isAuthenticated();
+    var userName = req.user ? req.user.username : null;
 
     Project
         .findOne({
             id: id,
-            name: projectName,
-            userName: userName
+            name: projectName
         })
         .populate('create_user')
         .populate('members.user')
@@ -33,7 +32,8 @@ router.get('/:projectId/:projectName', function (req, res, next) {
                 stages: stages,
                 assignedStageNamesJSON: assignedStageNamesJSON,
                 logined: logined,
-                mustLogin: mustLogin
+                mustLogin: mustLogin,
+                userName: userName
             });
         });
 
