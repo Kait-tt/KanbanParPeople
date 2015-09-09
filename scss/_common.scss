@@ -9,8 +9,7 @@ html{
 }
 body {
   height: 100%;
-  // overflow: hidden;
-  padding-top: 70px;
+  padding-top: 100px;
   margin: 0;
   font-family: "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
 }
@@ -22,5 +21,41 @@ body {
   height: 100%;
   padding: 0;
   margin: 0;
-  background: $background-basic-color;
+}
+
+.navbar{
+  box-shadow: 0 0 10px 0 #000;
+  border-radius: 0;
+  .navbar-brand-wrapper{
+    position: absolute;
+    width: 100%;
+    left: 0;
+    margin: 0;
+    text-align: center;
+    .navbar-brand{
+      font-family: 'Titillium Web', sans-serif;
+      font-weight: bold;
+      display: inline-block;
+      font-size: 2.3rem;
+      margin-left: 0 !important;
+      float: none;
+      text-shadow: 0 1px 1px #333;
+    }
+  }
+  .dropdown-menu{
+    background-color: $navbar-bg-color;
+    padding: 0;
+    > li{
+      &.divider{
+        margin: 0;
+      }
+      > a{
+        color: $navbar-color;
+        padding: 12px 8px;
+        &:hover{
+          background-color: lighten($navbar-bg-color, 10%);
+        }
+      }
+    }
+  }
 }

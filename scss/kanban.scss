@@ -1,8 +1,9 @@
 @import "compass/reset";
 @import "basic";
 @import "mini-menu";
+@import "variables";
 
-$card_width: 250px;
+$card_width: 300px;
 $card_height: 50px;
 $card_padding: 6px;
 
@@ -23,73 +24,164 @@ $issue-block_right-margin: 60px;
 
 $three-stage-blocks-padding: 40px;
 
-.blocks {
+html, body{
+  height: 100%;
+}
+
+body{
+  // overflow-y: hidden;
+  background-color: $body-bg-color;
+}
+
+#toolbar{
+  @extend .navbar;
+  background: $toolbar-bg-color;
+  box-shadow: none;
+  position: fixed;
+  top: 50px;
+  z-index: 2;
+  width: 100%;
+}
+
+#project-name{
+  @extend .navbar-text;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-weight: bold;
+  font-size: 2.5rem;
+  line-height: 50px;
+  height: 50px;
+  a{
+    color: #fff;
+    display: block;
+  }
+}
+
+#toolbar-btn-group{
+  margin-right: 15px;
+  button{
+    background-color: transparent;
+    border-color: #fff;
+    color: #fff;
+    .glyphicon{
+      vertical-align: -1px;
+    }
+    &:hover{
+      background-color: rgba(#fff, .3);
+    }
+  }
+}
+
+#issue-toggle-wrapper{
+  height: 100%;
+  float: left;
+  text-align: center;
   position: relative;
-  width: 2040px;
-  padding: 10px 20px;
-  margin: 0;
-  height: 95%;
+  z-index: 11;
+  width: $issue-toggle-wrapper-size;
+  button{
+    height: 100%;
+    width: 100%;
+    font-size: 4rem;
+    border: none;
+    border-right: 1px solid $toggle-button-border-color;
+    background-color: transparent;
+    outline: none;
+    color: #fff;
+    text-shadow: 0 0 10px #999;
+    transition: all .2s ease-in-out;
+    background-color: $toggle-button-bg-color;
+    box-shadow: 1px 0 10px #999;
+    &:hover{
+      background-color: darken($toggle-button-bg-color, 5%);
+      text-shadow: 0 0 15px #888;
+    }
+  }
+}
+
+#main{
+  height: calc(100% - 100px);
+  position: relative;
+  z-index: 1;
+  width: ($block_width + $stage-block-horizontal-margin * 2) * 5 + $issue-toggle-wrapper-size + $stage-block-horizontal-margin * 2;
+  transition: width .2s ease-in-out;
+  &.open{
+    width: ($block_width + $stage-block-horizontal-margin * 2) * 6 + $issue-toggle-wrapper-size + $stage-block-horizontal-margin * 2;
+  }
+}
+
+.blocks {
+  transition: all .3s ease-in-out;
+  position: relative;
+  float: left;
+  // margin-left: -($block_width + $stage-block-horizontal-margin);
+  height: 100%;
+  &.open{
+    // margin-left: $stage-block-horizontal-margin;
+  }
   &::after{
     clear: both;
     display: table-cell;
     content: '';
   }
+  .stage-blocks {
+    position: relative;
+    list-style-type: none;
+    height: 100%;
+    margin: 0;
+  }
 }
 
-.stage-blocks {
-  position: relative;
-  // letter-spacing: -.40em;
-  list-style-type: none;
-  height: 100%;
+#issue-block{
+  transition: margin-left .2s ease-in-out;
+  margin-left: -$block_width;
+  &.open{
+    margin-left: $stage-block-horizontal-margin * 2;
+  }
 }
 
 #three-stage-blocks{
   float: left;
-  width: ($block_width + $block_padding * 2) * 3 + $three-stage-blocks-padding;
   vertical-align: top;
   overflow: auto;
-  padding: 0 $three-stage-blocks-padding;
-  margin:0 -20px;
   max-height: 100%;
-  margin-right: $issue-block_right-margin;
-  position: relative;
-  
-  #inner-stage-blocks{
+  overflow: hidden;
+  height: 100%;
+  .inner-stage-blocks{
+    overflow: hidden;
+    height: 100%;
+    > .stage-block{
+      height: 100%;
+      .cell-block{
+        overflow: visible;
+      }
+    }
   }
 }
 
 .stage-block {
   float: left;
-  // display: inline-block;
-  letter-spacing: normal;
   width: $block_width;
-  padding: $block_padding;
+  padding: 0;
   max-height: 100%;
-  margin: 0;
-  vertical-align: top;
-  overflow: auto;
-  &:nth-child(odd) {
-    background: $background-second-color;
+  margin: 0 $stage-block-horizontal-margin;
+  overflow: visible;
+  background-color: #fefefe;
+  box-shadow: 0 0 10px #c0c0c0;
+  &#issue-block, &#backlog-block, &#done-block{
+    height: 100%;
   }
-
-  &:nth-child(even) {
-    background: $background-first-color;
-  }
-
   .stage-title {
-    text-align: center;
-    font-size: 28px;
-    margin-top: 8px;
-    margin-bottom: 14px;
-    color: #222;
-
+    font-size: 2rem;
+    margin: 0 0 1em;
+    padding: 1em 20px .8em;
+    border-bottom: 1px dashed #c0c0c0;
+    color: #494949;
+    text-shadow: 0 0 1px #fff;
+    font-family: 'Titillium Web', sans-serif;
+    font-weight: bold;
     .badge {
-      position: absolute;
-      display: inline-block;
-      vertical-align: top;
-      margin-left: 4px;
-      background: #999999;
-      font-size: 11px;
+      vertical-align: 3px;
     }
   }
 
@@ -105,35 +197,33 @@ $three-stage-blocks-padding: 40px;
   }
 
   &#issue-block {
-    @include border-radius(5px 0 0 5px);
-
+    &.folded{
+      overflow: hidden;
+    }
     .issue-block-header {
       padding-left: 21px;
     }
   }
 
   &#backlog-block {
-    @include border-radius(0 5px 5px 0);
-    margin-right: $issue-block_right-margin;
   }
 
   &#todo-block {
-    @include border-radius(5px 0 0 5px);
   }
 
   &#review-block {
-    @include border-radius(0 5px 5px 0);
   }
 
   &#done-block {
-    @include border-radius(5px);
   }
 
   .cell-block {
-    padding: 0;
-    margin: 0 auto;
+    $offset: 20px;
+    padding: $stage-block-horizontal-margin + 10px $stage-block-horizontal-margin + $offset 1em;
+    margin: -$stage-block-horizontal-margin + 10px (-$stage-block-horizontal-margin - $offset) 0;
     list-style-type: none;
-
+    height: calc(100% - 60px);
+    overflow: auto;
     .dummy-user-cell-block {
       height: $user-height + 14;
       margin-bottom: $user_margin-bottom;
@@ -149,14 +239,20 @@ $three-stage-blocks-padding: 40px;
 }
 
 div.user-block-area {
+  $offset: 10px;
   position: absolute;
-  top: 60px;
-  margin: 0 (-$three-stage-blocks-padding);
-
+  top: 70px;
+  // width: 1000px;
+  width: $block_width * 3 + $stage-block-horizontal-margin * 6;
+  overflow: auto;
+  // overflow: visible;
+  height: calc(100% - 70px);
+  margin: 0 ($stage-block-horizontal-margin - $offset);
+  padding: 0 $offset;
   .user-area-header {
     height: 40px;
-    margin: 0;
-    padding: 0 20px;
+    margin: 0 20px;
+    padding: 0 50px;
   }
 
   ul.user-blocks {
@@ -164,68 +260,70 @@ div.user-block-area {
 
     li.user-block {
       position: relative;
-      background-color: rgba(242, 242, 242, 0.60);
-      width: $block_width * 3 + $three-stage-blocks-padding * 2;
-      height: $user_height + 15;
-      border-radius: 20px;
-      margin-bottom: $user_margin-bottom;
+      width: $block_width * 3 + $stage-block-horizontal-margin * 4;
+      min-height: 175px;
       z-index: 5;
-      @include box-shadow(2px 2px 2px 0px rgba(#000, .1));
-
-      &.wip-limited {
-        border: 2px solid #d9534f;
+      &::after{
+        clear: both;
+        display: table-cell;
+        content: '';
       }
-
       .user-label-area {
-        display: inline-block;
-        position: absolute;
-        z-index: 6;
-        height: 12px + 17;
-
+        font-size: 1.2rem;
+        background-color: $ribbon-bg-color;
+        color: #fff;
+        padding: 7px 8px 6px;
+        position: relative;
+        box-shadow: 0 1px 1px #ccc;
+        $ribbon-size: 10px;
+        $ribbon-offset: 20px;
+        &::before{
+          content: '';
+          width: 0;
+          height: 0;
+          border: $ribbon-size solid transparent;
+          border-top-color: darken($ribbon-bg-color, 0%);
+          position: absolute;
+          right: $ribbon-offset;
+          bottom: -($ribbon-size * 2);
+        }
+        &.wip-limited{
+          background-color: $ribbon-bg-color--wip-limited;
+          &::before{
+            border-top-color: darken($ribbon-bg-color--wip-limited, 0%);
+          }
+        }
         .user-name {
-          font-size: 12px;
-          color: #222;
-          background-color: rgba(229, 229, 229, 0.60);
-          border-right: 1px solid lightgray;
-          border-bottom: 1px solid lightgray;
-          @include border-radius(20px 0 20px 0);
-          display: inline-block;
-          height: 12px + 17;
-          padding: 7px 8px 6px 8px;
-
           .close {
             font-size: 14px;
             float: none;
           }
-
           .user-settings-button {
-            color: #999999;
-
+            color: #fff;
+            text-decoration: none;
             &:hover {
-              color: #626262;
+              color: #ccc;
             }
           }
         }
-
-
-        .wip-limited-message {
-          font-size: 12px;
-          display: inline-block;
-
-          .glyphicon {
-            margin-right: 4px;
-          }
+        .wip-limited-message{
+          margin-left: 1rem;
         }
       }
 
       .stage-blocks {
-        margin-left: 30px;
-
+        margin:20px (-$stage-block-horizontal-margin);
+        &::after{
+          clear: both;
+          display: block;
+          content: '';
+        }
         .stage-block {
           background-color: inherit;
-
+          box-shadow: none;
+          margin: 0 $stage-block-horizontal-margin;
           .user-cell-block {
-            margin: 20px 0 0 0;
+            margin: 0;
             padding: 0;
           }
         }
@@ -235,7 +333,6 @@ div.user-block-area {
 }
 
 .user-cell-block {
-  height: $user_height - $user_padding-height * 2;
   margin-bottom: $user_margin-bottom;
   padding-top: $user_padding-height;
   padding-bottom: $user_padding-height;
@@ -248,22 +345,22 @@ div.user-block-area {
   }
 
   .each-all-issues-view-button {
-    position: relative;
-    display: inline-block;
-    color: #999999;
-    float: right;
-    margin: 4px 21px 0 0;
-    padding: 0;
-
-    .badge {
-      background: #999999;
-      font-size: 11px;
+    display: block;
+    text-align: center;
+    padding: 1rem 0;
+    text-decoration: none;
+    box-shadow: 0 0 10px #ccc;
+    border: 1px solid #fff;
+    background-color: #fff;
+    transition: all .2s ease;
+    &:hover{
+      background-color: #f0f0f0;
     }
   }
 }
 
 .card {
-  width: $card_width - $card_padding * 2;
+  width: $card_width;
   height: $card_height - $card_padding * 2 + 16;
   margin: 0 auto 10px;
   padding: $card_padding;
@@ -272,6 +369,7 @@ div.user-block-area {
   overflow: visible;
   cursor: pointer;
   display: block;
+  border-top: 1px solid #f0f0f0;
 
   &:before {
     content: " ";
@@ -343,7 +441,6 @@ div.user-block-area {
         background-color: #505050;
         margin: 30px 60px;
         padding: 20px 40px;
-        border-radius: 10px;
 
         .each-all-issues-view-title {
           color: #fafafa;

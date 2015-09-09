@@ -1,4 +1,4 @@
-(function (global, $, _, ko, util) {
+(function (global, $, _, ko, util, Vue) {
     'use strict';
 
     var viewmodel = util.namespace('kpp.viewmodel'),
@@ -62,4 +62,17 @@
         return _.compact(location.pathname.split('/')).splice(-2, 1)[0];
     }
 
-}(window, jQuery, _, ko, window.nakazawa.util));
+
+    new Vue({
+        el: 'body',
+        data: {
+            isOpen: false
+        },
+        methods: {
+            toggleIssue: function(){
+                this.isOpen = !this.isOpen;
+            }
+        }
+    });
+
+}(window, jQuery, _, ko, window.nakazawa.util, Vue));
