@@ -163,6 +163,7 @@ body{
   float: left;
   width: $block_width;
   padding: 0;
+  min-height: $card_height * 2;
   max-height: 100%;
   margin: 0 $stage-block-horizontal-margin;
   overflow: visible;
