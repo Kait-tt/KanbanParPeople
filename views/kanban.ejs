@@ -13,7 +13,7 @@
 
 <div id="toolbar" class="navbar-inverse">
     <div class="navbar-collapse collapse">
-        <h1 class="navbar-text" id="project-name"><span ><a href="./"><%= displayTitle %></span></a></h1>
+        <h1 class="navbar-text" id="project-name"><a href="./"><%= displayTitle %></a></h1>
         <div class="sync-status navbar-text">
             <!-- ko if: $root.project.github().sync -->
             <span class="label label-primary">同期ON</span>
@@ -31,9 +31,9 @@
     </div>
 </div>
 
-<div id="main" class="main" data-bind="visible: true" style="display: none" v-class="open: isOpen">
+<div id="main" class="main" data-bind="visible: true, css: {'open': openedIssueList}" style="display: none">
     <div id="issue-toggle-wrapper">
-        <button v-on="click: toggleIssue"><span class="glyphicon" v-class="glyphicon-chevron-left: isOpen, glyphicon-chevron-right: !isOpen"></span></button>
+        <button data-bind="click: toggleOpenedIssueList"><span class="glyphicon" data-bind="css: {'glyphicon-chevron-left': openedIssueList(), 'glyphicon-chevron-right': !openedIssueList()}"></span></button>
     </div>
     <div class="blocks">
         <ul class="stage-blocks">
@@ -42,7 +42,7 @@
                     <li id="three-stage-blocks">
                         <ul class="inner-stage-blocks">
                 <% } %>
-                <li id="<%= stage.name %>-block" class="stage-block" <% if(stage.name == 'issue'){ %>v-class="open: isOpen, folded : !isOpen" <% } %>>
+                <li id="<%= stage.name %>-block" class="stage-block" <% if(stage.name == 'issue'){ %> data-bind="css: {open: openedIssueList(), folded : !openedIssueList()}" <% } %>>
                     <h2 class="stage-title">
                         <%= stage.displayName %> <span class="badge" data-bind="text: $root.stages.<%= stage.name %>().length"></span>
                     </h2>
@@ -496,7 +496,6 @@
 <script src="/vendor/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script>
 <script src="/vendor/lodash/lodash.min.js"></script>
 <script src="/vendor/knockoutjs/dist/knockout.js"></script>
-<script src="/vendor/vue/dist/vue.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 
 <script src="/javascripts/module/util.js"></script>
