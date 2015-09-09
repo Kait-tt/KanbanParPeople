@@ -4,7 +4,7 @@ var router = express.Router();
 router.get('/', function (req, res) {
     var mustLogin = req.params.mustLogin === '1';
     var logined = req.isAuthenticated && req.isAuthenticated();
-    var userName = req.user.username;
+    var userName = req.user ? req.user.username : null;
 
     res.render('index', {
         title: 'KanbanParPeople',
