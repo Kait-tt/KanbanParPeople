@@ -96,6 +96,12 @@ body{
       background-color: darken($toggle-button-bg-color, 5%);
       text-shadow: 0 0 15px #888;
     }
+    .glyphicon {
+      transition: all .2s ease-in-out;
+      &.reverse {
+        @include rotate(180deg);
+      }
+    }
   }
 }
 

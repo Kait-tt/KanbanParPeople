@@ -33,7 +33,9 @@
 
 <div id="main" class="main" data-bind="visible: true, css: {'open': openedIssueList}" style="display: none">
     <div id="issue-toggle-wrapper">
-        <button data-bind="click: toggleOpenedIssueList"><span class="glyphicon" data-bind="css: {'glyphicon-chevron-left': openedIssueList(), 'glyphicon-chevron-right': !openedIssueList()}"></span></button>
+        <button data-bind="click: toggleOpenedIssueList">
+            <span class="glyphicon glyphicon-chevron-right" data-bind="css: { reverse: openedIssueList() }"></span>
+        </button>
     </div>
     <div class="blocks">
         <ul class="stage-blocks">
