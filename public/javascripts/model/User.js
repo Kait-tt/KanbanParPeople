@@ -36,6 +36,15 @@
             }, this, {deferEvaluation: true});
         }, this);
 
+        // this['viewAll' + stage] = 各ステージのタスクをすべて表示するかのフラグ
+        // this['toggleViewAll' + stage] = 各ステージのタスクをすべて表示するかのフラグを切り替える
+        stageTypeAssignedKeys.forEach(function (stage) {
+            this['viewAll' + stage] = ko.observable(false);
+            this['toggleViewAll' + stage] = function () {
+                this['viewAll' + stage](!this['viewAll' + stage]());
+            }.bind(this);
+        }, this);
+
         // 仕掛数
         this.wip = ko.computed(function () {
             return stageTypeAssignedKeys.reduce(function (sum, stage) {

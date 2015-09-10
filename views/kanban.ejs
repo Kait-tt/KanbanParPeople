@@ -98,7 +98,7 @@
                                         <div class="user-cell-block">
                                             <ul class="card-list" data-bind="
                                             foreach: {
-                                                data: member[stage]().slice(0, 2),
+                                                data: member['viewAll' + stage]() ?  member[stage]() : member[stage]().slice(0, 2),
                                                 afterRender: view.MiniMenu.init,
                                                 afterAdd: view.effects.slideDown,
                                                 beforeRemove: view.effects.slideUp }">
@@ -106,9 +106,14 @@
                                             </ul>
 
                                             <a href="#" class="each-all-issues-view-button" data-bind="
-                                            click: $root.decideViewEachAllIssues.bind(this, member, stage),
+                                            click: member['toggleViewAll' + stage],
                                             visible: member[stage]().length > 2">
-                                                全てのタスクを表示 <span class="badge" data-bind="text: member[stage]().length"></span>
+                                                <span class="glyphicon" data-bind="css: {
+                                                    'glyphicon-collapse-down': !member['viewAll' + stage](),
+                                                    'glyphicon-collapse-up': member['viewAll' + stage]()
+                                                }"></span>
+                                                <span data-bind="text: member['viewAll' + stage]() ? 'Collapse ' : 'Expand '"></span>
+                                                <span class="badge" data-bind="text: member[stage]().length"></span>
                                             </a>
                                         </div>
                                     </li>
@@ -464,30 +469,6 @@
             <!-- /ko -->
             <!-- /ko -->
         </div>
-    </div>
-</div>
-
-<!-- view all issues -->
-<div class="each-all-issues-view-area-wrap" data-bind="css: { show: $root.viewEachAllIssues }">
-    <div class="each-all-issues-view-area-back"
-         data-bind="click: $root.decideViewEachAllIssues.bind(null, null)"></div>
-    <div class="each-all-issues-view-area" data-bind="click: $root.decideViewEachAllIssues.bind(null, null)">
-        <!-- ko if: $root.viewEachAllIssues -->
-        <!-- ko with: $root.viewEachAllIssues() -->
-        <div class="each-all-issues-view-inner-area">
-            <h3 class="each-all-issues-view-title" data-bind="text: member.userName() + '\'s ' + stage"></h3>
-
-            <ul class="card-list" data-bind="
-            foreach: {
-                data: issues,
-                afterRender: view.MiniMenu.init,
-                afterAdd: view.effects.slideDown,
-                beforeRemove: view.effects.slideUp }">
-                <% include _card %>
-            </ul>
-        </div>
-        <!-- /ko -->
-        <!-- /ko -->
     </div>
 </div>
 
