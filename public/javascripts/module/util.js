@@ -130,6 +130,35 @@
             }
 
             return ary;
+        },
+
+        /**
+         * aryにitemを追加する
+         * 既に存在していたら何もしない
+         *
+         * @param ary
+         * @param item
+         */
+        safePush: function (ary, item) {
+            if (ary.indexOf(item) === -1) {
+                ary.push(item);
+            }
+            return ary;
+        },
+
+        /**
+         * aryからitemを削除する
+         * 存在しない場合は何もしない
+         *
+         * @param ary
+         * @param item
+         */
+        safeRemove: function (ary, item) {
+            var idx = ary.indexOf(item);
+            if (idx !== -1) {
+                ary.splice(idx, 1);
+            }
+            return ary;
         }
     };
 }(window, _));
