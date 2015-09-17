@@ -4,7 +4,8 @@
     var viewmodel = util.namespace('kpp.viewmodel'),
         model = util.namespace('kpp.model'),
         stageTypeKeys = model.stageTypeKeys,
-        stages = model.stageTypes;
+        stages = model.stageTypes,
+        DraggableIssueList = viewmodel.DraggableIssueList;
 
     viewmodel.Kanban = viewmodel.Kanban || Kanban;
 
@@ -19,6 +20,10 @@
 
         // that.stages[name] = 各ステージのIssues
         that.stages = null;
+
+        // that.draggableList[stage] = DraggableIssueList
+        // that.draggableList[stage][UserID] = DraggableIssueList
+        that.draggableList = {};
 
         // 追加するユーザの名前
         that.addMemberUserName = ko.observable();
@@ -78,8 +83,40 @@
             that.members = project.members;
             that.issues = project.issues;
             that.stages = project.stages;
+            that.initDraggableIssueList();
 
             initSocket();
+        };
+
+        // 各ステージ、各メンバー毎にDraggableIssueListを作る
+        // メンバーの追加を監視する
+        that.initDraggableIssueList = function () {
+            that.draggableList = {};
+            var _params = {
+                masterIssues: that.issues,
+                onUpdateStage: that.updateStage,
+                onUpdatePriority: that.updateIssuePriority
+            };
+            _.values(stages).forEach(function (stage) {
+                var params = _.extend(_params, {stage: stage.name}),
+                    list;
+
+                if (stage.assigned) {
+                    list = {};
+                    that.members().forEach(function (member) {
+                        list[member._id()] = new DraggableIssueList(_.extend(params, {assignee: member._id()}));
+                    });
+                    that.members.subscribe(function (member) {
+                        if (!list[member._id()]) {
+                            list[member._id()] = new DraggableIssueList(_.extend(params, {assignee: member._id()}));
+                        }
+                    });
+                } else {
+                    list = new DraggableIssueList(params);
+                }
+
+                that.draggableList[stage.name] = list;
+            });
         };
 
         // メンバーを追加する

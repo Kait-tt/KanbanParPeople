@@ -1,14 +1,14 @@
 (function (_, util) {
     'use strict';
 
-    var model = util.namespace('kpp.viewmodel'),
+    var viewmodel = util.namespace('kpp.viewmodel'),
         defaultOptions = {
             onUpdatedStage: _.noop,
             onUpdatedPriority: _.noop,
             rateLimit: 100
         };
 
-    model.DraggableIssueList = model.DraggableIssueList || DraggableIssueList;
+    viewmodel.DraggableIssueList = viewmodel.DraggableIssueList || DraggableIssueList;
 
     /**
      * DraggableUI 用の IssueList
@@ -20,25 +20,31 @@
      * When updated slave issues (Draggableで更新される)
      *      イベントを発火する
      *      add:
-     *          -. Issueとslaveのassignee, stage情報が異なる場合、 onUpdatedStage を発火
-     *          -. 挿入後の前後との相対位置がmasterと異なる場合、最小の変更になるよう onUpdatedPriority を発火
-     *              array pattern:   ※ o: updated issue, x: other issue
+     *          -. Issueとslaveのassignee, stage情報が異なる場合、 onUpdatedStage を発火する
+     *          -. 挿入後の前後との相対位置がmasterと異なる場合、最小の変更になるよう onUpdatedPriority を発火する
+     *              array pattern:   ※ o: target issue, [xy_]: other issue
      *              1. |o|          no update
-     *              2. |ox+|      check with master and insert to before x
-     *              3. |x+ox*|   check with master and insert to before (x + 1)
+     *              2. |ox_*|       if target issue is not before x in master, insert to before x
+     *              3. |_*xo|       if target issue is not after x in master, insert to before x + 1 in master
+     *              4. |_*xoy_*|    if target issue is not after x and before y, insert to before x + 1 in master
      *      remove: この後必ずどこかのslaveでaddされるので何もしない
      *
      * @param o
      * @param {null|String} o.assignee              UserID or null
      * @param {nakazawa.model.stageTypes} o.stage   Stage
      * @param {ko.observableArray} o.masterIssues   Master issue list
-     * @param {Function} o.onUpdatedStage            Callback which is fired on update stage or assignee
-     * @param {Function} o.onUpdatedPriority         Callback which is fired on update priority
+     * @param {Function} o.onUpdatedStage           Callback which is fired on update stage or assignee
+     *                                               Arguments are issue, stage and assignee
+     * @param {Function} o.onUpdatedPriority        Callback which is fired on update priority
+     *                                               Arguments are issue and issue which insert before of
      * @param {Number} o.rateLimit                  Notify rate limit of issue list
      * @constructor
      */
     function DraggableIssueList(o) {
         this.opts = _.extend(o || {}, defaultOptions);
+        this.masterIssues = this.opts.masterIssues;
+        this.stage = this.opts.stage;
+        this.assignee = this.opts.assignee;
         this.id = _.uniqueId();
 
         // issue の監視プロパティ名と、subscriptionを格納するプロパティ名（重複して監視しないようにするため）
@@ -52,12 +58,11 @@
         this.issues = ko.observableArray().extend({rateLimit: {timeout: o.rateLimit, method: 'notifyWhenChangesStop '}});
 
         // subscribe
-        this.subscribeMasterIssues(this.opts.masterIssues);
-        this.opts.masterIssues.forEach(this.subscribeIssue.bind(this));
+        this.subscribeMasterIssues(this.masterIssues);
+        this.masterIssues().forEach(this.subscribeIssue.bind(this));
         this.subscribeSlaveIssues(this.issues);
 
-
-        this.allUpdateIssues(this.opts.masterIssues);
+        this.allUpdateIssues(this.masterIssues);
     }
 
     // slave issue list の変更を監視する
@@ -65,15 +70,20 @@
         slaveIssues.subscribe(function (changes) {
             // deleted の後に必ず added が来るはずなので、deleted は無視する
             _.where(changes, {status: 'added'}).forEach(function (change) {
-                var issue = change.value, index = change.index;
+                var issue = change.value;
 
-                // stage, assignee に変更があるか
+                // stage, assignee の変更
                 if (!this.matchCondition(issue)) {
-                    this.onUpdatedStage();
+                    this.onUpdatedStage(issue, this.stage, this.assignee);
                 }
 
-                // priority に変更があるか
-                // TODO: check priority
+                // priority の変更
+                if (!this.needUpdatePriority(issue, this.masterIssues, this.issues)) {
+                    var afterIssue = this.getIssueInsertBeforeOf(issue, this.masterIssues, this.issues);
+                    if (afterIssue) {
+                        this.onUpdatedPriority(issue, afterIssue);
+                    }
+                }
             }, this);
 
         }, this, 'arrayChange');
@@ -97,7 +107,7 @@
 
     // issueの変更を監視する
     DraggableIssueList.prototype.subscribeIssue = function (issue) {
-        var allUpdateIssue = this.allUpdateIssues.bind(this, this.opts.masterIssues);
+        var allUpdateIssue = this.allUpdateIssues.bind(this, this.masterIssues);
 
         // 各プロパティが更新されたら、slave issue list を作り直す
         this.issueSubscriptionParams.forEach(function (sub) {
@@ -114,12 +124,47 @@
             nextIssues = masterIssues().filter(match);
 
         this.issues.removeAll();
-        this.issues.splice(0, 0, nextIssues);
+        Array.prototype.push.apply(this.issues(), nextIssues);
+    };
+
+    // master issue list と slave issue list を比較して、priority に変更が必要かチェックする
+    // 条件はクラスのコメント参照
+    DraggableIssueList.prototype.needUpdatePriority = function (targetIssue, masterIssues, slaveIssues) {
+        var slave = slaveIssues(),
+            master = masterIssues();
+
+        var slaveIdx = slave.indexOf(targetIssue);
+        var masterIdx = master.indexOf(targetIssue);
+        if (slaveIdx === -1) { throw new Error('added issue not found'); }
+        // 1
+        if (slave.length === 1) { return false; }
+        // 2
+        if (slaveIdx === 0) { return masterIdx < master.indexOf(slave[1]); }
+        // 3
+        if (slaveIdx === slave.length - 1) { return masterIdx > master.indexOf(slave[slaveIdx - 1]); }
+        // 4
+        return masterIdx > master.indexOf(slave[slaveIdx - 1]) &&
+                masterIdx < master.indexOf(slave[slaveIdx + 1]);
+    };
+
+    DraggableIssueList.prototype.getIssueInsertBeforeOf = function (targetIssue, masterIssues, slaveIssues) {
+        var slave = slaveIssues(),
+            master = masterIssues();
+
+        var slaveIdx = slave.indexOf(targetIssue);
+        if (slaveIdx === -1) { throw new Error('added issue not found'); }
+        // 1
+        if (slave.length === 1) { return false; }
+        // 2
+        if (slaveIdx === 0) { return slave[1]; }
+        // 3 and 4
+        var beforeIdx = master.indexOf(slave[slaveIdx - 1]);
+        return beforeIdx + 1 < master.length ? master[beforeIdx + 1] : null;
     };
 
     // issueが指定されたフィルター条件に合うか
     DraggableIssueList.prototype.matchCondition = function (issue) {
-        return issue.stage() === this.opts.stage && issue.assignee() === this.opts.assignee;
+        return issue.stage() === this.stage && issue.assignee() === this.assignee;
     };
 
 }(_, window.nakazawa.util));
