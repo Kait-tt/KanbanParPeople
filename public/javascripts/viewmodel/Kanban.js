@@ -124,6 +124,24 @@
             });
         };
 
+        // ドラッグ時にWIP制限を超過するようならばキャンセルする
+        that.onBeforeMoveDrag = function (arg) {
+            var list = arg.targetParent.parent,
+                item = arg.item,
+                member;
+
+            if (!(list instanceof DraggableIssueList)) { console.log(1); return; }
+            if (!list.assignee) { console.log(2); return; }
+            if (item.assignee() === list.assignee) { console.log(3); return; }
+
+            member = that.project.getMember(list.assignee);
+            if (!member) { throw new Error('dragged target member is not found: ' + list.assignee); }
+
+            if (member.isWipLimited()) {
+                arg.cancelDrop = true;
+            }
+        };
+
         // メンバーを追加する
         that.addMember = function () {
             that.socket.emit('add-member', {userName: that.addMemberUserName()}, function (res) {

@@ -54,6 +54,7 @@
         // slave issue list
         // rateLimit設定したいけど、設定するとsortable-uiが綺麗に動かない
         this.issues = ko.observableArray();
+        this.issues.parent = this;
 
         // create issues
         this.allUpdateIssues(this.masterIssues);

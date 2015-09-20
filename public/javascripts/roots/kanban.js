@@ -21,6 +21,10 @@
     vm = kanban;
     vm.dragAndDrop = issueDragAndDrop;
 
+    // knockout sortable option
+    ko.bindingHandlers.sortable.options.scroll = false;
+    ko.bindingHandlers.sortable.beforeMove = kanban.onBeforeMoveDrag;
+
     // test
     window.vm = vm;
 
