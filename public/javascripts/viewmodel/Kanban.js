@@ -106,11 +106,15 @@
                     that.members().forEach(function (member) {
                         list[member._id()] = new DraggableIssueList(_.extend(params, {assignee: member._id()}));
                     });
-                    that.members.subscribe(function (member) {
-                        if (!list[member._id()]) {
-                            list[member._id()] = new DraggableIssueList(_.extend(params, {assignee: member._id()}));
-                        }
-                    });
+                    that.members.subscribe(function (changes) {
+                        _.chain(changes)
+                            .where({status: 'added'})
+                            .pluck('value')
+                            .filter(function (member) { return !list[member._id()]; })
+                            .forEach(function (member) {
+                                list[member._id()] = new DraggableIssueList(_.extend(params, {assignee: member._id()}));
+                            });
+                    }, this, 'arrayChange');
                 } else {
                     list = new DraggableIssueList(params);
                 }
