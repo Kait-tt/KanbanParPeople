@@ -107,17 +107,14 @@
 
     // issueの変更を監視する
     DraggableIssueList.prototype.subscribeIssue = function (issue) {
-        var allUpdateIssue = this.allUpdateIssues.bind(this, this.masterIssues),
-            isRelatedIssue = this.isRelatedIssue.bind(this);
-
         // 監視プロパティが更新されたら、slave issue list を作り直す
         this.issueSubscriptionParams.forEach(function (sub) {
             if (!issue[sub.subscriptionName]) {  // 重複subscribe防止
                 issue[sub.subscriptionName] = issue[sub.targetProperty].subscribe(function (value) {
-                    if (isRelatedIssue(issue)) {
-                        allUpdateIssue(arguments);
+                    if (this.isRelatedIssue(issue)) {
+                        this.allUpdateIssues(this.masterIssues);
                     }
-                });
+                }.bind(this));
             }
         }, this);
     };
@@ -183,8 +180,8 @@
     };
 
     // IDが一致するissueが存在するか
-    DraggableIssueList.prototype.existsId = function (issue) {
-        return !!_.find(this.issues, function (issue) { return issue._id() === issue._id(); });
+    DraggableIssueList.prototype.existsId = function (needleIssueId) {
+        return !!_.find(this.issues(), function (issue) { return issue._id() === needleIssueId; });
     }
 
 }(_, window.nakazawa.util));
