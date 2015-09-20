@@ -62,7 +62,10 @@
                         sortable: {
                             data: $root.draggableList.<%= stage.name %>.issues,
                             afterRender: view.MiniMenu.init }">
-                            <% include _card %>
+                            <li class="card" draggable="true" data-toggle="modal" data-target="#issue-detail-modal" data-bind=" click: $root.selectedIssue">
+                                <% include _minimenu %>
+                                <span class="card-title" data-bind="text: title"></span>
+                            </li>
                         </ul>
                     <% } %>
                 </li>
@@ -70,11 +73,7 @@
                     </ul>
                     <div class="user-block-area">
 
-                        <ul class="user-blocks" data-bind="foreach: {
-                                data: members,
-                                as: 'member',
-                                afterAdd: view.effects.slideDown,
-                                beforeRemove: view.effects.slideUp }">
+                        <ul class="user-blocks" data-bind="foreach: { data: members, as: 'member' }">
                             <li class="user-block">
                                 <div class="user-label-area" data-bind="css: { 'wip-limited': member.isWipLimited, visible: member.visible }">
                                     <span class="user-name">
@@ -94,15 +93,18 @@
                                 <ul class="stage-blocks" data-bind="foreach: { data: <%= assignedStageNamesJSON %>, as: 'stage' }">
                                     <li class="stage-block">
                                         <div class="user-cell-block">
-                                            <!-- ko with: $root.draggableList[stage][member._id()] -->
-                                            <!-- data: member['viewAll' + stage]() ? issues() : issues().slice(0, 2), -->
                                             <ul class="card-list" data-bind="
-                                            sortable: {
-                                                data: issues,
-                                                afterRender: view.MiniMenu.init }">
-                                                <% include _card %>
+                                                    sortable: {
+                                                        data: $root.draggableList[stage][member._id()].issues,
+                                                        afterRender: view.MiniMenu.init }">
+                                                <li class="card" draggable="true" data-toggle="modal"
+                                                    data-target="#issue-detail-modal" data-bind="
+                                                        click: $root.selectedIssue,
+                                                        visible: $index() < 2 || member['viewAll' + stage()]()">
+                                                    <% include _minimenu %>
+                                                    <span class="card-title" data-bind="text: title"></span>
+                                                </li>
                                             </ul>
-                                            <!-- /ko -->
 
                                             <a href="#" class="each-all-issues-view-button" data-bind="
                                             click: member['toggleViewAll' + stage],
