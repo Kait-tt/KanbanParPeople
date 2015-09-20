@@ -94,17 +94,18 @@
             that.draggableList = {};
             var _params = {
                 masterIssues: that.issues,
-                onUpdateStage: that.updateStage,
-                onUpdatePriority: that.updateIssuePriority
+                onUpdatedStage: that.updateStage,
+                onUpdatedPriority: that.updateIssuePriority
             };
+
             _.values(stages).forEach(function (stage) {
-                var params = _.extend(_params, {stage: stage.name}),
+                var params = _.extend(_.clone(_params), {stage: stage.name, assignee: null}),
                     list;
 
                 if (stage.assigned) {
                     list = {};
                     that.members().forEach(function (member) {
-                        list[member._id()] = new DraggableIssueList(_.extend(params, {assignee: member._id()}));
+                        list[member._id()] = new DraggableIssueList(_.extend(_.clone(params), {assignee: member._id()}));
                     });
                     that.members.subscribe(function (changes) {
                         _.chain(changes)
@@ -112,7 +113,7 @@
                             .pluck('value')
                             .filter(function (member) { return !list[member._id()]; })
                             .forEach(function (member) {
-                                list[member._id()] = new DraggableIssueList(_.extend(params, {assignee: member._id()}));
+                                list[member._id()] = new DraggableIssueList(_.extend(_.clone(params), {assignee: member._id()}));
                             });
                     }, this, 'arrayChange');
                 } else {

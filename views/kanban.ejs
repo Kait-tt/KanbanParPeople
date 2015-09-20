@@ -59,11 +59,9 @@
                         </ul>
                     <% } else { %>
                         <ul class="cell-block" data-bind="
-                        foreach: {
-                            data: $root.stages.<%= stage.name %>,
-                            afterRender: view.MiniMenu.init,
-                            afterAdd: view.effects.slideDown,
-                            beforeRemove: view.effects.slideUp }">
+                        sortable: {
+                            data: $root.draggableList.<%= stage.name %>.issues,
+                            afterRender: view.MiniMenu.init }">
                             <% include _card %>
                         </ul>
                     <% } %>
@@ -96,14 +94,15 @@
                                 <ul class="stage-blocks" data-bind="foreach: { data: <%= assignedStageNamesJSON %>, as: 'stage' }">
                                     <li class="stage-block">
                                         <div class="user-cell-block">
+                                            <!-- ko with: $root.draggableList[stage][member._id()] -->
+                                            <!-- data: member['viewAll' + stage]() ? issues() : issues().slice(0, 2), -->
                                             <ul class="card-list" data-bind="
-                                            foreach: {
-                                                data: member['viewAll' + stage]() ?  member[stage]() : member[stage]().slice(0, 2),
-                                                afterRender: view.MiniMenu.init,
-                                                afterAdd: view.effects.slideDown,
-                                                beforeRemove: view.effects.slideUp }">
+                                            sortable: {
+                                                data: issues,
+                                                afterRender: view.MiniMenu.init }">
                                                 <% include _card %>
                                             </ul>
+                                            <!-- /ko -->
 
                                             <a href="#" class="each-all-issues-view-button" data-bind="
                                             click: member['toggleViewAll' + stage],
@@ -474,11 +473,13 @@
 
 <!-- include javascripts -->
 <script src="/vendor/jquery/dist/jquery.min.js"></script>
+<script src="/vendor/jquery-ui/jquery-ui.min.js"></script>
 <script src="/vendor/jquery.easing/js/jquery.easing.min.js"></script>
 <script src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="/vendor/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script>
 <script src="/vendor/lodash/lodash.min.js"></script>
 <script src="/vendor/knockoutjs/dist/knockout.js"></script>
+<script src="/vendor/knockout-sortable/build/knockout-sortable.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 
 <script src="/javascripts/module/util.js"></script>
