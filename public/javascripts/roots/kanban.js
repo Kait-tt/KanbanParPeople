@@ -10,10 +10,11 @@
             selectors: ['body', '.main', '.stage-block'],
             cancelSelectors: ['.card']
         }),
+        socket = new model.Socket(),
         project = new model.Project(),
-        kanban = new viewmodel.Kanban(),
+        kanban = new viewmodel.Kanban({socket: socket}),
         MiniMenu = view.MiniMenu,
-        alertHub = new viewmodel.AlertHub(alert, {kanban: kanban}),
+        alertHub = new viewmodel.AlertHub(alert, {kanban: kanban, socket: socket}),
         vm = {},
         chainHideMembersWithURL,
         projectId;

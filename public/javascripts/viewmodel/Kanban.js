@@ -23,6 +23,8 @@
 
         var that = this;
 
+        that.socket = o.socket;
+
         that.members = null;
 
         that.issues = null;
@@ -96,7 +98,7 @@
             that.stages = project.stages;
             that.initDraggableIssueList();
 
-            initSocket();
+            initSocket(that.socket);
         };
 
         // 各ステージ、各メンバー毎にDraggableIssueListを作る
@@ -338,45 +340,43 @@
         };
 
         // ソケット通信のイベント設定、デバッグ設定を初期化する
-        function initSocket () {
-            that.socket = new model.Socket();
-
-            that.socket.on('connect', function () {
-                that.socket.emit('join-project-room', {projectId: that.project.id()});
+        function initSocket (socket) {
+            socket.on('connect', function () {
+                socket.emit('join-project-room', {projectId: that.project.id()});
             });
 
-            that.socket.on('add-member', function (req) {
+            socket.on('add-member', function (req) {
                 that.project.addMember(req.member);
             });
 
-            that.socket.on('remove-member', function (req) {
+            socket.on('remove-member', function (req) {
                 var targetMember = that.project.getMember(req.member.user._id);
                 that.project.removeMember(targetMember);
             });
 
-            that.socket.on('update-member', function (req) {
+            socket.on('update-member', function (req) {
                 var targetMember = that.project.getMember(req.member.user._id);
                 that.project.updateMember(targetMember, req.member);
             });
 
-            that.socket.on('update-member-order', function (req) {
+            socket.on('update-member-order', function (req) {
                 that.project.updateMemberOrder(req.userName, req.insertBeforeOfUserName);
             });
 
-            that.socket.on('add-issue', function (req) {
+            socket.on('add-issue', function (req) {
                 that.project.addIssue(req.issue);
             });
 
-            that.socket.on('remove-issue', function (req) {
+            socket.on('remove-issue', function (req) {
                 var targetIssue = that.project.getIssue(req.issue._id);
                 that.project.removeIssue(targetIssue);
             });
 
-            that.socket.on('update-stage', function (req) {
+            socket.on('update-stage', function (req) {
                 that.project.updateStage(req.issueId, req.toStage, req.assignee);
             });
 
-            that.socket.on('update-issue-detail', function (req) {
+            socket.on('update-issue-detail', function (req) {
                 var targetIssue = that.project.getIssue(req.issue._id);
 
                 ['title', 'body'].forEach(function (key) {
@@ -384,11 +384,11 @@
                 });
             });
 
-            that.socket.on('update-issue-priority', function (req) {
+            socket.on('update-issue-priority', function (req) {
                 that.project.updateIssuePriority(req.issue._id, req.insertBeforeOfIssueId);
             });
 
-            that.socket.initSocketDebugMode();
+            socket.initSocketDebugMode();
         }
     }
 
