@@ -143,9 +143,9 @@
                 item = arg.item,
                 member;
 
-            if (!(list instanceof DraggableIssueList)) { console.log(1); return; }
-            if (!list.assignee) { console.log(2); return; }
-            if (item.assignee() === list.assignee) { console.log(3); return; }
+            if (!(list instanceof DraggableIssueList)) { return; }
+            if (!list.assignee) { return; }
+            if (item.assignee() === list.assignee) { return; }
 
             member = that.project.getMember(list.assignee);
             if (!member) { throw new Error('dragged target member is not found: ' + list.assignee); }
