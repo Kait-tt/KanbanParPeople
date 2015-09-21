@@ -45,7 +45,10 @@
         /**
          * アラートコンテンツを追加する
          *
-         * @param {util.viewmodel.AlertContent} content
+         * @param {Object} [content]
+         * @param {string=} [content.title=""]
+         * @param {string=} [content.message=""]
+         * @param {boolean=} [content.isSuccess=""]
          * @returns {util.viewmodel.Alert}
          */
         that.pushAlert = function (content) {

@@ -1,4 +1,4 @@
-(function (ko, io, _, util) {
+(function (EventEmitter, ko, io, _, util) {
     'use strict';
 
     var viewmodel = util.namespace('kpp.viewmodel'),
@@ -9,7 +9,18 @@
 
     viewmodel.Kanban = viewmodel.Kanban || Kanban;
 
+    /**
+     * カンバンのViewModel
+     *
+     *  Events:
+     *      overWIPLimitDropped(arg, member, targetSlaveIssueList): WIPリミットを超えてD&Dした (argはknockout-sortable.beforeMoveイベント引数のarg）
+     *
+     * @param o
+     * @constructor
+     */
     function Kanban(o) {
+        EventEmitter.call(this, o);
+
         var that = this;
 
         that.members = null;
@@ -139,6 +150,7 @@
 
             if (member.isWipLimited()) {
                 arg.cancelDrop = true;
+                that.emit('overWIPLimitDropped', arg, member, list);
             }
         };
 
@@ -380,4 +392,6 @@
         }
     }
 
-}(ko, io, _, window.nakazawa.util));
+    util.inherits(Kanban, EventEmitter);
+
+}(EventEmitter2, ko, io, _, window.nakazawa.util));

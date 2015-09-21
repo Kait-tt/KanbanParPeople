@@ -13,11 +13,13 @@
         project = new model.Project(),
         kanban = new viewmodel.Kanban(),
         MiniMenu = view.MiniMenu,
+        alertHub = new viewmodel.AlertHub(alert, {kanban: kanban}),
         vm = {},
         chainHideMembersWithURL,
         projectId;
 
     vm = kanban;
+    vm.alerts = alert.alerts;
 
     // knockout sortable option
     ko.bindingHandlers.sortable.options.scroll = false;
@@ -35,7 +37,6 @@
             effects.applyBindings(global);
             MiniMenu.applyBindings(global);
             MiniMenu.init();
-            ko.applyBindings(alert, $('.alerts')[0]);
             ko.applyBindings(vm);
             $('.switch').bootstrapSwitch()
                 .on('switchChange.bootstrapSwitch', function (e, state) {
