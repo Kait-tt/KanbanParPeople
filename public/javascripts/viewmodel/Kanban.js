@@ -341,7 +341,7 @@
 
         // ソケット通信のイベント設定、デバッグ設定を初期化する
         function initSocket (socket) {
-            socket.on('connect', function () {
+            socket.on('connect', function (req) {
                 socket.emit('join-project-room', {projectId: that.project.id()});
             });
 
@@ -389,6 +389,10 @@
             });
 
             socket.initSocketDebugMode();
+
+            if (socket.connected) {
+                socket.emit('join-project-room', {projectId: that.project.id()});
+            }
         }
     }
 

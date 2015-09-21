@@ -120,9 +120,12 @@
     }
 
     function alertServerError(alert, title, message) {
+        // 多くがユーザエラーがサーバエラーになっているので、サーバエラーと表記したら間違いになる
         alert.pushAlert({
-            title: '[サーバエラー] ' + title,
-            message: 'お手数ですが、管理者にお問い合わせください。 ' + '(' + message + ')',
+            //title: '[サーバエラー] ' + title,
+            title: title,
+            //message: 'お手数ですが、管理者にお問い合わせください。 ' + '(' + message + ')',
+            message: message,
             isSuccess: false
         });
     }

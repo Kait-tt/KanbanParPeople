@@ -35,6 +35,7 @@ function socketRouting(server) {
 
         // ログインしていなかったら接続を切る
         if (!checkAuth(socket, function (message) { socket.disconnect(message); })) {
+            console.error('must be login: ' + socket.id);
             return;
         }
 
