@@ -45,6 +45,9 @@
         this.assignee = this.opts.assignee;
         this.id = _.uniqueId();
 
+        // リストを畳み込むか
+        this.isCollapse = ko.observable(true);
+
         // issue の監視プロパティ名と、subscriptionを格納するプロパティ名（重複して監視しないようにするため）
         this.issueSubscriptionParams = [
             {targetProperty: 'stage', subscriptionName: '_draggableIssueList_subscriptionStage_' + this.id},
@@ -159,6 +162,7 @@
                 masterIdx < master.indexOf(slave[slaveIdx + 1]);
     };
 
+    // target issue を master issue の配置すべき一の後ろのIssueを返す
     DraggableIssueList.prototype.getIssueInsertBeforeOf = function (targetIssue, masterIssues, slaveIssues) {
         var slave = slaveIssues(),
             master = masterIssues();
@@ -172,6 +176,11 @@
         // 3 and 4
         var beforeIdx = master.indexOf(slave[slaveIdx - 1]);
         return beforeIdx + 1 < master.length ? master[beforeIdx + 1] : null;
+    };
+
+    // リストの畳み込みフラグを切り替える
+    DraggableIssueList.prototype.toggleCollapse = function () {
+        this.isCollapse(!this.isCollapse());
     };
 
     // issueが指定されたフィルター条件に合うか

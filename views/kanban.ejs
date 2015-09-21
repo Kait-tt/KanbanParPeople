@@ -93,29 +93,28 @@
                                 <ul class="stage-blocks" data-bind="foreach: { data: <%= assignedStageNamesJSON %>, as: 'stage' }">
                                     <li class="stage-block">
                                         <div class="user-cell-block">
+                                            <!-- ko with: $root.draggableList[stage][member._id()] -->
                                             <ul class="card-list" data-bind="
-                                                    sortable: {
-                                                        data: $root.draggableList[stage][member._id()].issues,
-                                                        afterRender: view.MiniMenu.init }">
+                                                    sortable: { data: issues, afterRender: view.MiniMenu.init }">
                                                 <li class="card" draggable="true" data-toggle="modal"
                                                     data-target="#issue-detail-modal" data-bind="
                                                         click: $root.selectedIssue,
-                                                        visible: $index() < 2 || member['viewAll' + stage()]()">
+                                                        visible: $index() < 2 || !$parent.isCollapse()">
                                                     <% include _minimenu %>
                                                     <span class="card-title" data-bind="text: title"></span>
                                                 </li>
                                             </ul>
 
                                             <a href="#" class="each-all-issues-view-button" data-bind="
-                                            click: member['toggleViewAll' + stage],
-                                            visible: member[stage]().length > 2">
+                                                    click: toggleCollapse, visible: issues().length > 2">
                                                 <span class="glyphicon" data-bind="css: {
-                                                    'glyphicon-collapse-down': !member['viewAll' + stage](),
-                                                    'glyphicon-collapse-up': member['viewAll' + stage]()
+                                                    'glyphicon-collapse-down': isCollapse(),
+                                                    'glyphicon-collapse-up': !isCollapse()
                                                 }"></span>
-                                                <span data-bind="text: member['viewAll' + stage]() ? 'Collapse ' : 'Expand '"></span>
-                                                <span class="badge" data-bind="text: member[stage]().length"></span>
+                                                <span data-bind="text: isCollapse() ? 'Expand ' : 'Collapse '"></span>
+                                                <span class="badge" data-bind="text: issues().length"></span>
                                             </a>
+                                            <!-- /ko -->
                                         </div>
                                     </li>
                                 </ul>
@@ -497,7 +496,6 @@
 <script src="/javascripts/viewmodel/DraggableIssueList.js"></script>
 <script src="/javascripts/viewmodel/Alert.js"></script>
 <script src="/javascripts/viewmodel/Kanban.js"></script>
-<script src="/javascripts/viewmodel/IssueDragAndDrop.js"></script>
 <script src="/javascripts/viewmodel/ChainHideMembersWithURL.js"></script>
 <script src="/javascripts/roots/kanban.js"></script>
 

@@ -13,13 +13,11 @@
         project = new model.Project(),
         kanban = new viewmodel.Kanban(),
         MiniMenu = view.MiniMenu,
-        issueDragAndDrop = new viewmodel.IssueDragAndDrop(kanban),
         vm = {},
         chainHideMembersWithURL,
         projectId;
 
     vm = kanban;
-    vm.dragAndDrop = issueDragAndDrop;
 
     // knockout sortable option
     ko.bindingHandlers.sortable.options.scroll = false;
