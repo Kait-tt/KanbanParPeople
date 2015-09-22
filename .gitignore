@@ -11,3 +11,5 @@ public/stylesheets/*
 
 config/*
 !config/default.json
+
+/logs

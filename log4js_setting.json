@@ -1,0 +1,16 @@
+{
+  "appenders": [
+    {
+      "type": "dateFile",
+      "category": "socket",
+      "filename": "logs/socket.log",
+      "pattern": "-yyyy-MM-dd"
+    },
+    {
+      "type": "dateFile",
+      "category": "api",
+      "filename": "logs/api.log",
+      "pattern": "-yyyy-MM-dd"
+    }
+  ]
+}
