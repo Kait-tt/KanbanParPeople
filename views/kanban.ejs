@@ -59,12 +59,13 @@
                         </ul>
                     <% } else { %>
                         <ul class="cell-block" data-bind="
-                        foreach: {
-                            data: $root.stages.<%= stage.name %>,
-                            afterRender: view.MiniMenu.init,
-                            afterAdd: view.effects.slideDown,
-                            beforeRemove: view.effects.slideUp }">
-                            <% include _card %>
+                        sortable: {
+                            data: $root.draggableList.<%= stage.name %>.issues,
+                            afterRender: view.MiniMenu.init }">
+                            <li class="card" draggable="true" data-toggle="modal" data-target="#issue-detail-modal" data-bind=" click: $root.selectedIssue">
+                                <% include _minimenu %>
+                                <span class="card-title" data-bind="text: title"></span>
+                            </li>
                         </ul>
                     <% } %>
                 </li>
@@ -72,11 +73,7 @@
                     </ul>
                     <div class="user-block-area">
 
-                        <ul class="user-blocks" data-bind="foreach: {
-                                data: members,
-                                as: 'member',
-                                afterAdd: view.effects.slideDown,
-                                beforeRemove: view.effects.slideUp }">
+                        <ul class="user-blocks" data-bind="foreach: { data: members, as: 'member' }">
                             <li class="user-block">
                                 <div class="user-label-area" data-bind="css: { 'wip-limited': member.isWipLimited, visible: member.visible }">
                                     <span class="user-name">
@@ -96,25 +93,28 @@
                                 <ul class="stage-blocks" data-bind="foreach: { data: <%= assignedStageNamesJSON %>, as: 'stage' }">
                                     <li class="stage-block">
                                         <div class="user-cell-block">
+                                            <!-- ko with: $root.draggableList[stage][member._id()] -->
                                             <ul class="card-list" data-bind="
-                                            foreach: {
-                                                data: member['viewAll' + stage]() ?  member[stage]() : member[stage]().slice(0, 2),
-                                                afterRender: view.MiniMenu.init,
-                                                afterAdd: view.effects.slideDown,
-                                                beforeRemove: view.effects.slideUp }">
-                                                <% include _card %>
+                                                    sortable: { data: issues, afterRender: view.MiniMenu.init }">
+                                                <li class="card" draggable="true" data-toggle="modal"
+                                                    data-target="#issue-detail-modal" data-bind="
+                                                        click: $root.selectedIssue,
+                                                        visible: $index() < 2 || !$parent.isCollapse()">
+                                                    <% include _minimenu %>
+                                                    <span class="card-title" data-bind="text: title"></span>
+                                                </li>
                                             </ul>
 
                                             <a href="#" class="each-all-issues-view-button" data-bind="
-                                            click: member['toggleViewAll' + stage],
-                                            visible: member[stage]().length > 2">
+                                                    click: toggleCollapse, visible: issues().length > 2">
                                                 <span class="glyphicon" data-bind="css: {
-                                                    'glyphicon-collapse-down': !member['viewAll' + stage](),
-                                                    'glyphicon-collapse-up': member['viewAll' + stage]()
+                                                    'glyphicon-collapse-down': isCollapse(),
+                                                    'glyphicon-collapse-up': !isCollapse()
                                                 }"></span>
-                                                <span data-bind="text: member['viewAll' + stage]() ? 'Collapse ' : 'Expand '"></span>
-                                                <span class="badge" data-bind="text: member[stage]().length"></span>
+                                                <span data-bind="text: isCollapse() ? 'Expand ' : 'Collapse '"></span>
+                                                <span class="badge" data-bind="text: issues().length"></span>
                                             </a>
+                                            <!-- /ko -->
                                         </div>
                                     </li>
                                 </ul>
@@ -474,12 +474,15 @@
 
 <!-- include javascripts -->
 <script src="/vendor/jquery/dist/jquery.min.js"></script>
+<script src="/vendor/jquery-ui/jquery-ui.min.js"></script>
 <script src="/vendor/jquery.easing/js/jquery.easing.min.js"></script>
 <script src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="/vendor/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script>
 <script src="/vendor/lodash/lodash.min.js"></script>
 <script src="/vendor/knockoutjs/dist/knockout.js"></script>
+<script src="/vendor/knockout-sortable/build/knockout-sortable.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
+<script src="/vendor/eventemitter2/lib/eventemitter2.js"></script>
 
 <script src="/javascripts/module/util.js"></script>
 <script src="/javascripts/model/Socket.js"></script>
@@ -494,8 +497,8 @@
 <script src="/javascripts/viewmodel/DraggableIssueList.js"></script>
 <script src="/javascripts/viewmodel/Alert.js"></script>
 <script src="/javascripts/viewmodel/Kanban.js"></script>
-<script src="/javascripts/viewmodel/IssueDragAndDrop.js"></script>
 <script src="/javascripts/viewmodel/ChainHideMembersWithURL.js"></script>
+<script src="/javascripts/viewmodel/AlertHub.js"></script>
 <script src="/javascripts/roots/kanban.js"></script>
 
 </body>

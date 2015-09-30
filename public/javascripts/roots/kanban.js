@@ -10,16 +10,21 @@
             selectors: ['body', '.main', '.stage-block'],
             cancelSelectors: ['.card']
         }),
+        socket = new model.Socket(),
         project = new model.Project(),
-        kanban = new viewmodel.Kanban(),
+        kanban = new viewmodel.Kanban({socket: socket}),
         MiniMenu = view.MiniMenu,
-        issueDragAndDrop = new viewmodel.IssueDragAndDrop(kanban),
+        alertHub = new viewmodel.AlertHub(alert, {kanban: kanban, socket: socket}),
         vm = {},
         chainHideMembersWithURL,
         projectId;
 
     vm = kanban;
-    vm.dragAndDrop = issueDragAndDrop;
+    vm.alerts = alert.alerts;
+
+    // knockout sortable option
+    ko.bindingHandlers.sortable.options.scroll = false;
+    ko.bindingHandlers.sortable.beforeMove = kanban.onBeforeMoveDrag;
 
     // test
     window.vm = vm;
@@ -33,7 +38,6 @@
             effects.applyBindings(global);
             MiniMenu.applyBindings(global);
             MiniMenu.init();
-            ko.applyBindings(alert, $('.alerts')[0]);
             ko.applyBindings(vm);
             $('.switch').bootstrapSwitch()
                 .on('switchChange.bootstrapSwitch', function (e, state) {

@@ -1,4 +1,4 @@
-(function (ko, io, _, util) {
+(function (EventEmitter, ko, io, _, util) {
     'use strict';
 
     var viewmodel = util.namespace('kpp.viewmodel'),
@@ -9,8 +9,21 @@
 
     viewmodel.Kanban = viewmodel.Kanban || Kanban;
 
+    /**
+     * カンバンのViewModel
+     *
+     *  Events:
+     *      overWIPLimitDropped(arg, member, targetSlaveIssueList): WIPリミットを超えてD&Dした (argはknockout-sortable.beforeMoveイベント引数のarg）
+     *
+     * @param o
+     * @constructor
+     */
     function Kanban(o) {
+        EventEmitter.call(this, o);
+
         var that = this;
+
+        that.socket = o.socket;
 
         that.members = null;
 
@@ -85,7 +98,7 @@
             that.stages = project.stages;
             that.initDraggableIssueList();
 
-            initSocket();
+            initSocket(that.socket);
         };
 
         // 各ステージ、各メンバー毎にDraggableIssueListを作る
@@ -94,29 +107,53 @@
             that.draggableList = {};
             var _params = {
                 masterIssues: that.issues,
-                onUpdateStage: that.updateStage,
-                onUpdatePriority: that.updateIssuePriority
+                onUpdatedStage: that.updateStage,
+                onUpdatedPriority: that.updateIssuePriority
             };
+
             _.values(stages).forEach(function (stage) {
-                var params = _.extend(_params, {stage: stage.name}),
+                var params = _.extend(_.clone(_params), {stage: stage.name, assignee: null}),
                     list;
 
                 if (stage.assigned) {
                     list = {};
                     that.members().forEach(function (member) {
-                        list[member._id()] = new DraggableIssueList(_.extend(params, {assignee: member._id()}));
+                        list[member._id()] = new DraggableIssueList(_.extend(_.clone(params), {assignee: member._id()}));
                     });
-                    that.members.subscribe(function (member) {
-                        if (!list[member._id()]) {
-                            list[member._id()] = new DraggableIssueList(_.extend(params, {assignee: member._id()}));
-                        }
-                    });
+                    that.members.subscribe(function (changes) {
+                        _.chain(changes)
+                            .where({status: 'added'})
+                            .pluck('value')
+                            .filter(function (member) { return !list[member._id()]; })
+                            .forEach(function (member) {
+                                list[member._id()] = new DraggableIssueList(_.extend(_.clone(params), {assignee: member._id()}));
+                            });
+                    }, this, 'arrayChange');
                 } else {
                     list = new DraggableIssueList(params);
                 }
 
                 that.draggableList[stage.name] = list;
             });
+        };
+
+        // ドラッグ時にWIP制限を超過するようならばキャンセルする
+        that.onBeforeMoveDrag = function (arg) {
+            var list = arg.targetParent.parent,
+                item = arg.item,
+                member;
+
+            if (!(list instanceof DraggableIssueList)) { return; }
+            if (!list.assignee) { return; }
+            if (item.assignee() === list.assignee) { return; }
+
+            member = that.project.getMember(list.assignee);
+            if (!member) { throw new Error('dragged target member is not found: ' + list.assignee); }
+
+            if (member.isWipLimited()) {
+                arg.cancelDrop = true;
+                that.emit('overWIPLimitDropped', arg, member, list);
+            }
         };
 
         // メンバーを追加する
@@ -303,45 +340,43 @@
         };
 
         // ソケット通信のイベント設定、デバッグ設定を初期化する
-        function initSocket () {
-            that.socket = new model.Socket();
-
-            that.socket.on('connect', function () {
-                that.socket.emit('join-project-room', {projectId: that.project.id()});
+        function initSocket (socket) {
+            socket.on('connect', function (req) {
+                socket.emit('join-project-room', {projectId: that.project.id()});
             });
 
-            that.socket.on('add-member', function (req) {
+            socket.on('add-member', function (req) {
                 that.project.addMember(req.member);
             });
 
-            that.socket.on('remove-member', function (req) {
+            socket.on('remove-member', function (req) {
                 var targetMember = that.project.getMember(req.member.user._id);
                 that.project.removeMember(targetMember);
             });
 
-            that.socket.on('update-member', function (req) {
+            socket.on('update-member', function (req) {
                 var targetMember = that.project.getMember(req.member.user._id);
                 that.project.updateMember(targetMember, req.member);
             });
 
-            that.socket.on('update-member-order', function (req) {
+            socket.on('update-member-order', function (req) {
                 that.project.updateMemberOrder(req.userName, req.insertBeforeOfUserName);
             });
 
-            that.socket.on('add-issue', function (req) {
+            socket.on('add-issue', function (req) {
                 that.project.addIssue(req.issue);
             });
 
-            that.socket.on('remove-issue', function (req) {
+            socket.on('remove-issue', function (req) {
                 var targetIssue = that.project.getIssue(req.issue._id);
                 that.project.removeIssue(targetIssue);
             });
 
-            that.socket.on('update-stage', function (req) {
+            socket.on('update-stage', function (req) {
                 that.project.updateStage(req.issueId, req.toStage, req.assignee);
             });
 
-            that.socket.on('update-issue-detail', function (req) {
+            socket.on('update-issue-detail', function (req) {
                 var targetIssue = that.project.getIssue(req.issue._id);
 
                 ['title', 'body'].forEach(function (key) {
@@ -349,12 +384,18 @@
                 });
             });
 
-            that.socket.on('update-issue-priority', function (req) {
+            socket.on('update-issue-priority', function (req) {
                 that.project.updateIssuePriority(req.issue._id, req.insertBeforeOfIssueId);
             });
 
-            that.socket.initSocketDebugMode();
+            socket.initSocketDebugMode();
+
+            if (socket.connected) {
+                socket.emit('join-project-room', {projectId: that.project.id()});
+            }
         }
     }
 
-}(ko, io, _, window.nakazawa.util));
+    util.inherits(Kanban, EventEmitter);
+
+}(EventEmitter2, ko, io, _, window.nakazawa.util));

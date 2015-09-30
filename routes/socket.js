@@ -3,6 +3,7 @@ var _ = require('underscore');
 var sessionMiddleware = require('../lib/module/sessionMiddleware');
 var Project = require('../lib/model/project');
 var stages = require('../lib/model/stages');
+var LoggerSocket = require('../lib/model/loggerSocket');
 
 var io;
 var emitters;
@@ -14,7 +15,10 @@ module.exports = {
 };
 
 function socketRouting(server) {
-    module.exports.io = io = socketio.listen(server);
+    io = socketio.listen(server);
+    var loggerIO = new LoggerSocket.IO(io);
+    module.exports.io = loggerIO.io;
+
     var users = {};
 
     io.use(function (socket, next) {
@@ -35,8 +39,11 @@ function socketRouting(server) {
 
         // ログインしていなかったら接続を切る
         if (!checkAuth(socket, function (message) { socket.disconnect(message); })) {
+            console.error('must be login: ' + socket.id);
             return;
         }
+
+        var loggerSocket = new LoggerSocket.Socket(socket, user);
 
         /***** イベント登録 *****/
 
@@ -58,6 +65,7 @@ function socketRouting(server) {
                 // valid
                 leaveProjectRoom(socket);
                 joinProjectRoom(socket, projectId);
+                loggerSocket.bindProjectId(projectId);
 
                 successWrap('joined room', {}, fn);
             });
