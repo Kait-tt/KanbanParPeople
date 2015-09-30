@@ -362,6 +362,7 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
+                            <th></th>
                             <th>Name</th>
                             <th>WIP</th>
                             <th>Order</th>
@@ -371,6 +372,7 @@
                     <tbody>
                         <!-- ko foreach: members -->
                         <tr>
+                            <td><img data-bind="attr: { src: avatarUrl }" src="" width="24" height="24"></td>
                             <td data-bind="text: userName"></td>
                             <td data-bind="text: wip() + '/' + wipLimit()"></td>
                             <td>
