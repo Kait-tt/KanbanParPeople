@@ -50,6 +50,11 @@
 
         // 可視
         this.visible = ko.observable(true);
+
+        // アバターURL
+        this.avatarUrl = ko.computed(function () {
+            return '/users/' + this.userName() + '/avatar';
+        }, this);
     };
 
 }(_, window.nakazawa.util));

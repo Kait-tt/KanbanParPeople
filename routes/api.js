@@ -16,7 +16,10 @@ router.get('/projects', logger.hook, function (req, res) {
 router.get('/projects/:projectId', logger.hook, function (req, res) {
     Project.findPopulated({id: req.params.projectId}, {one: true}, function (err, project) {
         if (err) { return serverError(res, err); }
-        res.status(200).json({ message: 'OK', project: project });
+        (new GitHub(req.user.token)).fetchUserAvatar(project.members.map(function (member) { return member.user.userName; }), function (err) {
+            if (err) { console.error(err); }
+            res.status(200).json({ message: 'OK', project: project });
+        });
     });
 });
 

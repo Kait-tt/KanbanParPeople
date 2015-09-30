@@ -77,13 +77,14 @@
                             <li class="user-block">
                                 <div class="user-label-area" data-bind="css: { 'wip-limited': member.isWipLimited, visible: member.visible }">
                                     <span class="user-name">
+                                        <img data-bind="attr: { src: member.avatarUrl }" class="user-avatar" src="" width="24" height="24">
+                                        <b data-bind="text: userName"></b>
+                                        <span data-bind="text: '(' + member.wip() + '/' + member.wipLimit() + ')'"></span>
                                         <a href="#" class="user-settings-button"
                                            data-toggle="modal" data-target="#user-settings-modal"
                                            data-bind="click: $root.selectedMember">
                                             <span class="glyphicon glyphicon-cog" area-hidden="true"></span>
                                         </a>
-                                        <b data-bind="text: userName"></b>
-                                        <span data-bind="text: '(' + member.wip() + '/' + member.wipLimit() + ')'"></span>
                                     </span>
                                     <small class="wip-limited-message" data-bind="visible: member.isWipLimited">
                                         <span class="glyphicon glyphicon-warning-sign"></span> WIP制限に達しています。

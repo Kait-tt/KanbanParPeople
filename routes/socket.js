@@ -4,6 +4,7 @@ var sessionMiddleware = require('../lib/module/sessionMiddleware');
 var Project = require('../lib/model/project');
 var stages = require('../lib/model/stages');
 var LoggerSocket = require('../lib/model/loggerSocket');
+var GitHub = require('../lib/model/github');
 
 var io;
 var emitters;
@@ -78,7 +79,7 @@ function socketRouting(server) {
 
         // memberの追加
         socketOn(socket, 'add-member', function (req, projectId, fn) {
-            emitters.addMember(projectId, req.userName, fn);
+            emitters.addMember(projectId, user.info.token, req.userName, fn);
         });
 
         // memberの更新
@@ -199,12 +200,16 @@ module.exports.emitters = emitters = {
         });
     },
 
-    addMember: function (projectId, targetUserName, fn) {
+    addMember: function (projectId, token, targetUserName, fn) {
         Project.addMember({id: projectId}, targetUserName, function (err, project, member) {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
-            successWrap('added member', {member: member}, fn);
-            module.exports.io.to(projectId).emit('add-member', {member: member});
+            (new GitHub(token)).fetchUserAvatar([targetUserName], function (err, path) {
+                if (err) { serverErrorWrap(err, {}, fn); return; }
+
+                successWrap('added member', {member: member}, fn);
+                module.exports.io.to(projectId).emit('add-member', {member: member});
+            });
         });
     },
 
