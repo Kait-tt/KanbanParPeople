@@ -72,15 +72,16 @@ var routes = {
                         console.error(err.message);
                         return res.status(500).json({message: err.message});
                     }
-                    // 変更の必要がなければ何もしない
                     if (user.userName === toAssignee) {
+                        // 変更の必要がなければ何もしない
                         console.log('already assigned');
                         res.status(200).json({message: 'already assigned'});
+                    } else {
+                        // assign
+                        console.log('replace assign');
+                        socket.emitters.updateStage(project.id, null, issue._id, stages.todo, user._id, _.noop);
+                        res.status(200).json({});
                     }
-                    // assign
-                    console.log('replace assign');
-                    socket.emitters.updateStage(project.id, null, issue._id, stages.todo, user._id, _.noop);
-                    res.status(200).json({});
                 });
             } else {
                 User.findOrCreate(toAssignee, function (err, user) {
