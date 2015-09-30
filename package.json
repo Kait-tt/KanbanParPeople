@@ -25,6 +25,7 @@
     "morgan": "~1.5.1",
     "passport": "^0.2.1",
     "passport-github": "~0.1.5",
+    "request": "^2.64.0",
     "rewire": "^2.3.3",
     "serve-favicon": "~2.2.0",
     "should": "^5.0.1",
