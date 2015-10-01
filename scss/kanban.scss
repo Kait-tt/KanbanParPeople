@@ -224,7 +224,7 @@ body{
   }
 
   .cell-block {
-    $offset: 20px;
+    $offset: 1px;
     padding: $stage-block-horizontal-margin + 10px $stage-block-horizontal-margin + $offset 1em;
     margin: -$stage-block-horizontal-margin + 10px (-$stage-block-horizontal-margin - $offset) 0;
     list-style-type: none;
