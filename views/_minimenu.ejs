@@ -37,6 +37,14 @@
             </button>
         </li>
 
+        <!-- ko if: github && github().url -->
+        <li>
+            <a target="_blank" class="btn btn-sm btn-default" href="" data-bind="attr: { href: github().url }">
+                <span class="glyphicon glyphicon-link" aria-hidden="true"></span>
+            </a>
+        </li>
+        <!-- /ko -->
+
         <li>
             <button type="button" class="btn btn-sm btn-default"
                     data-bind="click: $root.onClickIssuePrevStage,
