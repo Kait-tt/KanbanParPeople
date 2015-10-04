@@ -2,10 +2,14 @@ $mini-menu-size: 70px;
 $icon-size: 14px;
 
 .mini-menu {
-  position: relative;
+  position: static;
   display: inline-block;
+  margin: 0 0 1px 1px;
+  font-size: 18px;
+  float: right;
 
   button, a {
+    border-style: none;
     padding: 3px;
     width: $icon-size + 6 + 4;
     height: $icon-size + 6 + 4;

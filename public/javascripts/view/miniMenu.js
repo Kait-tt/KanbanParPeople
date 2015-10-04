@@ -8,6 +8,7 @@
             duration: 200,
             easing: 'easeOutCubic',
             margin: 0,
+            hideEventDebounceTime: 500, // (ms)
             onInitialized: function ($dom, $ul, $li, context) {}
         };
 
@@ -19,6 +20,7 @@
         that.opts = _.defaults(o || {}, defaultOptions);
 
         that.$dom = $(dom);
+        if (that.$dom.length === 0) { return; }
         that.$defaultButton = that.$dom.children('.mini-menu-default');
         that.$ul = that.$dom.children('ul.mini-menu-list');
         that.$li = that.$ul.children('li');
@@ -26,24 +28,30 @@
 
         // add mouse event
         that.$dom
-            .mouseenter(function () {
-                that.show();
-            })
-            .mouseleave(function () {
-                that.hide();
-            });
+            .mouseenter(function () { that.show(); })
+            .mouseleave(function () { that.hide(); });
 
         // to initialize position and hidden
+        that.initializeMenu();
+        that.$ul.show();
+        that.$li.each(function () {
+            $(this).hide();
+        });
+
+        that.opts.onInitialized(that.$dom, that.$ul, that.$li, that);
+    }
+
+    MiniMenu.prototype.initializeMenu = function () {
+        var that = this;
+
         that.$ul
             .stop(true, false)
             .css({
                 width: 0,
                 height: 0,
-                borderRadius:0,
-                top: that.iconSize / 2,
-                left: that.iconSize / 2
-            })
-            .hide();
+                top: that.$dom.position().top + that.iconSize / 2,
+                left: that.$dom.position().left + that.iconSize / 2
+            });
 
         that.$li.each(function () {
             var halfIconSize = that.iconSize / 2;
@@ -56,9 +64,7 @@
                 })
                 .hide();
         });
-
-        that.opts.onInitialized(that.$dom, that.$ul, that.$li, that);
-    }
+    };
 
     MiniMenu.prototype.show = function () {
         var that = this,
@@ -68,6 +74,8 @@
             margin = that.opts.margin,
             r = that.opts.r;
 
+        that.initializeMenu();
+
         that.$ul
             .stop(true, false)
             .show()
@@ -75,8 +83,8 @@
                 width: r,
                 height: r,
                 borderRadius:r,
-                top: r / -2 + that.iconSize / 2,
-                left: r / -2 + that.iconSize / 2
+                top : that.$dom.position().top + r / -2 + that.iconSize / 2,
+                left: that.$dom.position().left + r / -2 + that.iconSize / 2
             }, duration, easing);
 
         that.$li.each(function (i) {
@@ -106,8 +114,8 @@
                 width: 0,
                 height: 0,
                 borderRadius:0,
-                top: that.iconSize / 2,
-                left: that.iconSize / 2
+                top : that.$dom.position().top + that.iconSize / 2,
+                left: that.$dom.position().left + that.iconSize / 2
             }, duration, easing, function () { $(this).hide(); });
 
         that.$li.each(function () {

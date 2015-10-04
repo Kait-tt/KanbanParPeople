@@ -230,6 +230,7 @@ body{
     list-style-type: none;
     height: calc(100% - 60px);
     overflow: auto;
+    position: static;
     .dummy-user-cell-block {
       height: $user-height + 14;
       margin-bottom: $user_margin-bottom;
@@ -407,16 +408,6 @@ div.user-block-area {
     margin-left: 12px;
     width: $card-width - $card-padding * 2 - 41 - 15;
     height: $card_height - $card_padding * 2 + 16 - 15;
-  }
-
-  .mini-menu {
-    margin: 0 0 1px 1px;
-    font-size: 18px;
-    float: right;
-
-    button {
-      border-style: none;
-    }
   }
 }
 

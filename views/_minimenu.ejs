@@ -44,7 +44,7 @@
         <!-- ko if: github && github().url -->
         <li>
             <a target="_blank" class="btn btn-sm btn-default" href="" data-bind="attr: { href: github().url }"
-               data-toggle2="tooltip" data-placement="right" title="GitHub link">
+               data-toggle2="tooltip" data-placement="left" title="GitHub link">
                 <span class="glyphicon glyphicon-link" aria-hidden="true"></span>
             </a>
         </li>
@@ -55,7 +55,7 @@
                     data-bind="click: $root.onClickIssuePrevStage,
                             css: {disabled: stage() === 'issue' || stage() === 'done'},
                             attr: {disabled: stage() === 'issue' || stage() === 'done'}"
-                    data-toggle2="tooltip" data-placement="right" title="Prev stage">
+                    data-toggle2="tooltip" data-placement="left" title="Prev stage">
                 <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
             </button>
         </li>

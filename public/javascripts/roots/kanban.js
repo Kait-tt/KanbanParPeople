@@ -48,8 +48,8 @@
         });
 
     function initMinimenuTooltip($dom, $ul, $li, context) {
-        $li.children('[data-toggle="tooltip"]').tooltip();
-        $li.children('[data-toggle2="tooltip"]').tooltip();
+        $li.children('[data-toggle="tooltip"]').tooltip({delay: { 'show': 200, 'hide': 100 }});
+        $li.children('[data-toggle2="tooltip"]').tooltip({delay: { 'show': 200, 'hide': 100 }});
     }
 
     function getProjectId() {
