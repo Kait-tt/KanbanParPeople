@@ -346,6 +346,11 @@
             return util.cancelBubble(e);
         };
 
+        that.onClickDeleteMember = function () {
+            $('*').modal('hide');
+            return true;
+        };
+
         // ソケット通信のイベント設定、デバッグ設定を初期化する
         function initSocket (socket) {
             socket.on('connect', function (req) {
