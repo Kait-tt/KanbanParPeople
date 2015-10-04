@@ -5,7 +5,7 @@
         defaultOptions = {
             selectors: [],
             cancelSelectors: [],
-            target: 'body',
+            target: window,
             step: 1
         };
 
