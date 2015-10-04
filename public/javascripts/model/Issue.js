@@ -36,7 +36,7 @@
         // 表示タイトル
         this.displayTitle = ko.computed(function () {
             var title = this.title();
-            if (this.github() && this.github().number) {
+            if (this.github() && this.github().number && this.github().number !== '0') {
                 title = '#' + this.github().number + ' ' + title;
             }
             return title;
