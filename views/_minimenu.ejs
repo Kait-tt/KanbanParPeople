@@ -8,7 +8,8 @@
         <li>
             <button type="button" class="btn btn-sm btn-default"
                     data-toggle="modal" data-target="#issue-detail-modal"
-                    data-bind="click: $root.onClickIssueDetail">
+                    data-bind="click: $root.onClickIssueDetail"
+                    data-toggle2="tooltip" data-placement="top" title="Detail">
                 <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
             </button>
         </li>
@@ -17,14 +18,16 @@
             <button type="button" class="btn btn-sm btn-default"
                     data-bind="click: $root.onClickIssueNextStage,
                             css: {disabled: stage() === 'backlog' || stage() === 'done'},
-                            attr: {disabled: stage() === 'backlog' || stage() === 'done'}">
+                            attr: {disabled: stage() === 'backlog' || stage() === 'done'}"
+                    data-toggle2="tooltip" data-placement="right" title="Next stage">
                 <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
             </button>
         </li>
 
         <li>
             <button type="button" class="btn btn-sm btn-default"
-                    data-bind="click: $root.onClickIssueRemove">
+                    data-bind="click: $root.onClickIssueRemove"
+                    data-toggle2="tooltip" data-placement="right" title="Archive">
                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
             </button>
         </li>
@@ -32,14 +35,16 @@
         <li>
             <button type="button" class="btn btn-sm btn-default"
                     data-toggle="modal" data-target="#assign-issue-modal"
-                    data-bind="click: $root.onClickIssueAssign">
+                    data-bind="click: $root.onClickIssueAssign"
+                    data-toggle2="tooltip" data-placement="bottom" title="Assign">
                 <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
             </button>
         </li>
 
         <!-- ko if: github && github().url -->
         <li>
-            <a target="_blank" class="btn btn-sm btn-default" href="" data-bind="attr: { href: github().url }">
+            <a target="_blank" class="btn btn-sm btn-default" href="" data-bind="attr: { href: github().url }"
+               data-toggle2="tooltip" data-placement="right" title="GitHub link">
                 <span class="glyphicon glyphicon-link" aria-hidden="true"></span>
             </a>
         </li>
@@ -49,7 +54,8 @@
             <button type="button" class="btn btn-sm btn-default"
                     data-bind="click: $root.onClickIssuePrevStage,
                             css: {disabled: stage() === 'issue' || stage() === 'done'},
-                            attr: {disabled: stage() === 'issue' || stage() === 'done'}">
+                            attr: {disabled: stage() === 'issue' || stage() === 'done'}"
+                    data-toggle2="tooltip" data-placement="right" title="Prev stage">
                 <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
             </button>
         </li>

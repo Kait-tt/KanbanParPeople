@@ -36,8 +36,8 @@
         })
         .done(function () {
             effects.applyBindings(global);
-            MiniMenu.applyBindings(global);
-            MiniMenu.init();
+            MiniMenu.applyBindings(global, {onInitialized: initMinimenuTooltip});
+            MiniMenu.init(null, {onInitialized: initMinimenuTooltip});
             ko.applyBindings(vm);
             $('.switch').bootstrapSwitch()
                 .on('switchChange.bootstrapSwitch', function (e, state) {
@@ -46,6 +46,11 @@
                 });
             chainHideMembersWithURL = new viewmodel.ChainHideMembersWithURL(project);
         });
+
+    function initMinimenuTooltip($dom, $ul, $li, context) {
+        $li.children('[data-toggle="tooltip"]').tooltip();
+        $li.children('[data-toggle2="tooltip"]').tooltip();
+    }
 
     function getProjectId() {
         return _.compact(location.pathname.split('/')).splice(-2, 1)[0];

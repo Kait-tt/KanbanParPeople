@@ -7,7 +7,8 @@
             r: 90,
             duration: 200,
             easing: 'easeOutCubic',
-            margin: 0
+            margin: 0,
+            onInitialized: function ($dom, $ul, $li, context) {}
         };
 
     ns.MiniMenu = ns.MiniMenu || MiniMenu;
@@ -55,6 +56,8 @@
                 })
                 .hide();
         });
+
+        that.opts.onInitialized(that.$dom, that.$ul, that.$li, that);
     }
 
     MiniMenu.prototype.show = function () {
@@ -126,14 +129,14 @@
     };
 
     // to knockout
-    MiniMenu.applyBindings = function (global) {
+    MiniMenu.applyBindings = function (global, o) {
         if (!global.view) { global.view = {}; }
 
         if (!global.view.MiniMenu) {
             global.view.MiniMenu = {
                 init: function (doms) {
                     doms.forEach(function (dom) {
-                        new MiniMenu($(dom).find(defaultSelector));
+                        new MiniMenu($(dom).find(defaultSelector), o);
                     });
                 }
             };
