@@ -64,7 +64,7 @@
                             afterRender: view.MiniMenu.init }">
                             <li class="card" draggable="true">
                                 <% include _minimenu %>
-                                <span class="card-title" data-bind="text: title, click: $root.selectedIssue"
+                                <span class="card-title" data-bind="text: displayTitle, click: $root.selectedIssue"
                                       data-toggle="modal" data-target="#issue-detail-modal"></span>
                             </li>
                         </ul>
@@ -101,7 +101,7 @@
                                                 <li class="card" draggable="true" data-bind="visible: $index() < 2 || !$parent.isCollapse()">
                                                     <% include _minimenu %>
                                                     <span data-toggle="modal" data-target="#issue-detail-modal"
-                                                          class="card-title" data-bind="text: title, click: $root.selectedIssue"></span>
+                                                          class="card-title" data-bind="text: displayTitle, click: $root.selectedIssue"></span>
                                                 </li>
                                             </ul>
 

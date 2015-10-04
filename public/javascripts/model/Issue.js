@@ -32,6 +32,15 @@
             var userId = this.assignee();
             return _.find(this.members(), function (x) { return x._id() === userId; });
         }, this, {deferEvaluation: true});
+
+        // 表示タイトル
+        this.displayTitle = ko.computed(function () {
+            var title = this.title();
+            if (this.github() && this.github().number) {
+                title = '#' + this.github().number + ' ' + title;
+            }
+            return title;
+        }, this);
     };
 
 }(_, window.nakazawa.util));
