@@ -26,7 +26,8 @@
 
         <li>
             <button type="button" class="btn btn-sm btn-default"
-                    data-bind="click: $root.onClickIssueRemove"
+                    data-toggle="modal" data-target="#archive-issue-modal"
+                    data-bind="click: $root.onClickIssueArchive"
                     data-toggle2="tooltip" data-placement="right" title="Archive">
                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
             </button>

@@ -229,6 +229,12 @@
             that.socket.emit('remove-issue', {issueId: issue._id()}, _.noop);
         };
 
+        // Issueを削除する (archive)
+        that.removeIssueWithSelected = function () {
+            console.log(that.selectedIssue());
+            that.removeIssue(that.selectedIssue());
+        };
+
         // タスクをアサインする
         // ユーザが指定されていない場合はアンアサインする
         that.assignIssue = function () {
@@ -328,8 +334,9 @@
             return util.cancelBubble(e);
         };
 
-        that.onClickIssueRemove = function (issue, e) {
-            that.removeIssue(issue);
+        that.onClickIssueArchive = function (issue, e) {
+            that.selectedIssue(issue);
+            $($(e.target.parentElement).attr('data-target')).modal('show');
             return util.cancelBubble(e);
         };
 
