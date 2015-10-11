@@ -36,8 +36,8 @@
         })
         .done(function () {
             effects.applyBindings(global);
-            MiniMenu.applyBindings(global, {onInitialized: initMinimenuTooltip});
-            MiniMenu.init(null, {onInitialized: initMinimenuTooltip});
+            MiniMenu.applyBindings(global);
+            MiniMenu.init(null);
             ko.applyBindings(vm);
             $('.switch').bootstrapSwitch()
                 .on('switchChange.bootstrapSwitch', function (e, state) {
@@ -46,11 +46,6 @@
                 });
             chainHideMembersWithURL = new viewmodel.ChainHideMembersWithURL(project);
         });
-
-    function initMinimenuTooltip($dom, $ul, $li, context) {
-        $li.children('[data-toggle="tooltip"]').tooltip({delay: { 'show': 200, 'hide': 100 }});
-        $li.children('[data-toggle2="tooltip"]').tooltip({delay: { 'show': 200, 'hide': 100 }});
-    }
 
     function getProjectId() {
         return _.compact(location.pathname.split('/')).splice(-2, 1)[0];

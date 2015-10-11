@@ -67,7 +67,9 @@
                                 <ul class="card-label-block" data-bind="foreach: { data: labels, as: 'label' }">
                                     <!-- ko with: $root.project.getLabel(label) -->
                                     <li class="card-label-inner-block">
-                                        <div class="card-label" data-bind="style: { 'background-color': '#' + color() }"></div>
+                                        <div class="card-label" data-bind="
+                                            style: { 'background-color': '#' + color() },
+                                            tooltip: { title: name, placement: 'right' }"></div>
                                     </li>
                                     <!-- /ko -->
                                 </ul>
@@ -110,7 +112,9 @@
                                                     <ul class="card-label-block" data-bind="foreach: { data: labels, as: 'label' }">
                                                         <!-- ko with: $root.project.getLabel(label) -->
                                                         <li class="card-label-inner-block">
-                                                            <div class="card-label" data-bind="style: { 'background-color': '#' + color() }"></div>
+                                                            <div class="card-label" data-bind="
+                                                                style: { 'background-color': '#' + color() },
+                                                                tooltip: { title: name, placement: 'right' }"></div>
                                                         </li>
                                                         <!-- /ko -->
                                                     </ul>
@@ -573,6 +577,7 @@
 <script src="/vendor/knockout-sortable/build/knockout-sortable.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/vendor/eventemitter2/lib/eventemitter2.js"></script>
+<script src="/vendor/knockout-bootstrap/build/knockout-bootstrap.min.js"></script>
 
 <script src="/javascripts/module/util.js"></script>
 <script src="/javascripts/model/Socket.js"></script>
