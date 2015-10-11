@@ -31,7 +31,7 @@ async.series([
         async.each(syncProjects, function (project, nextProject) {
             console.log('[' + project.name + ']');
 
-            // Œ ŒÀ‚âapi limit“™‚ÅƒGƒ‰[‚É‚È‚é‚±‚Æ‚ª‚ ‚é‚Ì‚Å–³‹‚µ‚ÄŸ‚Ìproject‚Ìˆ—‚ÉˆÚ‚é
+            // æ¨©é™ã‚„api limitç­‰ã§ã‚¨ãƒ©ãƒ¼ã«ãªã‚‹ã“ã¨ãŒã‚ã‚‹ã®ã§ç„¡è¦–ã—ã¦æ¬¡ã®projectã®å‡¦ç†ã«ç§»ã‚‹
             console.log('syncLabelsFromGitHub...');
             github.syncLabelsFromGitHub(project.github.repoName, project.github.userName, project, function (err, project) {
                 if (err) { console.error(err); nextProject(); }
