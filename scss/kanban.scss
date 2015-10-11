@@ -387,17 +387,25 @@ div.user-block-area {
   display: block;
   border-top: 1px solid #f0f0f0;
 
-  &:before {
-    content: " ";
-    background: #3498db;
+  .card-label-block {
     float: left;
     position: relative;
-    display: inline-block;
+    display: table;
+    table-layout: fixed;
     top: 0;
     left: 0;
     height: $card_height - $card_padding * 2 + 16;
     width: 15px;
     margin: $card_padding * -1;
+    border-right: 1px solid #e0e0e0;
+
+    .card-label-inner-block {
+      display: table-row;
+
+      .card-label {
+        display: table-cell;
+      }
+    }
   }
 
   .card-title {

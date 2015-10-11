@@ -17,7 +17,8 @@
             'github',
             'issues',
             'members',
-            'name'
+            'name',
+            'labels'
         ],
         githubColumnKeys = [
             'userName',
@@ -41,8 +42,8 @@
         }, this);
 
         this.issues = ko.observableArray();
-
         this.members = ko.observableArray();
+        this.labels = ko.observableArray((o && o.labels) ? o.labels.map(function (x) { return new model.Label(x); }) : []);
 
         // issuesの初期化
         (o.issues || []).reverse();
@@ -159,6 +160,13 @@
         return _.find(this.members(), function (x) { return x.userName() === memberName; });
     };
 
+    Project.prototype.getLabel = function (labelId) {
+        return _.find(this.labels(), function (x) { return x._id() === labelId; });
+    };
+
+    Project.prototype.getLabelByName = function (labelName) {
+        return _.find(this.labels(), function (x) { return x.name() === labelName; });
+    };
 
     function createUrl (userName, projectId, projectName) {
         return '/users/' + userName + '/projects/' + projectId + '/' + projectName;

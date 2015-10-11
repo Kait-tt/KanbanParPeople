@@ -11,7 +11,8 @@
             'updated_at',
             'created_at',
             'github',
-            'stage'
+            'stage',
+            'labels' // ids
         ];
 
     model.Issue = model.Issue || Issue;
@@ -23,6 +24,7 @@
 
     Issue.prototype.init = function (o) {
         _.each(columnKeys, function (key) { this[key] = ko.observable(o[key]); }.bind(this));
+        this.labels = ko.observableArray((o && o.labels) || []);
 
         // プロジェクトに所属しているMembers (オブジェクトを指定して監視する)
         this.members = o.members || ko.observableArray();
