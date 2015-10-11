@@ -19,7 +19,7 @@ var routes = {
                 return res.status(500).json({});
             }
 
-            GitHub.serializeIssue(req.body.issue, function (err, issue) {
+            GitHub.serializeIssue(project, req.body.issue, function (err, issue) {
                 if (err) {
                     console.error(err);
                     return res.status(500).json({message: err.message});
