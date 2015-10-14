@@ -14,8 +14,8 @@ async.series([
         Log.find({}, function (err, logs) {
             if (err) { return next(err); }
             async.each(logs, function (log, nextLog) {
-                var text = JSON.stringify(log);
-                if (!text ||  _.isEqual(text, {})){
+                if (!log.text ||  _.isEqual(log.text, {})){
+                    var text = JSON.stringify(log);
                     log.text = text;
                     console.log('generate: ', text);
                     log.save(nextLog);
