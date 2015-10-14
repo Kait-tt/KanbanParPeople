@@ -16,7 +16,8 @@ async.series([
             async.each(logs, function (log, nextLog) {
                 if (log.values.method && log.values.path) {
                     console.log('set type: ', log.values, log.values.path);
-                    log.type = 'api';
+                    log.values.type = 'api';
+                    log.markModified('values');
                     log.save(nextLog);
                 } else {
                     nextLog();
