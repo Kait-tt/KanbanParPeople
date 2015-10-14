@@ -5,11 +5,11 @@
 
     ns.api = ns.api || [
             {
-                title: 'Method',
+                title: 'method',
                 field: 'method'
             },
             {
-                title: 'Path',
+                title: 'path',
                 field: 'path',
                 formatter: function (value, row, index) {
                     var res = String(value);
@@ -22,11 +22,11 @@
                 }
             },
             {
-                title: 'User',
+                title: 'username',
                 field: 'username'
             },
             {
-                title: 'Params',
+                title: 'params',
                 field: 'params',
                 formatter: function (value, row, index) {
                     return JSON.stringify(value);
@@ -34,7 +34,7 @@
                 visible: false
             },
             {
-                title: 'Query',
+                title: 'query',
                 field: 'query',
                 formatter: function (value, row, index) {
                     return JSON.stringify(value);
@@ -42,7 +42,7 @@
                 visible: false
             },
             {
-                title: 'Body',
+                title: 'body',
                 field: 'body',
                 formatter: function (value, row, index) {
                     return JSON.stringify(value);
@@ -50,7 +50,7 @@
                 visible: false
             },
             {
-                title: 'Time',
+                title: 'created_at',
                 field: 'created_at',
                 formatter: function (value, row, index) {
                     if (!value) { return null; }

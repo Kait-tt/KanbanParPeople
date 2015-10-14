@@ -5,14 +5,14 @@
 
     ns.all = ns.all || [
             {
-                title: 'Values',
+                title: 'values',
                 field: 'values',
                 formatter: function (value, row, index) {
                     return JSON.stringify(value);
                 }
             },
             {
-                title    : 'Time',
+                title    : 'created_at',
                 field    : 'created_at',
                 formatter: function (value, row, index) {
                     if (!value) { return null; }

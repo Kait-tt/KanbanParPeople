@@ -5,23 +5,23 @@
 
     ns.socket = ns.socket || [
             {
-                title: 'Action',
+                title: 'action',
                 field: 'action'
             },
             {
-                title: 'Key',
+                title: 'key',
                 field: 'key'
             },
             {
-                title: 'ProjectID',
+                title: 'projectId',
                 field: 'projectId'
             },
             {
-                title: 'User',
+                title: 'username',
                 field: 'username'
             },
             {
-                title: 'Request or Response',
+                title: 'req or Response',
                 field: 'req',
                 formatter: function (value, row, index) {
                     return JSON.stringify(value ? value : row.res);
@@ -29,7 +29,7 @@
                 visible: false
             },
             {
-                title: 'Time',
+                title: 'created_at',
                 field: 'created_at',
                 formatter: function (value, row, index) {
                     if (!value) { return null; }
