@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,700' rel='stylesheet' type='text/css'>
+    <link rel='stylesheet' href='/stylesheets/log.css'/>
+    <link rel='stylesheet' href="/vendor/bootstrap-table/dist/bootstrap-table.min.css" />
+</head>
+<body>
+
+<% include _header %>
+
+<div class="main">
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li role="presentation" class="<%= logType === 'all' ? 'active' : '' %>">
+                <a href="/logs">All Logs</a>
+            </li>
+            <li role="presentation" class="<%= logType === 'api' ? 'active' : '' %>">
+                <a href="/logs/api">API Logs</a>
+            </li>
+            <li role="presentation" class="<%= logType === 'socket' ? 'active' : '' %>">
+                <a href="/logs/socket">Socket Logs</a>
+            </li>
+        </ul>
+
+        <table id="table"
+               data-search="true"
+               data-show-refresh="true"
+               data-show-columns="true"
+               data-show-pagination-switch="true"
+               data-pagination="true"
+               data-data-field="logs"
+               data-page-list="[10, 20, 30, 40, 50, 100, ALL]"
+               data-page-size="30"
+               data-side-pagination="server"
+               data-url="/api/logs/<%= logType %>"
+               data-log-type="<%= logType %>"
+               data-response-handler="responseHandler">
+        </table>
+    </div>
+</div>
+
+<!-- include javascripts -->
+<script src="/vendor/jquery/dist/jquery.min.js"></script>
+<script src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/vendor/lodash/lodash.min.js"></script>
+<script src="/vendor/bootstrap-table/dist/bootstrap-table.min.js"></script>
+<script src="/vendor/bootstrap-table/dist/locale/bootstrap-table-ja-JP.js"></script>
+
+<script src="/javascripts/module/util.js"></script>
+<script src="/javascripts/model/logColumn/all.js"></script>
+<script src="/javascripts/model/logColumn/api.js"></script>
+<script src="/javascripts/model/logColumn/socket.js"></script>
+<script src="/javascripts/roots/log.js"></script>
+
+</body>
+</html>

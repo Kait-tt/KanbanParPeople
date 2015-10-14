@@ -65,11 +65,13 @@ var user = require('./routes/user');
 var project = require('./routes/project');
 var api = require('./routes/api');
 var github = require('./routes/github');
+var log = require('./routes/log');
 
 app.use('/', routes);
 app.use('/auth', auth);
 app.use('/api', api);
 app.use('/github', github);
+app.use('/logs', auth.ensureAuthenticated, log);
 app.use('/users', auth.ensureAuthenticated, user);
 app.use('/users/:user/projects', auth.ensureAuthenticated, project);
 
