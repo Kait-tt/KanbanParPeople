@@ -39,8 +39,8 @@ var routes = {
             if (issue.stage === stages.archive || issue.stage === stages.done) {
                 return res.status(200).json({});
             }
-
-            socket.emitters.removeIssue(project.id, null, issue._id, _.noop);
+            
+            socket.emitters.updateStage(project.id, null, issue._id, stages.done, null, _.noop);
             res.status(200).json({});
         },
         reopened: function (project, req, res) {
