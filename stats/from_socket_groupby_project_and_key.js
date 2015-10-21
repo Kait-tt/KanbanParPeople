@@ -12,7 +12,9 @@ mongoose.connect(config.get('mongo.url'));
 async.waterfall([
     // get projects
     function (next) {
-        Project.find({}, next);
+        Project.find({}, function (err, projects) {
+            next(null, (projects || []).map(function (project) { return _.pick(project, 'id', 'name'); }));
+        });
     },
 
     // each stat
@@ -22,10 +24,11 @@ async.waterfall([
                 'values.projectId': project.id,
                 'values.type': 'socket',
                 'values.action': 'on',
-                'values.username': {'$ne': 'snakazawa'}
+                'values.username': {'$ne': ''}
             };
             Log.find(qry, function (err, logs) {
-                nextProject(err, {project: _.pick(project, 'id', 'name'), logs: logs});
+                project.logs = logs;
+                nextProject(err, project);
             });
         }, function (err, results) {
             next(err, results);
@@ -40,6 +43,29 @@ async.waterfall([
         });
 
         next(null, projects);
+    },
+
+    // format to tsv
+    function (projects, next) {
+        var keys = _.chain(projects)
+            .map(function (project) { return _.keys(project.keys); })
+            .flatten()
+            .unique()
+            .value();
+
+        var values = projects.map(function (project) {
+            return [project.name].concat(keys.map(function (key) {
+                return project.keys[key] || 0;
+            }));
+        });
+
+        var header = ['projectName'].concat(keys);
+
+        var ary = [header].concat(values);
+
+        var tsv = _.invoke(ary, 'join', '\t').join('\n');
+
+        next(null, tsv);
     }
 
 ], function (err, projects) {
@@ -47,7 +73,6 @@ async.waterfall([
         console.error(err);
     } else {
         console.log(projects);
-        console.log('done');
     }
     mongoose.disconnect();
 });
