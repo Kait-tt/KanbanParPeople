@@ -71,7 +71,7 @@
         that.settingsWipLimit = ko.observable();
 
         // IssueListが表示されているか
-        that.openedIssueList = ko.observable(false);
+        that.openedIssueList = ko.observable(true);
 
         // IssueListの表示/非表示の切り替え
         that.toggleOpenedIssueList = function () {
