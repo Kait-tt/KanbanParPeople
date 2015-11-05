@@ -16,3 +16,6 @@ logs/*
 !logs/.gitkeep
 
 public/images/avatar/*
+
+develop/dev-run.sh
+
