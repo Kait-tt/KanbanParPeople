@@ -118,29 +118,23 @@ var routes = {
                 return res.status(500).json({message: 'issue not found'});
             }
 
-            issue.populate('labels', function (err, issue) {
-                if (err) {
-                    console.error(err.message + ': ' + req.body.issue.number);
-                    return res.status(500).json({message: err.message});
-                }
+            // 存在しないラベル、あるいはカラーが異なる場合はラベルに関するすべての情報を更新する
+            // GitHubと本システムで、名前とカラーは同じだが異なるラベルのような場合は、ここでは想定していない
+            var label = project.findLabelByName(req.body.label.name);
+            if (!label || String(label.color) !== String(req.body.label.color)) {
+                return syncLabelAll();
+            }
 
-                // 存在しないラベル、あるいはカラーが異なる場合はラベルに関するすべての情報を更新する
-                // GitHubと本システムで、名前とカラーは同じだが異なるラベルのような場合は、ここでは想定していない
-                var label = project.findLabelByName(req.body.label.name);
-                if (!label || String(label.color) !== String(req.body.label.color)) {
-                    return syncLabelAll();
-                }
+            // 変更が必要なければ何もしない
+            var issueLabels = project.expandIssueLabel(issue);
+            var issueLabel = _.find(issueLabels, function (x) { return String(x.name) === String(label.name); });
+            if (issueLabel) {
+                return res.status(200).json({});
+            }
 
-                // 変更が必要なければ何もしない
-                var issueLabel = _.find(issue.labels, function (x) { return String(x.name) === String(label.name); });
-                if (issueLabel) {
-                    return res.status(200).json({});
-                }
-
-                // ラベルを付ける
-                socket.emitters.attachLabel(project.id, null, issue._id, label.name, _.noop);
-                res.status(200).json({});
-            });
+            // ラベルを付ける
+            socket.emitters.attachLabel(project.id, null, issue._id, label.name, _.noop);
+            res.status(200).json({});
         },
         unlabeled: function (project, req, res) {
             var issue = GitHub.findIssueByNumber(project, req.body.issue.number);
@@ -149,29 +143,23 @@ var routes = {
                 return res.status(500).json({message: 'issue not found'});
             }
 
-            issue.populate('labels', function (err, issue) {
-                if (err) {
-                    console.error(err.message + ': ' + req.body.issue.number);
-                    return res.status(500).json({message: err.message});
-                }
+            // 存在しないラベル、あるいはカラーが異なる場合はラベルに関するすべての情報を更新する
+            // GitHubと本システムで、名前とカラーは同じだが異なるラベルのような場合は、ここでは想定していない
+            var label = project.findLabelByName(req.body.label.name);
+            if (!label || String(label.color) !== String(req.body.label.color)) {
+                return syncLabelAll();
+            }
 
-                // 存在しないラベル、あるいはカラーが異なる場合はラベルに関するすべての情報を更新する
-                // GitHubと本システムで、名前とカラーは同じだが異なるラベルのような場合は、ここでは想定していない
-                var label = project.findLabelByName(req.body.label.name);
-                if (!label || String(label.color) !== String(req.body.label.color)) {
-                    return syncLabelAll();
-                }
+            // 変更が必要なければ何もしない
+            var issueLabels = project.expandIssueLabel(issue);
+            var issueLabel = _.find(issueLabels, function (x) { return String(x.name) === String(label.name); });
+            if (!issueLabel) {
+                return res.status(200).json({});
+            }
 
-                // 変更が必要なければ何もしない
-                var issueLabel = _.find(issue.labels, function (x) { return String(x.name) === String(label.name); });
-                if (!issueLabel) {
-                    return res.status(200).json({});
-                }
-
-                // ラベルを外す
-                socket.emitters.detachLabel(project.id, null, issue._id, label.name, _.noop);
-                res.status(200).json({});
-            });
+            // ラベルを外す
+            socket.emitters.detachLabel(project.id, null, issue._id, label.name, _.noop);
+            res.status(200).json({});
         }
     }
 };
