@@ -266,6 +266,7 @@ module.exports.emitters = emitters = {
 
     updateIssueDetail: function (projectId, token, issueId, title, body, fn) {
         Project.updateIssueDetail({id: projectId}, token, issueId, title, body, function (err, project, issue) {
+            if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('updated issue detail', {issue: issue}, fn);
             module.exports.io.to(projectId).emit('update-issue-detail', {issue: issue, issueId: issueId});
@@ -274,9 +275,28 @@ module.exports.emitters = emitters = {
 
     updateIssuePriority: function (projectId, issueId, insertBeforeOfIssueId, fn) {
         Project.updateIssuePriority({id: projectId}, issueId, insertBeforeOfIssueId, function (err, project, issue, insertBeforeOfIssueId) {
+            if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('updated issue priority', {issue: issue, insertBeforeOfIssueId: insertBeforeOfIssueId}, fn);
             module.exports.io.to(projectId).emit('update-issue-priority', {issue: issue, issueId: issueId, insertBeforeOfIssueId: insertBeforeOfIssueId});
+        });
+    },
+
+    attachLabel: function (projectId, token, issueId, labelName, fn) {
+        Project.attachLabel({id: projectId}, token, issueId, labelName, function (err, project, issue, label) {
+            if (err) { serverErrorWrap(err, {}, fn); return; }
+
+            successWrap('attached label', {issue: issue, label: label}, fn);
+            module.exports.io.to(projectId).emit('attach-label', {issue: issue, issueId: issueId, label: label});
+        });
+    },
+
+    detachLabel: function (projectId, token, issueId, labelName, fn) {
+        Project.detachLabel({id: projectId}, token, issueId, labelName, function (err, project, issue, label) {
+            if (err) { serverErrorWrap(err, {}, fn); return; }
+
+            successWrap('detached label', {issue: issue, label: label}, fn);
+            module.exports.io.to(projectId).emit('detach-label', {issue: issue, issueId: issueId, label: label});
         });
     }
 };

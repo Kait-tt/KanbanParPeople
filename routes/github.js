@@ -119,8 +119,9 @@ var routes = {
             }
 
             // 存在しないラベル、あるいはカラーが異なる場合はラベルに関するすべての情報を更新する
+            // GitHubと本システムで、名前とカラーは同じだが異なるラベルのような場合は、ここでは想定していない
             var label = project.findLabelByName(req.body.label.name);
-            if (!label) {
+            if (!label || String(label.color) !== String(req.body.label.color)) {
                 return syncLabelAll();
             }
 
@@ -131,7 +132,7 @@ var routes = {
             }
 
             // ラベルを付ける
-            // TODO: emit attach label
+            socket.emitters.attachLabel(project.id, null, issue._id, label.name, _.noop);
             res.status(200).json({});
         },
         unlabeled: function (project, req, res) {
@@ -142,8 +143,9 @@ var routes = {
             }
 
             // 存在しないラベル、あるいはカラーが異なる場合はラベルに関するすべての情報を更新する
+            // GitHubと本システムで、名前とカラーは同じだが異なるラベルのような場合は、ここでは想定していない
             var label = project.findLabelByName(req.body.label.name);
-            if (!label) {
+            if (!label || String(label.color) !== String(req.body.label.color)) {
                 return syncLabelAll();
             }
 
@@ -154,7 +156,7 @@ var routes = {
             }
 
             // ラベルを外す
-            // TODO: emit detach label
+            socket.emitters.detachLabel(project.id, null, issue._id, label.name, _.noop);
             res.status(200).json({});
         }
     }
