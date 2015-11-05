@@ -5,6 +5,8 @@ var Project = require('../lib/model/project');
 var stages = require('../lib/model/stages');
 var LoggerSocket = require('../lib/model/loggerSocket');
 var GitHub = require('../lib/model/github');
+var queue = require('../lib/module/asyncQueue');
+
 
 var io;
 var emitters;
@@ -283,20 +285,26 @@ module.exports.emitters = emitters = {
     },
 
     attachLabel: function (projectId, token, issueId, labelName, fn) {
-        Project.attachLabel({id: projectId}, token, issueId, labelName, function (err, project, issue, label) {
-            if (err) { serverErrorWrap(err, {}, fn); return; }
+        queue.push(projectId, function (done) {
+            Project.attachLabel({id: projectId}, token, issueId, labelName, function (err, project, issue, label) {
+                done();
+                if (err) { serverErrorWrap(err, {}, fn); return; }
 
-            successWrap('attached label', {issue: issue, label: label}, fn);
-            module.exports.io.to(projectId).emit('attach-label', {issue: issue, issueId: issueId, label: label});
+                successWrap('attached label', {issue: issue, label: label}, fn);
+                module.exports.io.to(projectId).emit('attach-label', {issue: issue, issueId: issueId, label: label});
+            });
         });
     },
 
     detachLabel: function (projectId, token, issueId, labelName, fn) {
-        Project.detachLabel({id: projectId}, token, issueId, labelName, function (err, project, issue, label) {
-            if (err) { serverErrorWrap(err, {}, fn); return; }
+        queue.push(projectId, function (done) {
+            Project.detachLabel({id: projectId}, token, issueId, labelName, function (err, project, issue, label) {
+                done();
+                if (err) { serverErrorWrap(err, {}, fn); return; }
 
-            successWrap('detached label', {issue: issue, label: label}, fn);
-            module.exports.io.to(projectId).emit('detach-label', {issue: issue, issueId: issueId, label: label});
+                successWrap('detached label', {issue: issue, label: label}, fn);
+                module.exports.io.to(projectId).emit('detach-label', {issue: issue, issueId: issueId, label: label});
+            });
         });
     }
 };
