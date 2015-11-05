@@ -125,9 +125,6 @@
         var issue = this.getIssue(issueId);
         if (!issue) { throw new Error('issue not found'); }
 
-        var label = this.getLabel(labelId);
-        if (!label) { throw new Error('label not found'); }
-
         issue.labels.push(labelId);
     };
 
@@ -135,10 +132,7 @@
         var issue = this.getIssue(issueId);
         if (!issue) { throw new Error('issue not found'); }
 
-        var label = this.getLabel(labelId);
-        if (!label) { throw new Error('label not found'); }
-
-        issue.labels.remove(issueId);
+        issue.labels.remove(labelId);
     };
 
     /*** helper ***/
