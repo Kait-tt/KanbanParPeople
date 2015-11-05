@@ -121,6 +121,25 @@
         util.moveToBefore(this.members, member, insertBeforeOfMember);
     };
 
+    Project.prototype.attachLabel = function (issueId, labelId) {
+        var issue = this.getIssue(issueId);
+        if (!issue) { throw new Error('issue not found'); }
+
+        var label = this.getLabel(labelId);
+        if (!label) { throw new Error('label not found'); }
+
+        issue.labels.push(labelId);
+    };
+
+    Project.prototype.detachLabel = function (issueId, labelId) {
+        var issue = this.getIssue(issueId);
+        if (!issue) { throw new Error('issue not found'); }
+
+        var label = this.getLabel(labelId);
+        if (!label) { throw new Error('label not found'); }
+
+        issue.labels.remove(issueId);
+    };
 
     /*** helper ***/
 

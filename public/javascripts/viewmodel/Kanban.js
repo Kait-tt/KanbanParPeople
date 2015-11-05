@@ -400,6 +400,14 @@
                 that.project.updateIssuePriority(req.issue._id, req.insertBeforeOfIssueId);
             });
 
+            socket.on('attach-label', function (req) {
+                that.project.attachLabel(req.issue._id, req.label._id);
+            });
+
+            socket.on('detach-label', function (req) {
+                that.project.detachLabel(req.issue._id, req.label._id);
+            });
+
             socket.initSocketDebugMode();
 
             if (socket.connected) {

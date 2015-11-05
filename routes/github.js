@@ -117,6 +117,7 @@ var routes = {
                 console.error('issue not found: ' + req.body.issue.number);
                 return res.status(500).json({message: 'issue not found'});
             }
+            // TODO: populate label
 
             // 存在しないラベル、あるいはカラーが異なる場合はラベルに関するすべての情報を更新する
             // GitHubと本システムで、名前とカラーは同じだが異なるラベルのような場合は、ここでは想定していない
@@ -141,6 +142,7 @@ var routes = {
                 console.error('issue not found: ' + req.body.issue.number);
                 return res.status(500).json({message: 'issue not found'});
             }
+            // TODO: populate label
 
             // 存在しないラベル、あるいはカラーが異なる場合はラベルに関するすべての情報を更新する
             // GitHubと本システムで、名前とカラーは同じだが異なるラベルのような場合は、ここでは想定していない
