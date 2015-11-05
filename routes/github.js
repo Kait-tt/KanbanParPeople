@@ -110,6 +110,52 @@ var routes = {
 
             socket.emitters.updateStage(project.id, null, issue._id, stages.backlog, null, _.noop);
             res.status(200).json({});
+        },
+        labeled: function (project, req, res) {
+            var issue = GitHub.findIssueByNumber(project, req.body.issue.number);
+            if (!issue) {
+                console.error('issue not found: ' + req.body.issue.number);
+                return res.status(500).json({message: 'issue not found'});
+            }
+
+            // 存在しないラベル、あるいはカラーが異なる場合はラベルに関するすべての情報を更新する
+            var label = project.findLabelByName(req.body.label.name);
+            if (!label) {
+                return syncLabelAll();
+            }
+
+            // 変更が必要なければ何もしない
+            var issueLabel = _.find(issue.labels, function (x) { return String(x.name) === String(label.name); });
+            if (issueLabel) {
+                return res.status(200).json({});
+            }
+
+            // ラベルを付ける
+            // TODO: emit attach label
+            res.status(200).json({});
+        },
+        unlabeled: function (project, req, res) {
+            var issue = GitHub.findIssueByNumber(project, req.body.issue.number);
+            if (!issue) {
+                console.error('issue not found: ' + req.body.issue.number);
+                return res.status(500).json({message: 'issue not found'});
+            }
+
+            // 存在しないラベル、あるいはカラーが異なる場合はラベルに関するすべての情報を更新する
+            var label = project.findLabelByName(req.body.label.name);
+            if (!label) {
+                return syncLabelAll();
+            }
+
+            // 変更が必要なければ何もしない
+            var issueLabel = _.find(issue.labels, function (x) { return String(x.name) === String(label.name); });
+            if (!issueLabel) {
+                return res.status(200).json({});
+            }
+
+            // ラベルを外す
+            // TODO: emit detach label
+            res.status(200).json({});
         }
     }
 };
@@ -141,5 +187,25 @@ router.post('/:projectId', function (req, res) {
         }
     });
 });
+
+function syncLabelAll(project, req, res) {
+    console.log('unmatch project labels and sync all labels');
+    var github = new GitHub();
+    github.syncLabelsFromGitHub(project.github.repoName, project.github.userName, project, function (err, project) {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({message: err});
+        }
+        github.syncIssuesFromGitHub(project.github.repoName, project.github.userName, project, ['labels'], function (err, project) {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({message: err});
+            } else {
+                // TODO: emmit all sync labels
+                return res.status(200).json({});
+            }
+        });
+    });
+}
 
 module.exports = router;
