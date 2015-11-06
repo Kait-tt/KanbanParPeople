@@ -306,6 +306,31 @@ module.exports.emitters = emitters = {
                 module.exports.io.to(projectId).emit('detach-label', {issue: issue, issueId: issueId, label: label});
             });
         });
+    },
+
+    syncLabelAll: function (projectId, token, fn) {
+        queue.push(projectId, function (done) {
+            Project.findById(projectId, function (err, project) {
+                if (err) { return error(err, fn, done); }
+
+                var github = new GitHub(token);
+                github.syncLabelsFromGitHub(project.github.repoName, project.github.userName, project, function (err, project) {
+                    if (err) { return error(err, fn, done); }
+
+                    github.syncIssuesFromGitHub(project.github.repoName, project.github.userName, project, ['labels'], function (err, project) {
+                        if (err) { return error(err, fn, done); }
+
+                        successWrap('done to sync label all', {project: project}, fn);
+                        module.exports.io.to(projectId).emit('sync-label-all', {project: project});
+                    });
+                });
+            });
+        });
+
+        function error(fn, done, err) {
+            serverErrorWrap(err, {}, fn);
+            done();
+        }
     }
 };
 

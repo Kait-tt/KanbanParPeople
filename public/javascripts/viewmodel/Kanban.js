@@ -408,6 +408,10 @@
                 that.project.detachLabel(req.issue._id, req.label._id);
             });
 
+            socket.on('sync-label-all', function (req) {
+                that.project.replaceLabelAll(req.labels, req.issues);
+            });
+
             socket.initSocketDebugMode();
 
             if (socket.connected) {

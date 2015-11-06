@@ -192,23 +192,14 @@ router.post('/:projectId', function (req, res) {
     });
 });
 
-function syncLabelAll(project, req, res) {
+function syncLabelAll(project, httpReq, httpRes) {
     console.log('unmatch project labels and sync all labels');
-    var github = new GitHub();
-    github.syncLabelsFromGitHub(project.github.repoName, project.github.userName, project, function (err, project) {
-        if (err) {
-            console.error(err);
-            return res.status(500).json({message: err});
+    socket.emitters.syncLabelAll(project.id, null, function (res) {
+        if (res.status === 'success') {
+            httpRes.status(200).json({status: res.status, message: 'unmatch project labels and sync all labels'});
+        } else {
+            httpRes.status(500).json(res);
         }
-        github.syncIssuesFromGitHub(project.github.repoName, project.github.userName, project, ['labels'], function (err, project) {
-            if (err) {
-                console.error(err);
-                return res.status(500).json({message: err});
-            } else {
-                // TODO: emmit all sync labels
-                return res.status(200).json({});
-            }
-        });
     });
 }
 

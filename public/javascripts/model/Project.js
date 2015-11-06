@@ -135,6 +135,16 @@
         issue.labels.remove(labelId);
     };
 
+    Project.prototype.replaceLabelAll = function (newLabels, newIssues) {
+        this.labels.splice(0, this.labels.slice().length, newLabels.map(function (x) { return new model.Label(x); }));
+        // TODO: O(N^2) なので O(NlogN)に抑える
+        newIssues.forEach(function (newIssue) {
+            var issue = this.getIssue(newIssue._id);
+            if (!issue) { return console.error('issue not found'); }
+            issue.labels.splice(0, issue.labels().length, newIssue.labels);
+        }, this);
+    };
+
     /*** helper ***/
 
     Project.prototype.addIssue = function (issue) {

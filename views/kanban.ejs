@@ -66,11 +66,13 @@
                                 <% include _minimenu %>
                                 <ul class="card-label-block" data-bind="foreach: { data: labels, as: 'label' }">
                                     <!-- ko with: $root.project.getLabel(label) -->
+                                    <!-- ko if: $data -->
                                     <li class="card-label-inner-block">
                                         <div class="card-label" data-bind="
                                             style: { 'background-color': '#' + color() },
                                             tooltip: { title: name, placement: 'right' }"></div>
                                     </li>
+                                    <!-- /ko -->
                                     <!-- /ko -->
                                 </ul>
                                 <span class="card-title" data-bind="text: displayTitle, click: $root.selectedIssue"
