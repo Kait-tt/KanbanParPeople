@@ -310,7 +310,7 @@ module.exports.emitters = emitters = {
 
     syncLabelAll: function (projectId, token, fn) {
         queue.push(projectId, function (done) {
-            Project.findById(projectId, function (err, project) {
+            Project.findOne({id: projectId}, function (err, project) {
                 if (err) { return error(err, fn, done); }
 
                 var github = new GitHub(token);
@@ -327,7 +327,7 @@ module.exports.emitters = emitters = {
             });
         });
 
-        function error(fn, done, err) {
+        function error(err, fn, done) {
             serverErrorWrap(err, {}, fn);
             done();
         }

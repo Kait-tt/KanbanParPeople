@@ -31,14 +31,35 @@ async.series([
         async.each(syncProjects, function (project, nextProject) {
             console.log('[' + project.name + ']');
 
-            // 権限やapi limit等でエラーになることがあるので無視して次のprojectの処理に移る
-            console.log('syncLabelsFromGitHub...');
-            github.syncLabelsFromGitHub(project.github.repoName, project.github.userName, project, function (err, project) {
-                if (err) { console.error(err); nextProject(); }
-                console.log('syncIssuesFromGitHub...');
-                github.syncIssuesFromGitHub(project.github.repoName, project.github.userName, project, ['labels'], function (err, project) {
-                    if (err) { console.error(err); nextProject(); }
+            github.checkNeedUpdateLabels(project.github.repoName, project.github.userName, project, function (err, res) {
+                if (err) {
+                    console.error(res.message);
                     nextProject();
+                    return;
+                }
+                if (!res) {
+                    console.log('it is not necessary to sync labels');
+                    nextProject();
+                    return;
+                }
+
+                // 権限やapi limit等でエラーになることがあるので無視して次のprojectの処理に移る
+                console.log('syncLabelsFromGitHub...');
+                github.syncLabelsFromGitHub(project.github.repoName, project.github.userName, project, function (err, project) {
+                    if (err) {
+                        console.error(err);
+                        nextProject();
+                        return;
+                    }
+                    console.log('syncIssuesFromGitHub...');
+                    github.syncIssuesFromGitHub(project.github.repoName, project.github.userName, project, ['labels'], function (err, project) {
+                        if (err) {
+                            console.error(err);
+                            nextProject();
+                            return;
+                        }
+                        nextProject();
+                    });
                 });
             });
         }, next);
