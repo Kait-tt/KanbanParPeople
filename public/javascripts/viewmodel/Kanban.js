@@ -433,13 +433,13 @@
 
             socket.on('attach-label', function (req) {
                 if (req.issue && req.label) {
-                    that.project.attachLabel(req.issue._id, that.project.getLabelByName(req.label.name));
+                    that.project.attachLabel(req.issue._id, that.project.getLabelByName(req.label.name)._id);
                 }
             });
 
             socket.on('detach-label', function (req) {
                 if (req.issue && req.label) {
-                    that.project.detachLabel(req.issue._id, that.project.getLabelByName(req.label.name));
+                    that.project.detachLabel(req.issue._id, that.project.getLabelByName(req.label.name)._id);
                 }
             });
 
