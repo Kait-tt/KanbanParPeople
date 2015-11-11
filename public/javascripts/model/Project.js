@@ -124,15 +124,19 @@
     Project.prototype.attachLabel = function (issueId, labelId) {
         var issue = this.getIssue(issueId);
         if (!issue) { throw new Error('issue not found'); }
+        var label = this.getLabel(labelId);
+        if (!label) { throw new Error('label not found'); }
 
-        issue.labels.push(labelId);
+        issue.labels.push(label);
     };
 
     Project.prototype.detachLabel = function (issueId, labelId) {
         var issue = this.getIssue(issueId);
         if (!issue) { throw new Error('issue not found'); }
+        var label = this.getLabel(labelId);
+        if (!label) { throw new Error('label not found'); }
 
-        issue.labels.remove(labelId);
+        issue.labels.remove(label);
     };
 
     Project.prototype.replaceLabelAll = function (newLabels, newIssues) {
@@ -141,14 +145,18 @@
         newIssues.forEach(function (newIssue) {
             var issue = this.getIssue(newIssue._id);
             if (!issue) { return console.error('issue not found'); }
-            issue.labels.splice(0, issue.labels().length, newIssue.labels);
+            issue.labels.splice(0, issue.labels().length,
+                newIssue.labels.map(function (labelId) { return this.getLabel(labelId); }, this));
         }, this);
     };
 
     /*** helper ***/
 
     Project.prototype.addIssue = function (issue) {
-        this.issues.unshift(new Issue(_.extend(issue, {members: this.members})));
+        this.issues.unshift(new Issue(_.extend(issue, {
+            members: this.members,
+            labels: issue.labels.map(function (labelId) { return this.getLabel(labelId); }, this)
+        })));
     };
 
     Project.prototype.removeIssue = function (issue) {

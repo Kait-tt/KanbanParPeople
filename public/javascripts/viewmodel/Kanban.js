@@ -29,6 +29,8 @@
 
         that.issues = null;
 
+        that.labels = null;
+
         that.project = null;
 
         // that.stages[name] = 各ステージのIssues
@@ -95,6 +97,7 @@
             that.project = project;
             that.members = project.members;
             that.issues = project.issues;
+            that.labels = project.labels;
             that.stages = project.stages;
             that.initDraggableIssueList();
 

@@ -6,6 +6,7 @@
     <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,700' rel='stylesheet' type='text/css'>
     <link rel='stylesheet' href='/stylesheets/kanban.css'/>
     <link rel='stylesheet' href='/vendor/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css'/>
+    <link rel='stylesheet' href='/vendor/bootstrap-select/dist/css/bootstrap-select.min.css'/>
 </head>
 <body>
 
@@ -64,16 +65,12 @@
                             afterRender: view.MiniMenu.init }">
                             <li class="card" draggable="true">
                                 <% include _minimenu %>
-                                <ul class="card-label-block" data-bind="foreach: { data: labels, as: 'label' }">
-                                    <!-- ko with: $root.project.getLabel(label) -->
-                                    <!-- ko if: $data -->
+                                <ul class="card-label-block" data-bind="foreach: { data: labels }">
                                     <li class="card-label-inner-block">
                                         <div class="card-label" data-bind="
                                             style: { 'background-color': '#' + color() },
                                             tooltip: { title: name, placement: 'right' }"></div>
                                     </li>
-                                    <!-- /ko -->
-                                    <!-- /ko -->
                                 </ul>
                                 <span class="card-title" data-bind="text: displayTitle, click: $root.selectedIssue"
                                       data-toggle="modal" data-target="#issue-detail-modal"></span>
@@ -111,14 +108,12 @@
                                                     sortable: { data: issues, afterRender: view.MiniMenu.init }">
                                                 <li class="card" draggable="true" data-bind="visible: $index() < 2 || !$parent.isCollapse()">
                                                     <% include _minimenu %>
-                                                    <ul class="card-label-block" data-bind="foreach: { data: labels, as: 'label' }">
-                                                        <!-- ko with: $root.project.getLabel(label) -->
+                                                    <ul class="card-label-block" data-bind="foreach: { data: labels }">
                                                         <li class="card-label-inner-block">
                                                             <div class="card-label" data-bind="
                                                                 style: { 'background-color': '#' + color() },
                                                                 tooltip: { title: name, placement: 'right' }"></div>
                                                         </li>
-                                                        <!-- /ko -->
                                                     </ul>
                                                     <span data-toggle="modal" data-target="#issue-detail-modal"
                                                           class="card-title" data-bind="text: displayTitle, click: $root.selectedIssue"></span>
@@ -191,7 +186,25 @@
                             <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Assign
                         </label>
                         <p class="form-control-static" id="issue-detail-assign"
-                           data-bind="text: assigneeMember() ? assigneeMember().userName : null"></p>
+                           data-bind="text: assigneeMember() ? assigneeMember().userName : '(None)'"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="issue-detail-labels" class="control-label">
+                            <span class="glyphicon glyphicon-tags" aria-hidden="true"></span> Labels
+                        </label>
+                        <select id="issue-detail-labels" multiple data-bind="selectPicker: labels, optionsText: 'name', selectPickerOptions: {optionsArray: $root.labels}"></select>
+                        <!--<select id="issue-detail-labels" multiple data-bind="selectPicker: labels, optionsText: 'name'"></select>-->
+
+                        <ul class="issue-labels-view" data-bind="foreach: labels">
+                            <li>
+                                <span class="label label-default" data-bind="
+                                        style: {
+                                            color: '#' + invertMonoColor(),
+                                            'background-color':  '#' + color() },
+                                        text: name">Default</span>
+                            </li>
+                        </ul>
                     </div>
 
                     <div data-bind="if: github && github().url">
@@ -580,7 +593,9 @@
 <script src="/socket.io/socket.io.js"></script>
 <script src="/vendor/eventemitter2/lib/eventemitter2.js"></script>
 <script src="/vendor/knockout-bootstrap/build/knockout-bootstrap.min.js"></script>
+<script src="/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
 
+<script src="/javascripts/module/knockout/knockout-selectPicker.js"></script>
 <script src="/javascripts/module/util.js"></script>
 <script src="/javascripts/model/Socket.js"></script>
 <script src="/javascripts/model/stageTypes.js"></script>
