@@ -17,10 +17,10 @@
         this.opts = _.defaults(o || {}, defaultOptions);
         this.init(this.opts);
 
-        // color‚É‘Î‚µ‚ÄŒ©‚â‚·‚¢Fi”’or•j
+        // colorã«å¯¾ã—ã¦è¦‹ã‚„ã™ã„è‰²ï¼ˆç™½oré»’ï¼‰
         this.invertMonoColor = ko.computed(function () {
             var color = parseInt(this.color(), 16);
-            var mono = Math.floor(((color & 0xff) + (color >> 2 & 0xff) + (color >> 4 & 0xff)) / 3);
+            var mono = Math.floor(((color & 0xff) + (color >> 8 & 0xff) + (color >> 16 & 0xff)) / 3);
             var invert = mono < 0x88 ? 0xff : 0x00;
             var invert16 = _.padLeft(invert.toString(16), 2, '0');
             return invert16 + invert16 + invert16;
