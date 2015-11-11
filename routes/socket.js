@@ -302,7 +302,9 @@ module.exports.emitters = emitters = {
                 if (err) { serverErrorWrap(err, {}, fn); return; }
 
                 successWrap('attached label', {issue: issue, label: label}, fn);
-                module.exports.io.to(projectId).emit('attach-label', {issue: issue, issueId: issueId, label: label});
+                if (issue && label) {
+                    module.exports.io.to(projectId).emit('attach-label', { issue: issue, issueId: issueId, label: label });
+                }
             });
         });
     },
@@ -314,7 +316,9 @@ module.exports.emitters = emitters = {
                 if (err) { serverErrorWrap(err, {}, fn); return; }
 
                 successWrap('detached label', {issue: issue, label: label}, fn);
-                module.exports.io.to(projectId).emit('detach-label', {issue: issue, issueId: issueId, label: label});
+                if (issue && label) {
+                    module.exports.io.to(projectId).emit('detach-label', { issue: issue, issueId: issueId, label: label });
+                }
             });
         });
     },

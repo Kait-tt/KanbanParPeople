@@ -432,11 +432,15 @@
             });
 
             socket.on('attach-label', function (req) {
-                that.project.attachLabel(req.issue._id, req.label._id);
+                if (req.issue && req.label) {
+                    that.project.attachLabel(req.issue._id, that.project.getLabelByName(req.label.name));
+                }
             });
 
             socket.on('detach-label', function (req) {
-                that.project.detachLabel(req.issue._id, req.label._id);
+                if (req.issue && req.label) {
+                    that.project.detachLabel(req.issue._id, that.project.getLabelByName(req.label.name));
+                }
             });
 
             socket.on('sync-label-all', function (req) {
