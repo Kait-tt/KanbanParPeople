@@ -28,6 +28,7 @@
                                     data-toggle="modal" data-target="#add-issue-modal"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <span class="sr-only">Add task</span></button>
           <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#members-settings-modal"><span class="glyphicon glyphicon-user"></span> <span class="sr-only">Members</span></button>
           <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#project-settings-modal"><span class="glyphicon glyphicon-cog"></span> <span class="sr-only">Settings</span></button>
+          <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#project-labels-modal"><span class="glyphicon glyphicon-tags"></span> <span class="sr-only">Labels</span></button>
         </div>
     </div>
 </div>
@@ -580,6 +581,36 @@
         </div>
     </div>
 </div>
+
+<!-- Project Labels Modal -->
+<div class="modal fade" id="project-labels-modal" tabindex="-1" role="dialog" aria-labelledby="project-labels-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="project-labels-modal-label">Project Labels</h4>
+            </div>
+            <div class="modal-body">
+                <!-- ko with: $root.labels -->
+                <ul class="project-labels" data-bind="foreach: $root.labels">
+                    <li>
+                        <span class="label label-default" data-bind="
+                                style: { color: '#' + invertMonoColor(), 'background-color':  '#' + color() },
+                                text: name">Default</span>
+                    </li>
+                </ul>
+                <!-- /ko -->
+                <!-- ko if: $root.project.github -->
+                <div>
+                    <a data-bind="attr: {href: $root.project.github().url() + '/labels' }" target="_blank">Edit</a>
+                    <p class="help-block">※ラベルリストは5分間隔で更新しています。</p>
+                </div>
+                <!-- /ko -->
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <!-- include javascripts -->
 <script src="/vendor/jquery/dist/jquery.min.js"></script>
