@@ -127,7 +127,9 @@
         var label = this.getLabel(labelId);
         if (!label) { throw new Error('label not found'); }
 
-        issue.labels.push(label);
+        if (!_.includes(issue.labels(), label)) {
+            issue.labels.push(label);
+        }
     };
 
     Project.prototype.detachLabel = function (issueId, labelId) {
@@ -136,7 +138,9 @@
         var label = this.getLabel(labelId);
         if (!label) { throw new Error('label not found'); }
 
-        issue.labels.remove(label);
+        if (_.includes(issue.labels(), label)) {
+            issue.labels.remove(label);
+        }
     };
 
     Project.prototype.replaceLabelAll = function (newLabels, newIssues) {

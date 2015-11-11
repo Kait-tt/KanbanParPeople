@@ -118,6 +118,17 @@ function socketRouting(server) {
             emitters.updateIssuePriority(projectId, req.issueId, req.insertBeforeOfIssueId, fn);
         });
 
+        // attach label
+        //attachLabel: function (projectId, token, issueId, labelName, fn) {
+        socketOn(socket, 'attach-label', function (req, projectId, fn) {
+            emitters.attachLabel(projectId, user.info.token, req.issueId, req.labelName, fn);
+        });
+
+        // detach label
+        socketOn(socket, 'detach-label', function (req, projectId, fn) {
+            emitters.detachLabel(projectId, user.info.token, req.issueId, req.labelName, fn);
+        });
+
         // 切断
         socket.on('disconnect', function () {
             console.log('disconnected: ' + socket.id);

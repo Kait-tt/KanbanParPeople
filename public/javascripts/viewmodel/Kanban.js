@@ -61,9 +61,13 @@
         // Issueの更新後のBody
         that.updateIssueDetailBody = ko.observable();
 
+        // Issueの更新後のLabels
+        that.updateIssueDetailLabels = ko.observableArray();
+
         that.selectedIssue.subscribe(function (issue) {
             that.updateIssueDetailTitle(issue ? issue.title() : null);
             that.updateIssueDetailBody(issue ? issue.body() : null);
+            that.updateIssueDetailLabels(issue ? _.clone(issue.labels()) : []);
         });
 
         // 選択しているメンバー
@@ -297,10 +301,12 @@
             that.socket.emit('update-stage', {issueId: issue._id(), toStage: toStage, userId: userId !== undefined ? userId : issue.assignee()});
         };
 
-        // タスクのタイトル/説明を更新する
+        // タスクのタイトル/説明/ラベルリストを更新する
         that.updateIssueDetail = function () {
             var issue = that.selectedIssue();
             if (!issue) { throw new Error('issue is not selected'); }
+
+            that.updateIssueLabels();
 
             that.socket.emit('update-issue-detail', {
                 issueId: issue._id(),
@@ -311,6 +317,28 @@
                     // reset form
                     that.selectedIssue(null);
                 }
+            });
+        };
+
+        that.updateIssueLabels = function () {
+            var issue = that.selectedIssue();
+            var curLabels = issue.labels();
+            var newLabels = that.updateIssueDetailLabels();
+            var adds = newLabels.filter(function (x) { return !_.includes(curLabels, x); });
+            var removes = curLabels.filter(function (x) { return !_.includes(newLabels, x); });
+
+            adds.forEach(function (label) {
+                that.socket.emit('attach-label', {
+                    issueId: issue._id(),
+                    labelName: label.name()
+                }, _.noop);
+            });
+
+            removes.forEach(function (label) {
+                that.socket.emit('detach-label', {
+                    issueId: issue._id(),
+                    labelName: label.name()
+                }, _.noop);
             });
         };
 

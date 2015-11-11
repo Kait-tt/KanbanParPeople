@@ -193,15 +193,15 @@
                         <label for="issue-detail-labels" class="control-label">
                             <span class="glyphicon glyphicon-tags" aria-hidden="true"></span> Labels
                         </label>
-                        <select id="issue-detail-labels" multiple data-bind="selectPicker: labels, optionsText: 'name', selectPickerOptions: {optionsArray: $root.labels}"></select>
-                        <!--<select id="issue-detail-labels" multiple data-bind="selectPicker: labels, optionsText: 'name'"></select>-->
+                        <select id="issue-detail-labels" multiple data-bind="selectPicker: $root.updateIssueDetailLabels,
+                                optionsText: 'name',
+                                selectPickerOptions: {optionsArray: $root.labels}
+                                "></select>
 
-                        <ul class="issue-labels-view" data-bind="foreach: labels">
+                        <ul class="issue-labels-view" data-bind="foreach: $root.updateIssueDetailLabels">
                             <li>
                                 <span class="label label-default" data-bind="
-                                        style: {
-                                            color: '#' + invertMonoColor(),
-                                            'background-color':  '#' + color() },
+                                        style: { color: '#' + invertMonoColor(), 'background-color':  '#' + color() },
                                         text: name">Default</span>
                             </li>
                         </ul>
