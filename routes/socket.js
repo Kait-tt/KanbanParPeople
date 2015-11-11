@@ -56,19 +56,18 @@ function socketRouting(server) {
             fn = fn || function () {};
             var projectId = req.projectId;
 
-            Project.exists({id: projectId}, function (err, isExists) {
-                if (err) { serverErrorWrap(err, {}, fn); return; }
-
-                // invalid
-                if (!isExists) {
-                    userErrorWrap('invalid projectId: ' + projectId, {}, fn);
-                    return;
-                }
+            Project.findOne({id: projectId}, function (err, project) {
+                if (err) { return serverErrorWrap(err, {}, fn); }
+                if (!project) { return userErrorWrap('invalid projectId: ' + projectId, {}, fn); }
 
                 // valid
                 leaveProjectRoom(socket);
                 joinProjectRoom(socket, projectId);
                 loggerSocket.bindProjectId(projectId);
+
+                // 同期用にtokenを保存する
+                project.github.token = user.info.token;
+                project.save(function (err) { if (err) { console.error(err); }});
 
                 successWrap('joined room', {}, fn);
             });

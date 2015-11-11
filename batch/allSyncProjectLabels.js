@@ -10,7 +10,6 @@ console.log('### sync all project for labels ###');
 mongoose.connect(config.get('mongo.url'));
 
 var projects;
-var github = new GitHub();
 
 
 async.series([
@@ -30,6 +29,10 @@ async.series([
         var syncProjects = projects.filter(function (project) { return project.github.sync; });
         async.each(syncProjects, function (project, nextProject) {
             console.log('[' + project.name + ']');
+
+            var github = new GitHub(project.github.token);
+            console.log(project.github.token);
+            return nextProject();
 
             github.checkNeedUpdateLabels(project.github.repoName, project.github.userName, project, function (err, res) {
                 if (err) {
