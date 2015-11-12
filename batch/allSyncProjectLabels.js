@@ -31,8 +31,6 @@ async.series([
             console.log('[' + project.name + ']');
 
             var github = new GitHub(project.github.token);
-            console.log(project.github.token);
-            return nextProject();
 
             github.checkNeedUpdateLabels(project.github.repoName, project.github.userName, project, function (err, res) {
                 if (err) {
