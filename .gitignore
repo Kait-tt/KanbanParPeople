@@ -19,3 +19,6 @@ public/images/avatar/*
 
 develop/dev-run.sh
 
+analyze/store/*
+!analyze/store/taskUpdateLog/
+analyze/store/taskUpdateLog/*
