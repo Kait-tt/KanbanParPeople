@@ -37,7 +37,7 @@ function main(done) {
     async.waterfall([
         // fetch projects
         function (next) {
-            Project.find({}, function (err, docs) {
+            Project.findPopulated({}, {}, function (err, docs) {
                 projects = docs;
                 next(err);
             });
@@ -86,7 +86,7 @@ function main(done) {
                     })
                     .value();
 
-                var projectPicked = _.pick(project, ['id', 'name', 'create_user', 'github', 'created_at']);
+                var projectPicked = _.pick(project, ['id', 'name', 'members', 'create_user', 'github', 'created_at']);
 
                 return {project: projectPicked, issueLogs: issueLogs};
             });
