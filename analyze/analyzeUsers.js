@@ -6,10 +6,10 @@ var fs = require('fs');
 require('date-utils');
 
 var Project = require('../lib/model/project');
-var User = require('../lib/model/user');
 var Log = require('../lib/model/log');
 
 var STORE_PATH = __dirname + '/store/userLog';
+var DATE_FILTER = null; // new Date('2015/11/25');
 
 async.series([
     before, main, after
@@ -45,7 +45,9 @@ function main(done) {
         // fetch logs
         function (next) {
             Log.find({}, function (err, docs) {
-                _logs = docs;
+                _logs = DATE_FILTER ?
+                    docs.filter(function (x) { return DATE_FILTER.compareTo(new Date(x.created_at)) >= 0; }) :
+                    docs;
                 next(err);
             });
         },
@@ -128,7 +130,16 @@ function main(done) {
             var fileFormat = _.template('{projectName}_{projectId}_{datetime}.json',
                 {interpolate: /{([\s\S]+?)}/g});
 
-            console.log(JSON.stringify(logs, null, '    '));
+            logs.forEach(function (log) {
+                var path = STORE_PATH + '/' + fileFormat({
+                        projectName: log.projectName,
+                        projectId: log.projectId,
+                        datetime: (new Date()).toFormat('YYMMDD_HH24MISS')
+                    });
+
+                fs.writeFileSync(path, JSON.stringify(log, null, '    '));
+                console.log('created: ' + path);
+            });
 
             next(null);
         }
