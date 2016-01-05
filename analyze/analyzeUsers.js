@@ -112,6 +112,12 @@ function main(done) {
                         .map(function (x, k) { return [k, x.length]; })
                         .zipObject()
                         .value();
+
+                    user.totalOperationTimes = _.chain(user.socketRequestTimes)
+                        .reduce(function (total, x, k) {
+                            return _.includes(['join-project-room', 'disconnect'], k) ? 0 : total + x;
+                        }, 0)
+                        .value();
                 });
             });
 
@@ -123,7 +129,7 @@ function main(done) {
                 {interpolate: /{([\s\S]+?)}/g});
 
             console.log(JSON.stringify(logs, null, '    '));
-            
+
             next(null);
         }
     ], function (err, res) {
