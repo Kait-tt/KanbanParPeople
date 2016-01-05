@@ -22,5 +22,7 @@ develop/dev-run.sh
 analyze/store/*
 !analyze/store/taskUpdateLog/
 !analyze/store/taskLeadTimeTSV/
+!analyze/store/userLog/
 analyze/store/taskUpdateLog/*
 analyze/store/taskLeadTimeTSV/*
+analyze/store/userLog/*
