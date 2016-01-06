@@ -23,6 +23,8 @@ analyze/store/*
 !analyze/store/taskUpdateLog/
 !analyze/store/taskLeadTimeTSV/
 !analyze/store/userLog/
+!analyze/store/userLogEachDate/
 analyze/store/taskUpdateLog/*
 analyze/store/taskLeadTimeTSV/*
 analyze/store/userLog/*
+analyze/store/userLogEachDate/*
