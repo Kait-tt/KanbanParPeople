@@ -45,9 +45,15 @@ function main(done) {
         // fetch logs
         function (next) {
             Log.find({}, function (err, docs) {
-                _logs = DATE_FILTER ?
+                _logs = (DATE_FILTER ?
                     docs.filter(function (x) { return DATE_FILTER.compareTo(new Date(x.created_at)) >= 0; }) :
-                    docs;
+                    docs)
+                    // flatten
+                    .map(function (x) { return _.assign(x, x.values); })
+                    .map(function (x) {
+                        _.each(x.params, function (v, k) { x['params_' + k] = v; });
+                        return x;
+                    });
                 next(err);
             });
         },
@@ -57,15 +63,13 @@ function main(done) {
                 var users = project.members.map(function (member) {
                     var user = member.user;
                     var apiCount = _.chain(_logs)
-                        .pluck('values')
                         .where({
                             type: 'api',
                             username: user.userName,
                             path: '/projects/:projectId',
-                            method: 'GET'
+                            method: 'GET',
+                            params_projectId: project.id
                         })
-                        .pluck('params')
-                        .where({'projectId': project.id})
                         .value()
                         .length;
                     return {username: user.userName, userId: user._id, apiCount: apiCount};
@@ -80,8 +84,12 @@ function main(done) {
             projects.forEach(function (project) {
                 project.users.forEach(function (user) {
                     var logs = _.chain(_logs)
-                        .map(function (x) { return _.assign(x, x.values); })
-                        .where({type: 'socket', action: 'on', username: user.username})
+                        .where({
+                            type: 'socket',
+                            action: 'on',
+                            username: user.username,
+                            params_projectId: project.id
+                        })
                         .filter(function (x) { return _.includes(['join-project-room', 'disconnect'], x.key); })
                         .value();
 
@@ -100,13 +108,17 @@ function main(done) {
 
             next(null, projects);
         },
-        // count socket request times
+        // count socket request
         function (projects, next) {
             projects.map(function (project) {
                 return project.users.map(function (user) {
                     var logs = _.chain(_logs)
-                        .map(function (x) { return _.assign(x, x.values); })
-                        .where({type: 'socket', action: 'on', username: user.username})
+                        .where({
+                            type: 'socket',
+                            action: 'on',
+                            username: user.username,
+                            params_projectId: project.id
+                        })
                         .value();
 
                     user.socketRequestTimes = _.chain(logs)
@@ -140,6 +152,8 @@ function main(done) {
                 fs.writeFileSync(path, JSON.stringify(log, null, '    '));
                 console.log('created: ' + path);
             });
+
+            //console.log(JSON.stringify(logs, null, '    '));
 
             next(null);
         }
