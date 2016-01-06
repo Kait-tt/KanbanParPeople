@@ -156,10 +156,10 @@ function main(done) {
                         return log.users.reduce(function (y, x) { return y.push(x.cnts[i][type]), y; }, [leftHeaders[i]]);
                     });
 
-                    var tsv = [].concat(vs, [headers]);
+                    var tsv = [].concat([headers], vs);
 
                     //console.log(tsv);
-                    fs.writeFileSync(path, vs.map(function (x) { return x.join('\t'); }).join('\n'));
+                    fs.writeFileSync(path, tsv.map(function (x) { return x.join('\t'); }).join('\n'));
                     console.log('created: ' + path);
                 });
             });
