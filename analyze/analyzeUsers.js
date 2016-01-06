@@ -49,11 +49,13 @@ function main(done) {
                     docs.filter(function (x) { return DATE_FILTER.compareTo(new Date(x.created_at)) >= 0; }) :
                     docs)
                     // flatten
-                    .map(function (x) { return _.assign(x, x.values); })
                     .map(function (x) {
+                        x = _.assign(x, x.values);
                         _.each(x.params, function (v, k) { x['params_' + k] = v; });
+                        _.each(x.req, function (v, k) { x['req_' + k] = v; });
                         return x;
                     });
+                //console.log(_logs);
                 next(err);
             });
         },
@@ -87,9 +89,9 @@ function main(done) {
                         .where({
                             type: 'socket',
                             action: 'on',
-                            username: user.username,
-                            params_projectId: project.id
+                            username: user.username
                         })
+                        .filter(function (x) { return _.includes([x.projectId, x.req_projectId], project.projectId); })
                         .filter(function (x) { return _.includes(['join-project-room', 'disconnect'], x.key); })
                         .value();
 
@@ -111,14 +113,17 @@ function main(done) {
         // count socket request
         function (projects, next) {
             projects.map(function (project) {
+                var issueIds = _.pluck(_.findWhere(_projects, ({id: project.projectId})).issues  , '_id').map(String);
+
                 return project.users.map(function (user) {
                     var logs = _.chain(_logs)
                         .where({
                             type: 'socket',
                             action: 'on',
-                            username: user.username,
-                            params_projectId: project.id
+                            username: user.username
                         })
+                        .filter(function (x) { return !_.includes(['join-project-room', 'disconnect'], x.key); })
+                        .filter(function (x) { return x.projectId === project.projectId || _.includes(issueIds, x.req_issueId); })
                         .value();
 
                     user.socketRequestTimes = _.chain(logs)
