@@ -32,7 +32,7 @@ var routes = {
         closed: function (project, req, res) {
             var issue = GitHub.findIssueByNumber(project, req.body.issue.number);
             if (!issue) {
-                return res.status(500).json({message: 'issue not found'});
+                return routes.issues.opened(project, req, res);
             }
 
             // 変更の必要がなければ何もしない
@@ -46,7 +46,7 @@ var routes = {
         reopened: function (project, req, res) {
             var issue = GitHub.findIssueByNumber(project, req.body.issue.number);
             if (!issue) {
-                return res.status(500).json({message: 'issue not found'});
+                return routes.issues.opened(project, req, res);
             }
 
             // 変更の必要がなければ何もしない
@@ -60,8 +60,7 @@ var routes = {
         assigned: function (project, req, res) {
             var issue = GitHub.findIssueByNumber(project, req.body.issue.number);
             if (!issue) {
-                console.error('issue not found: ' + req.body.issue.number);
-                return res.status(500).json({message: 'issue not found'});
+                return routes.issues.opened(project, req, res);
             }
 
             var toAssignee = req.body.issue.assignee.login;
@@ -99,8 +98,7 @@ var routes = {
         unassigned: function (project, req, res) {
             var issue = GitHub.findIssueByNumber(project, req.body.issue.number);
             if (!issue) {
-                console.error('issue not found: ' + req.body.issue.number);
-                return res.status(500).json({message: 'issue not found'});
+                return routes.issues.opened(project, req, res);
             }
 
             // 変更が必要なければ何もしない
@@ -114,8 +112,7 @@ var routes = {
         labeled: function (project, req, res) {
             var issue = GitHub.findIssueByNumber(project, req.body.issue.number);
             if (!issue) {
-                console.error('issue not found: ' + req.body.issue.number);
-                return res.status(500).json({message: 'issue not found'});
+                return routes.issues.opened(project, req, res);
             }
 
             // 存在しないラベル、あるいはカラーが異なる場合はラベルに関するすべての情報を更新する
@@ -139,8 +136,7 @@ var routes = {
         unlabeled: function (project, req, res) {
             var issue = GitHub.findIssueByNumber(project, req.body.issue.number);
             if (!issue) {
-                console.error('issue not found: ' + req.body.issue.number);
-                return res.status(500).json({message: 'issue not found'});
+                return routes.issues.opened(project, req, res);
             }
 
             // 存在しないラベル、あるいはカラーが異なる場合はラベルに関するすべての情報を更新する
