@@ -84,8 +84,8 @@
                     <div class="user-block-area">
 
                         <ul class="user-blocks" data-bind="foreach: { data: members, as: 'member' }">
-                            <li class="user-block">
-                                <div class="user-label-area" data-bind="css: { 'wip-limited': member.isWipLimited, visible: member.visible }">
+                            <li class="user-block" data-bind="visible: member.visible">
+                                <div class="user-label-area" data-bind="css: { 'wip-limited': member.isWipLimited}">
                                     <span class="user-name">
                                         <img data-bind="attr: { src: member.avatarUrl }" class="user-avatar" src="" width="24" height="24">
                                         <b data-bind="text: userName"></b>
