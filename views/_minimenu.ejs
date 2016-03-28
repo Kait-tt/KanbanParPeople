@@ -5,39 +5,34 @@
         </button>
     </div>
     <ul class="mini-menu-list">
-        <li>
-            <button type="button" class="btn btn-sm btn-default"
-                    data-toggle="modal" data-target="#issue-detail-modal"
-                    data-bind="click: $root.onClickIssueDetail,
+        <li data-toggle="modal" data-target="#issue-detail-modal"
+            data-bind="click: $root.onClickIssueDetail,
                         tooltip: { title: 'Detail', placement:'top', delay: { show: 200, hide: 100 } }">
+            <button type="button" class="btn btn-sm btn-default">
                 <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
             </button>
         </li>
 
-        <li>
+        <li data-bind="click: $root.onClickIssueNextStage, tooltip: { title: 'Next stage', placement:'right', delay: { show: 200, hide: 100 } }">
             <button type="button" class="btn btn-sm btn-default"
-                    data-bind="click: $root.onClickIssueNextStage,
-                            css: {disabled: stage() === 'backlog' || stage() === 'done'},
-                            attr: {disabled: stage() === 'backlog' || stage() === 'done'},
-                            tooltip: { title: 'Next stage', placement:'right', delay: { show: 200, hide: 100 } }">
+                    data-bind="css: {disabled: stage() === 'backlog' || stage() === 'done'},
+                               attr: {disabled: stage() === 'backlog' || stage() === 'done'}">
                 <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
             </button>
         </li>
 
-        <li>
-            <button type="button" class="btn btn-sm btn-default"
-                    data-toggle="modal" data-target="#archive-issue-modal"
-                    data-bind="click: $root.onClickIssueArchive,
+        <li data-toggle="modal" data-target="#archive-issue-modal"
+            data-bind="click: $root.onClickIssueArchive,
                         tooltip: { title: 'Archive', placement:'right', delay: { show: 200, hide: 100 } }">
+            <button type="button" class="btn btn-sm btn-default">
                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
             </button>
         </li>
 
-        <li>
-            <button type="button" class="btn btn-sm btn-default"
-                    data-toggle="modal" data-target="#assign-issue-modal"
-                    data-bind="click: $root.onClickIssueAssign,
+        <li data-toggle="modal" data-target="#assign-issue-modal"
+            data-bind="click: $root.onClickIssueAssign,
                         tooltip: { title: 'Assign', placement:'bottom', delay: { show: 200, hide: 100 } }">
+            <button type="button" class="btn btn-sm btn-default">
                 <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
             </button>
         </li>
@@ -51,12 +46,10 @@
         </li>
         <!-- /ko -->
 
-        <li>
+        <li data-bind="click: $root.onClickIssuePrevStage, tooltip: { title: 'Prev stage', placement:'right', delay: { show: 200, hide: 100 } }">
             <button type="button" class="btn btn-sm btn-default"
-                    data-bind="click: $root.onClickIssuePrevStage,
-                            css: {disabled: stage() === 'issue' || stage() === 'done'},
-                            attr: {disabled: stage() === 'issue' || stage() === 'done'},
-                            tooltip: { title: 'Prev stage', placement:'right', delay: { show: 200, hide: 100 } }">
+                    data-bind="css: {disabled: stage() === 'issue' || stage() === 'done'},
+                               attr: {disabled: stage() === 'issue' || stage() === 'done'}">
                 <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
             </button>
         </li>
