@@ -178,6 +178,7 @@ body{
     height: 100%;
   }
   .stage-title {
+    position: relative;
     font-size: 2rem;
     margin: 0 0 1em;
     padding: 1em 20px .8em;
@@ -468,4 +469,14 @@ div.user-block-area {
       margin: 5px 0;
     }
   }
+}
+
+.all-done-archive-button {
+  display: block;
+  position: absolute;
+  right: 20px;
+  bottom: 17px;
+  font-size: 14px;
+  color: #6f6f6f;
+  text-decoration: underline;
 }

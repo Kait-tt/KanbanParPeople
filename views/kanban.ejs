@@ -49,6 +49,10 @@
                 <li id="<%= stage.name %>-block" class="stage-block" <% if(stage.name == 'issue'){ %> data-bind="css: {open: openedIssueList(), folded : !openedIssueList()}" <% } %>>
                     <h2 class="stage-title">
                         <%= stage.displayName %> <span class="badge" data-bind="text: $root.stages.<%= stage.name %>().length"></span>
+                        <% if(stage.name == 'done') { %>
+                        <a href="#" class="all-done-archive-button">All archive</a>
+                        <% } %>
+                        <span></span>
                     </h2>
 
                     <% if (stage.assigned) { %>
