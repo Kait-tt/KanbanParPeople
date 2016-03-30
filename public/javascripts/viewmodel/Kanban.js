@@ -381,6 +381,12 @@
             $('*').modal('hide');
             return true;
         };
+        
+        that.archiveAllIssues = function () {
+            that.draggableList.done.issues().forEach(function (issue) {
+                that.removeIssue(issue);
+            });
+        };
 
         // ソケット通信のイベント設定、デバッグ設定を初期化する
         function initSocket (socket) {

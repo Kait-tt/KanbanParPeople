@@ -50,7 +50,7 @@
                     <h2 class="stage-title">
                         <%= stage.displayName %> <span class="badge" data-bind="text: $root.stages.<%= stage.name %>().length"></span>
                         <% if(stage.name == 'done') { %>
-                        <a href="#" class="all-done-archive-button">All archive</a>
+                        <a href="#" class="all-done-archive-button" data-toggle="modal" data-target="#archive-all-modal">Archive all</a>
                         <% } %>
                         <span></span>
                     </h2>
@@ -579,6 +579,32 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-success" data-dismiss="modal"
                             data-bind="click: $root.removeMember">Delete</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Archive all Modal -->
+<div class="modal fade" id="archive-all-modal" tabindex="-1" role="dialog" aria-labelledby="archive-all-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="archive-all-modal-label">Archive all issues</h4>
+            </div>
+            <form class="form">
+                <div class="modal-body">
+                    <p>
+                        DoneステージのすべてのタスクをArchiveしますか？
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success" data-dismiss="modal"
+                            data-bind="click: $root.archiveAllIssues">Archive</button>
                 </div>
             </form>
 
