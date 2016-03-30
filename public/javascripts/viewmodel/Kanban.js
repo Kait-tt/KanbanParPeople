@@ -351,7 +351,11 @@
         // events
         that.onClickIssueDetail = function (issue, e) {
             that.selectedIssue(issue);
-            $($(e.target.parentElement).attr('data-target')).modal('show');
+            var $ele = $(e.target.parentElement);
+            if ($ele.attr('data-toggle') !== 'modal') {
+                $ele = $ele.parents('li[data-toggle=modal]');
+            }
+            $($ele.attr('data-target')).modal('show');
             return util.cancelBubble(e);
         };
 
@@ -367,13 +371,21 @@
 
         that.onClickIssueArchive = function (issue, e) {
             that.selectedIssue(issue);
-            $($(e.target.parentElement).attr('data-target')).modal('show');
+            var $ele = $(e.target.parentElement);
+            if ($ele.attr('data-toggle') !== 'modal') {
+                $ele = $ele.parents('li[data-toggle=modal]');
+            }
+            $($ele.attr('data-target')).modal('show');
             return util.cancelBubble(e);
         };
 
         that.onClickIssueAssign = function (issue, e) {
             that.selectedIssue(issue);
-            $($(e.target.parentElement).attr('data-target')).modal('show');
+            var $ele = $(e.target.parentElement);
+            if ($ele.attr('data-toggle') !== 'modal') {
+                $ele = $ele.parents('li[data-toggle=modal]');
+            }
+            $($ele.attr('data-target')).modal('show');
             return util.cancelBubble(e);
         };
 
