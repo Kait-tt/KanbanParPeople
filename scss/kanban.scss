@@ -109,10 +109,10 @@ body{
   height: calc(100% - 100px);
   position: relative;
   z-index: 1;
-  width: ($block_width + $stage-block-horizontal-margin * 2) * 5 + $issue-toggle-wrapper-size + $stage-block-horizontal-margin * 2;
+  width: ($block_width + $stage-block-horizontal-margin * 2) * 6 + $issue-toggle-wrapper-size + $stage-block-horizontal-margin * 2;
   transition: width .2s ease-in-out;
   &.open{
-    width: ($block_width + $stage-block-horizontal-margin * 2) * 6 + $issue-toggle-wrapper-size + $stage-block-horizontal-margin * 2;
+    width: ($block_width + $stage-block-horizontal-margin * 2) * 7 + $issue-toggle-wrapper-size + $stage-block-horizontal-margin * 2;
   }
 }
 
@@ -174,7 +174,7 @@ body{
   overflow: visible;
   background-color: #fefefe;
   box-shadow: 0 0 10px #c0c0c0;
-  &#issue-block, &#backlog-block, &#done-block{
+  &#issue-block, &#backlog-block, &#done-block, &#archive-block{
     height: 100%;
   }
   .stage-title {
@@ -222,6 +222,9 @@ body{
   }
 
   &#done-block {
+  }
+
+  &#archive-block {
   }
 
   .cell-block {
