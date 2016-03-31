@@ -173,7 +173,11 @@
 
 
     Project.prototype.addMember = function (member, o) {
-        this.members[(o && o.reverse) ? 'push' : 'unshift'](new User(_.extend(member.user, {issues: this.issues, wipLimit: member.wipLimit})));
+        this.members[(o && o.reverse) ? 'push' : 'unshift'](new User(_.extend(member.user, {
+            issues: this.issues,
+            wipLimit: member.wipLimit,
+            visible: member.visible
+        })));
     };
 
     Project.prototype.removeMember = function (member) {

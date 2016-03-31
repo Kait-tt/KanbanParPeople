@@ -16,7 +16,6 @@
         MiniMenu = view.MiniMenu,
         alertHub = new viewmodel.AlertHub(alert, {kanban: kanban, socket: socket}),
         vm = {},
-        chainHideMembersWithURL,
         projectId;
 
     vm = kanban;
@@ -44,7 +43,6 @@
                     // checkboxとgithub.syncを同期
                     project.github().sync(state);
                 });
-            chainHideMembersWithURL = new viewmodel.ChainHideMembersWithURL(project);
         });
 
     function getProjectId() {

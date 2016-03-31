@@ -7,7 +7,8 @@
             '_id',
             'created_at',
             'userName',
-            'wipLimit'
+            'wipLimit',
+            'visible'
         ],
         stageTypeAssignedKeys = model.stageTypeAssignedKeys;
 
@@ -47,9 +48,6 @@
         this.isWipLimited = ko.computed(function () {
             return this.wip() >= this.wipLimit();
         }, this);
-
-        // 可視
-        this.visible = ko.observable(true);
 
         // アバターURL
         this.avatarUrl = ko.computed(function () {
