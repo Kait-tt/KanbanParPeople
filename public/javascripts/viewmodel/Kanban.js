@@ -190,7 +190,7 @@
         };
 
         // メンバー設定を更新する
-        that.updateMember = function () {
+        that.updateMemberWipLimit = function () {
             var member = that.selectedMember();
             if (!member) { return console.error('unselected member'); }
 
@@ -391,6 +391,11 @@
 
         that.onClickDeleteMember = function () {
             $('*').modal('hide');
+            return true;
+        };
+
+        that.onClickMemberVisibleCheckBox = function (member) {
+            that.socket.emit('update-member', {userName: member.userName(), visible: member.visible()});
             return true;
         };
         

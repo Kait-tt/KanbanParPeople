@@ -461,7 +461,7 @@
                                 </div>
                             </td>
                             <td>
-                                <input type="checkbox" data-bind="checked: visible">
+                                <input type="checkbox" data-bind="checked: visible, click: $root.onClickMemberVisibleCheckBox" />
                             </td>
                         </tr>
                         <!-- /ko -->
@@ -540,7 +540,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-success" data-dismiss="modal" data-bind="
-                    click: $root.updateMember,
+                    click: $root.updateMemberWipLimit,
                     enable: wip() <= $root.settingsWipLimit()">
                         Update
                     </button>

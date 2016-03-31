@@ -186,8 +186,12 @@
 
     Project.prototype.updateMember = function (member, params) {
         // wip update
-        if (params && params.wipLimit) {
+        if (params && params.wipLimit && params.wipLimit !== member.wipLimit()) {
             member.wipLimit(params.wipLimit);
+        }
+        // visible update
+        if (params && _.isBoolean(params.visible) && params.visible !== member.visible()) {
+            member.visible(params.visible);
         }
     };
 

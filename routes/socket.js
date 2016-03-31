@@ -85,7 +85,9 @@ function socketRouting(server) {
 
         // memberの更新
         socketOn(socket, 'update-member', function (req, projectId, fn) {
-            emitters.updateMember(projectId, user.info.token, req.userName, {wipLimit: req.wipLimit}, fn);
+            emitters.updateMember(projectId, user.info.token, req.userName,
+                _.pick(req, ['wipLimit', 'visible']),
+                fn);
         });
 
         socketOn(socket, 'update-member-order', function (req, projectId, fn) {
