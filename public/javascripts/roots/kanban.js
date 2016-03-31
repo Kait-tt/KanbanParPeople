@@ -60,7 +60,7 @@
         };
 
         $content.markdown({
-            resize: 'vertical',
+            resize: 'both',
             onShow: function (e) {
                 markDownEle = e;
             }
