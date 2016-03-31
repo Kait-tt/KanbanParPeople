@@ -25,6 +25,8 @@
 
         that.socket = o.socket;
 
+        that.activityTexts = ko.observableArray();
+
         that.members = null;
 
         that.issues = null;
@@ -471,6 +473,12 @@
             });
 
             socket.initSocketDebugMode();
+
+            Object.keys(socket._callbacks).forEach(function (key) {
+                socket.on(key, function (res) {
+                    that.activityTexts.push(JSON.stringify(res));
+                });
+            });
 
             if (socket.connected) {
                 socket.emit('join-project-room', {projectId: that.project.id()});

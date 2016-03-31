@@ -25,7 +25,7 @@
             <!-- /ko -->
         </div>
         <div class="btn-group navbar-left" role="group" id="toolbar-btn-group">
-          <button type="button" class="btn btn-default navbar-btn" 
+          <button type="button" class="btn btn-default navbar-btn"
                                     data-toggle="modal" data-target="#add-issue-modal"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <span class="sr-only">Add task</span></button>
           <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#members-settings-modal"><span class="glyphicon glyphicon-user"></span> <span class="sr-only">Members</span></button>
           <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#project-settings-modal"><span class="glyphicon glyphicon-cog"></span> <span class="sr-only">Settings</span></button>
@@ -150,6 +150,14 @@
     </div>
 
     <% include alert %>
+
+    <div id="activity-wrap">
+        <div id="activity">
+            <ul data-bind="foreach: activityTexts">
+                <li data-bind="text: $data"></li>
+            </ul>
+        </div>
+    </div>
 </div>
 
 <!-- Issue Detail Modal -->
