@@ -25,7 +25,7 @@
 
         that.socket = o.socket;
 
-        that.activityTexts = ko.observableArray();
+        that.eventList = null;
 
         that.members = null;
 
@@ -108,6 +108,7 @@
             that.initDraggableIssueList();
 
             initSocket(that.socket);
+            that.eventList = new model.EventList(that.socket);
         };
 
         // 各ステージ、各メンバー毎にDraggableIssueListを作る
@@ -473,12 +474,6 @@
             });
 
             socket.initSocketDebugMode();
-
-            Object.keys(socket._callbacks).forEach(function (key) {
-                socket.on(key, function (res) {
-                    that.activityTexts.push(JSON.stringify(res));
-                });
-            });
 
             if (socket.connected) {
                 socket.emit('join-project-room', {projectId: that.project.id()});
