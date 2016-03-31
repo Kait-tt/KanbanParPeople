@@ -43,10 +43,35 @@
                     // checkboxとgithub.syncを同期
                     project.github().sync(state);
                 });
+            initIssueMarkDown();
         });
 
     function getProjectId() {
         return _.compact(location.pathname.split('/')).splice(-2, 1)[0];
+    }
+
+    function initIssueMarkDown() {
+        var markDownEle;
+        var $content = $('#issue-detail-body');
+        var body = vm.updateIssueDetailBody;
+
+        $.fn.markdown.messages['en'] = {
+            'Preview': 'Preview/Edit'
+        };
+
+        $content.markdown({
+            resize: 'vertical',
+            onShow: function (e) {
+                markDownEle = e;
+            }
+        });
+
+        body.subscribe(function () {
+            markDownEle.hidePreview();
+            setTimeout(function () {
+                markDownEle.showPreview();
+            }, 300);
+        });
     }
 
 }(window, jQuery, _, ko, window.nakazawa.util));

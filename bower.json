@@ -27,6 +27,8 @@
     "lodash": "~3.10.0",
     "knockout-bootstrap": "~0.3.2",
     "bootstrap-table": "~1.9.0",
-    "bootstrap-select": "~1.7.5"
+    "bootstrap-select": "~1.7.5",
+    "bootstrap-markdown": "~2.10.0",
+    "marked": "~0.3.5"
   }
 }

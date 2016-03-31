@@ -7,6 +7,7 @@
     <link rel='stylesheet' href='/stylesheets/kanban.css'/>
     <link rel='stylesheet' href='/vendor/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css'/>
     <link rel='stylesheet' href='/vendor/bootstrap-select/dist/css/bootstrap-select.min.css'/>
+    <link rel="stylesheet" href='/vendor/bootstrap-markdown/css/bootstrap-markdown.min.css' />
 </head>
 <body>
 
@@ -173,7 +174,7 @@
                         <label for="issue-detail-body" class="control-label">
                             <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span> 説明
                         </label>
-                        <textarea class="form-control" rows="10" id="issue-detail-body" placeholder="Body"
+                        <textarea class="form-control" rows="15" id="issue-detail-body" placeholder="Body"
                                   data-bind="value: $root.updateIssueDetailBody"></textarea>
                     </div>
 
@@ -646,6 +647,7 @@
 <script src="/vendor/jquery/dist/jquery.min.js"></script>
 <script src="/vendor/jquery-ui/jquery-ui.min.js"></script>
 <script src="/vendor/jquery.easing/js/jquery.easing.min.js"></script>
+<script src="/vendor/marked/marked.min.js"></script>
 <script src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="/vendor/bootstrap-switch/dist/js/bootstrap-switch.min.js"></script>
 <script src="/vendor/lodash/lodash.min.js"></script>
@@ -655,6 +657,8 @@
 <script src="/vendor/eventemitter2/lib/eventemitter2.js"></script>
 <script src="/vendor/knockout-bootstrap/build/knockout-bootstrap.min.js"></script>
 <script src="/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+<script src="/vendor/bootstrap-markdown/js/bootstrap-markdown.js"></script>
+<script src="/vendor/bootstrap-markdown/locale/bootstrap-markdown.ja.js"></script>
 
 <script src="/javascripts/module/knockout/knockout-selectPicker.js"></script>
 <script src="/javascripts/module/util.js"></script>
