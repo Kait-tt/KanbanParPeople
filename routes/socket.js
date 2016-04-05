@@ -2,6 +2,8 @@ var socketio = require('socket.io');
 var _ = require('underscore');
 var sessionMiddleware = require('../lib/module/sessionMiddleware');
 var Project = require('../lib/model/project');
+var User = require('../lib/model/user');
+var Issue = require('../lib/model/issue');
 var stages = require('../lib/model/stages');
 var LoggerSocket = require('../lib/model/loggerSocket');
 var GitHub = require('../lib/model/github');
@@ -46,6 +48,9 @@ function socketRouting(server) {
             return;
         }
 
+        var username = user.info.username;
+        var token = user.info.token;
+
         var loggerSocket = new LoggerSocket.Socket(socket, user);
 
         /***** イベント登録 *****/
@@ -66,8 +71,10 @@ function socketRouting(server) {
                 loggerSocket.bindProjectId(projectId);
 
                 // 同期用にtokenを保存する
-                project.github.token = user.info.token;
+                project.github.token = token;
                 project.save(function (err) { if (err) { console.error(err); }});
+
+                notifyText(projectId, username, 'joined room');
 
                 successWrap('joined room', {}, fn);
             });
@@ -75,63 +82,64 @@ function socketRouting(server) {
 
         // memberの追放
         socketOn(socket, 'remove-member', function (req, projectId, fn) {
-            emitters.removeMember(projectId, req.userName, fn);
+            emitters.removeMember(projectId, username, token, req.userName, fn);
         });
 
         // memberの追加
         socketOn(socket, 'add-member', function (req, projectId, fn) {
-            emitters.addMember(projectId, user.info.token, req.userName, fn);
+            emitters.addMember(projectId, username, token, req.userName, fn);
         });
 
         // memberの更新
         socketOn(socket, 'update-member', function (req, projectId, fn) {
-            emitters.updateMember(projectId, user.info.token, req.userName,
+            emitters.updateMember(projectId, username, token, req.userName,
                 _.pick(req, ['wipLimit', 'visible']),
                 fn);
         });
 
         socketOn(socket, 'update-member-order', function (req, projectId, fn) {
-            emitters.updateMemberOrder(projectId, req.userName, req.insertBeforeOfUserName, fn);
+            emitters.updateMemberOrder(projectId, username, token, req.userName, req.insertBeforeOfUserName, fn);
         });
 
         // issueの追加
         socketOn(socket, 'add-issue', function (req, projectId, fn) {
-            emitters.addIssue(projectId, user.info.token, {title: req.title, body: req.body}, fn);
+            emitters.addIssue(projectId, username, token, {title: req.title, body: req.body}, fn);
         });
 
         // issueの削除
         socketOn(socket, 'remove-issue', function (req, projectId, fn) {
-            emitters.removeIssue(projectId, user.info.token, req.issueId, fn);
+            emitters.removeIssue(projectId, username, token, req.issueId, fn);
         });
 
         // update stage
         socketOn(socket, 'update-stage', function (req, projectId, fn) {
-            emitters.updateStage(projectId, user.info.token, req.issueId, req.toStage, req.userId, fn);
+            emitters.updateStage(projectId, username, token, req.issueId, req.toStage, req.userId, fn);
         });
 
         // update issue
         socketOn(socket, 'update-issue-detail', function (req, projectId, fn) {
-            emitters.updateIssueDetail(projectId, user.info.token, req.issueId, req.title, req.body, fn);
+            emitters.updateIssueDetail(projectId, username, token, req.issueId, req.title, req.body, fn);
         });
 
         // update issue priority
         socketOn(socket, 'update-issue-priority', function (req, projectId, fn) {
-            emitters.updateIssuePriority(projectId, req.issueId, req.insertBeforeOfIssueId, fn);
+            emitters.updateIssuePriority(projectId, username, token, req.issueId, req.insertBeforeOfIssueId, fn);
         });
 
         // attach label
         //attachLabel: function (projectId, token, issueId, labelName, fn) {
         socketOn(socket, 'attach-label', function (req, projectId, fn) {
-            emitters.attachLabel(projectId, user.info.token, req.issueId, req.labelName, fn);
+            emitters.attachLabel(projectId, username, token, req.issueId, req.labelName, fn);
         });
 
         // detach label
         socketOn(socket, 'detach-label', function (req, projectId, fn) {
-            emitters.detachLabel(projectId, user.info.token, req.issueId, req.labelName, fn);
+            emitters.detachLabel(projectId, username, token, req.issueId, req.labelName, fn);
         });
 
         // 切断
         socket.on('disconnect', function () {
+            notifyText(users[socket.id].projectRoomId, username, 'disjoined room');
             console.log('disconnected: ' + socket.id);
             delete users[socket.id];
         });
@@ -205,16 +213,17 @@ function socketRouting(server) {
 }
 
 module.exports.emitters = emitters = {
-    removeMember: function (projectId, targetUserName, fn) {
+    removeMember: function (projectId, username, token, targetUserName, fn) {
         Project.removeMember({id: projectId}, targetUserName, function (err, project, member) {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('removed member', {}, fn);
             module.exports.io.to(projectId).emit('remove-member', {member: member});
+            notifyText(projectId, username, 'removed member: "' + targetUserName + '"');
         });
     },
 
-    addMember: function (projectId, token, targetUserName, fn) {
+    addMember: function (projectId, username, token, targetUserName, fn) {
         Project.addMember({id: projectId}, targetUserName, function (err, project, member) {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
@@ -223,80 +232,98 @@ module.exports.emitters = emitters = {
 
                 successWrap('added member', {member: member}, fn);
                 module.exports.io.to(projectId).emit('add-member', {member: member});
+                notifyText(projectId, username, 'added member: "' + targetUserName + '"');
             });
         });
     },
 
-    updateMember: function (projectId, token, targetUserName, updateParams, fn) {
+    updateMember: function (projectId, username, token, targetUserName, updateParams, fn) {
         Project.updateMember({id: projectId}, targetUserName, updateParams, function (err, project, member) {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('updated member', {member: member}, fn);
             module.exports.io.to(projectId).emit('update-member', {member: member});
+            notifyText(projectId, username, 'updated member: "' + targetUserName + '" , ' + JSON.stringify(updateParams));
         });
     },
 
-    updateMemberOrder: function (projectId, userName, insertBeforeOfUserName, fn) {
+    updateMemberOrder: function (projectId, username, token, userName, insertBeforeOfUserName, fn) {
         Project.updateMemberOrder({id: projectId}, userName, insertBeforeOfUserName, function (err, project, member, insertBeforeOfMember) {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('updated member order', {issue: member, insertBeforeOfMember: insertBeforeOfMember}, fn);
             module.exports.io.to(projectId).emit('update-member-order', {member: member, userName: userName,
                 insertBeforeOfMember: insertBeforeOfMember, insertBeforeOfUserName: insertBeforeOfUserName, project: project});
+            notifyText(projectId, username, 'updated member order: ' + 'insert "' + userName + '" before "' + insertBeforeOfUserName + '"');
         });
     },
 
-    addIssue: function (projectId, token, params, fn) {
+    addIssue: function (projectId, username, token, params, fn) {
         Project.addIssue({id: projectId}, token, params, function (err, project, issue) {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('added issue', {issue: issue}, fn);
             if (issue) {
                 module.exports.io.to(projectId).emit('add-issue', {issue: issue});
+                notifyText(projectId, username, 'added issue: ' + JSON.stringify(params));
+            } else {
+                notifyText(projectId, username, 'added issue (through GitHub): ' + JSON.stringify(params));
             }
         });
     },
 
-    removeIssue: function (projectId, token, issueId, fn) {
+    removeIssue: function (projectId, username, token, issueId, fn) {
         Project.removeIssue({id: projectId}, token, issueId, function (err, project, issue) {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('removed issue', {issue: issue}, fn);
             if (issue) {
                 module.exports.io.to(projectId).emit('remove-issue', {issue: issue});
+                notifyText(projectId, username, 'removed issue: ' + JSON.stringify({issueId: issueId, title: issue.title}));
+            } else {
+                notifyText(projectId, username, 'removed issue (through GitHub): ' + JSON.stringify({issueId: issueId, title: issue.title}));
             }
         });
     },
 
     // ステージとアサインを同時に処理する
-    updateStage: function (projectId, token, issueId, toStage, userId, fn) {
+    updateStage: function (projectId, username, token, issueId, toStage, userId, fn) {
         Project.updateStage({id: projectId}, token, issueId, toStage, userId, function (err, project, issue) {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('updated stage', {issue: issue}, fn);
             module.exports.io.to(projectId).emit('update-stage', {issue: issue, issueId: issueId, toStage: toStage, assignee: userId});
+            User.findById(userId, function (err, res) {
+                notifyText(projectId, username, 'updated issue stage and assignee: ' +
+                    JSON.stringify({title: issue.title, stage: toStage, assignee: err ? userId : res.userName}));
+            });
         });
     },
 
-    updateIssueDetail: function (projectId, token, issueId, title, body, fn) {
+    updateIssueDetail: function (projectId, username, token, issueId, title, body, fn) {
         Project.updateIssueDetail({id: projectId}, token, issueId, title, body, function (err, project, issue) {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('updated issue detail', {issue: issue}, fn);
             module.exports.io.to(projectId).emit('update-issue-detail', {issue: issue, issueId: issueId});
+            notifyText(projectId, username, 'updated issue detail: ' + JSON.stringify({title: title, body: body}));
         });
     },
 
-    updateIssuePriority: function (projectId, issueId, insertBeforeOfIssueId, fn) {
+    updateIssuePriority: function (projectId, username, token, issueId, insertBeforeOfIssueId, fn) {
         Project.updateIssuePriority({id: projectId}, issueId, insertBeforeOfIssueId, function (err, project, issue, insertBeforeOfIssueId) {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('updated issue priority', {issue: issue, insertBeforeOfIssueId: insertBeforeOfIssueId}, fn);
             module.exports.io.to(projectId).emit('update-issue-priority', {issue: issue, issueId: issueId, insertBeforeOfIssueId: insertBeforeOfIssueId});
+            Issue.findById(insertBeforeOfIssueId, function (err, res) {
+                notifyText(projectId, username, 'updated issue priority: ' +
+                        'insert "' + issue.title + '" before "' + (err ? insertBeforeOfIssueId : res.title) + '"');
+            });
         });
     },
 
-    attachLabel: function (projectId, token, issueId, labelName, fn) {
+    attachLabel: function (projectId, username, token, issueId, labelName, fn) {
         queue.push(projectId, function (done) {
             Project.attachLabel({id: projectId}, token, issueId, labelName, function (err, project, issue, label) {
                 done();
@@ -305,12 +332,15 @@ module.exports.emitters = emitters = {
                 successWrap('attached label', {issue: issue, label: label}, fn);
                 if (issue && label) {
                     module.exports.io.to(projectId).emit('attach-label', { issue: issue, issueId: issueId, label: label });
+                    notifyText(projectId, username, 'attached label: ' + JSON.stringify({title: issue.title, label: labelName}));
+                } else {
+                    notifyText(projectId, username, 'attached label (through GitHub): ' + JSON.stringify({title: issue.title, label: labelName}));
                 }
             });
         });
     },
 
-    detachLabel: function (projectId, token, issueId, labelName, fn) {
+    detachLabel: function (projectId, username, token, issueId, labelName, fn) {
         queue.push(projectId, function (done) {
             Project.detachLabel({id: projectId}, token, issueId, labelName, function (err, project, issue, label) {
                 done();
@@ -319,12 +349,15 @@ module.exports.emitters = emitters = {
                 successWrap('detached label', {issue: issue, label: label}, fn);
                 if (issue && label) {
                     module.exports.io.to(projectId).emit('detach-label', { issue: issue, issueId: issueId, label: label });
+                    notifyText(projectId, username, 'detached label: ' + JSON.stringify({title: issue.title, label: labelName}));
+                } else {
+                    notifyText(projectId, username, 'detached label (through GitHub): ' + JSON.stringify({title: issue.title, label: labelName}));
                 }
             });
         });
     },
 
-    syncLabelAll: function (projectId, token, fn) {
+    syncLabelAll: function (projectId, username, token, fn) {
         queue.push(projectId, function (done) {
             Project.findOne({id: projectId}, function (err, project) {
                 if (err) { return error(err, fn, done); }
@@ -338,6 +371,7 @@ module.exports.emitters = emitters = {
 
                         successWrap('done to sync label all', {project: project}, fn);
                         module.exports.io.to(projectId).emit('sync-label-all', {project: project});
+                        notifyText(projectId, username, 'synchronized all labels. please update this page.');
                     });
                 });
             });
@@ -374,4 +408,9 @@ function successWrap(message, otherParam, fn) {
         status: 'success',
         message: message
     }, otherParam || {}));
+}
+
+function notifyText(projectId, username, text) {
+    var time = (new Date()).toLocaleString('ja-JP');
+    module.exports.io.to(projectId).emit('notify', '[' + time + '] "' + username + '" ' + text);
 }

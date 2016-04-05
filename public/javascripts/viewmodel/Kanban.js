@@ -25,7 +25,7 @@
 
         that.socket = o.socket;
 
-        that.eventList = null;
+        that.notifyTexts = ko.observableArray();
 
         that.members = null;
 
@@ -108,7 +108,6 @@
             that.initDraggableIssueList();
 
             initSocket(that.socket);
-            that.eventList = new model.EventList(that.socket);
         };
 
         // 各ステージ、各メンバー毎にDraggableIssueListを作る
@@ -471,6 +470,10 @@
 
             socket.on('sync-label-all', function (req) {
                 that.project.replaceLabelAll(req.labels, req.issues);
+            });
+
+            socket.on('notify', function (req) {
+                that.notifyTexts.push(req);
             });
 
             socket.initSocketDebugMode();

@@ -25,7 +25,7 @@ var routes = {
                     return res.status(500).json({message: err.message});
                 }
 
-                socket.emitters.addIssue(project.id, null, issue, _.noop);
+                socket.emitters.addIssue(project.id, 'GitHub', null, issue, _.noop);
                 res.status(200).json({});
             });
         },
@@ -40,7 +40,7 @@ var routes = {
                 return res.status(200).json({});
             }
             
-            socket.emitters.updateStage(project.id, null, issue._id, stages.done, null, _.noop);
+            socket.emitters.updateStage(project.id, 'GitHub', null, issue._id, stages.done, null, _.noop);
             res.status(200).json({});
         },
         reopened: function (project, req, res) {
@@ -54,7 +54,7 @@ var routes = {
                 return res.status(200).json({});
             }
 
-            socket.emitters.updateStage(project.id, null, issue._id, stages.issue, null, _.noop);
+            socket.emitters.updateStage(project.id, 'GitHub', null, issue._id, stages.issue, null, _.noop);
             res.status(200).json({});
         },
         assigned: function (project, req, res) {
@@ -78,7 +78,7 @@ var routes = {
                     } else {
                         // assign
                         console.log('replace assign');
-                        socket.emitters.updateStage(project.id, null, issue._id, stages.todo, user._id, _.noop);
+                        socket.emitters.updateStage(project.id, 'GitHub', null, issue._id, stages.todo, user._id, _.noop);
                         res.status(200).json({});
                     }
                 });
@@ -89,7 +89,7 @@ var routes = {
                         res.status(500).json({message: err.message});
                     } else {
                         console.log('assign: ' + JSON.stringify({issue: issue._id, user: user._id}));
-                        socket.emitters.updateStage(project.id, null, issue._id, stages.todo, user._id, _.noop);
+                        socket.emitters.updateStage(project.id, 'GitHub', null, issue._id, stages.todo, user._id, _.noop);
                         res.status(200).json({});
                     }
                 });
@@ -106,7 +106,7 @@ var routes = {
                 return res.status(200).json({});
             }
 
-            socket.emitters.updateStage(project.id, null, issue._id, stages.backlog, null, _.noop);
+            socket.emitters.updateStage(project.id, 'GitHub', null, issue._id, stages.backlog, null, _.noop);
             res.status(200).json({});
         },
         labeled: function (project, req, res) {
@@ -130,7 +130,7 @@ var routes = {
             }
 
             // ラベルを付ける
-            socket.emitters.attachLabel(project.id, null, issue._id, label.name, _.noop);
+            socket.emitters.attachLabel(project.id, 'GitHub', null, issue._id, label.name, _.noop);
             res.status(200).json({});
         },
         unlabeled: function (project, req, res) {
@@ -154,7 +154,7 @@ var routes = {
             }
 
             // ラベルを外す
-            socket.emitters.detachLabel(project.id, null, issue._id, label.name, _.noop);
+            socket.emitters.detachLabel(project.id, 'GitHub', null, issue._id, label.name, _.noop);
             res.status(200).json({});
         }
     }
@@ -190,7 +190,7 @@ router.post('/:projectId', function (req, res) {
 
 function syncLabelAll(project, httpReq, httpRes) {
     console.log('unmatch project labels and sync all labels');
-    socket.emitters.syncLabelAll(project.id, null, function (res) {
+    socket.emitters.syncLabelAll(project.id, 'GitHub', null, function (res) {
         if (res.status === 'success') {
             httpRes.status(200).json({status: res.status, message: 'unmatch project labels and sync all labels'});
         } else {
