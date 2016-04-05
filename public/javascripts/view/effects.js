@@ -23,6 +23,13 @@
             });
         },
 
+        scrollDown: function (elm, idx, item) {
+            if (elm.nodeType !== 1) { return; }
+            var $elm = $(elm).eq(0);
+            var $wrap = $elm.parents('.scroll-wrap').eq(0);
+            $wrap.scrollTop(($elm.height() + 10) * (idx + 1));
+        },
+
         applyBindings: function (global) {
             if (!global.view) { global.view = {}; }
             global.view.effects = this;

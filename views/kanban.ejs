@@ -152,8 +152,8 @@
     <% include alert %>
 
     <div id="activity-wrap">
-        <div id="activity">
-            <ul data-bind="foreach: notifyTexts">
+        <div id="activity" class="scroll-wrap">
+            <ul data-bind="foreach: { data: notifyTexts, afterAdd: view.effects.scrollDown }">
                 <li data-bind="text: $data"></li>
             </ul>
         </div>
