@@ -12,6 +12,8 @@ var queue = require('../lib/module/asyncQueue');
 
 var io;
 var emitters;
+var notifies = {};
+var notifiesQueueSize = 50;
 
 module.exports = {
     socket: socketRouting,
@@ -74,6 +76,12 @@ function socketRouting(server) {
                 project.github.token = token;
                 project.save(function (err) { if (err) { console.error(err); }});
 
+                if (notifies[projectId]) {
+                    notifies[projectId].forEach(function (content) {
+                        socket.emit('notify', content);
+                    });
+                    socket.emit('notify', '----------');
+                }
                 notifyText(projectId, username, 'joined room');
 
                 successWrap('joined room', {}, fn);
@@ -295,7 +303,7 @@ module.exports.emitters = emitters = {
             module.exports.io.to(projectId).emit('update-stage', {issue: issue, issueId: issueId, toStage: toStage, assignee: userId});
             User.findById(userId, function (err, res) {
                 notifyText(projectId, username, 'updated issue stage and assignee: ' +
-                    JSON.stringify({title: issue.title, stage: toStage, assignee: err ? userId : res.userName}));
+                    JSON.stringify({title: issue.title, stage: toStage, assignee: (err || !res) ? userId : res.userName}));
             });
         });
     },
@@ -412,5 +420,12 @@ function successWrap(message, otherParam, fn) {
 
 function notifyText(projectId, username, text) {
     var time = (new Date()).toLocaleString('ja-JP');
-    module.exports.io.to(projectId).emit('notify', '[' + time + '] "' + username + '" ' + text);
+    var content = '[' + time + '] "' + username + '" ' + text;
+    module.exports.io.to(projectId).emit('notify', content);
+
+    if (!notifies[projectId]) { notifies[projectId] = []; }
+    notifies[projectId].push(content);
+    if (notifies[projectId].length > notifiesQueueSize) {
+        notifies[projectId].shift();
+    }
 }
