@@ -13,7 +13,7 @@ var queue = require('../lib/module/asyncQueue');
 var io;
 var emitters;
 var notifies = {};
-var notifiesQueueSize = 50;
+var notifiesQueueSize = 200;
 
 module.exports = {
     socket: socketRouting,
