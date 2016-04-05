@@ -8,7 +8,7 @@
         effects = view.effects,
         scroller = new view.Scroller({
             selectors: ['body', '.main', '.stage-block'],
-            cancelSelectors: ['.card']
+            cancelSelectors: ['.card', '#activity-wrap']
         }),
         socket = new model.Socket(),
         project = new model.Project(),
