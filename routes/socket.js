@@ -316,10 +316,10 @@ module.exports.emitters = emitters = {
 
             successWrap('updated issue priority', {issue: issue, insertBeforeOfIssueId: insertBeforeOfIssueId}, fn);
             module.exports.io.to(projectId).emit('update-issue-priority', {issue: issue, issueId: issueId, insertBeforeOfIssueId: insertBeforeOfIssueId});
-            Issue.findById(insertBeforeOfIssueId, function (err, res) {
-                notifyText(projectId, username, 'updated issue priority: ' +
-                        'insert "' + issue.title + '" before "' + (err ? insertBeforeOfIssueId : res.title) + '"');
-            });
+
+            var insertBeforeOfIssue = project.findIssueById(insertBeforeOfIssueId);
+            notifyText(projectId, username, 'updated issue priority: ' +
+                    'insert "' + issue.title + '" before "' + (insertBeforeOfIssue ? insertBeforeOfIssue.title : insertBeforeOfIssueId) + '"');
         });
     },
 
