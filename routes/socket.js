@@ -342,7 +342,9 @@ module.exports.emitters = emitters = {
                     module.exports.io.to(projectId).emit('attach-label', { issue: issue, issueId: issueId, label: label });
                     notifyText(projectId, username, 'attached label: ' + JSON.stringify({title: issue.title, label: labelName}));
                 } else {
-                    notifyText(projectId, username, 'attached label (through GitHub): ' + JSON.stringify({title: issue.title, label: labelName}));
+                    issue = project.findIssueById(issueId);
+                    notifyText(projectId, username, 'attached label (through GitHub): ' +
+                        JSON.stringify({title: (issue ? issue.title : issueId), label: labelName}));
                 }
             });
         });
@@ -359,7 +361,9 @@ module.exports.emitters = emitters = {
                     module.exports.io.to(projectId).emit('detach-label', { issue: issue, issueId: issueId, label: label });
                     notifyText(projectId, username, 'detached label: ' + JSON.stringify({title: issue.title, label: labelName}));
                 } else {
-                    notifyText(projectId, username, 'detached label (through GitHub): ' + JSON.stringify({title: issue.title, label: labelName}));
+                    issue = project.findIssueById(issueId);
+                    notifyText(projectId, username, 'detached label (through GitHub): ' +
+                        JSON.stringify({title: (issue ? issue.title : issue), label: labelName}));
                 }
             });
         });
