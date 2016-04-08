@@ -407,6 +407,11 @@
             });
         };
 
+        that.addChatText = function (chat) {
+            var time = moment(chat.created_at).format('MM/DD HH:mm:ss');
+            that.chatTexts.push('[' + time + '] (' + chat.sender + ') ' + chat.content);
+        };
+
         // ソケット通信のイベント設定、デバッグ設定を初期化する
         function initSocket (socket) {
             socket.on('connect', function (req) {
@@ -473,15 +478,14 @@
             });
 
             socket.on('chat', function (req) {
-                that.chatTexts.push('[' + req.created_at + '] ' + req.sender + ' > ' + req.content);
+                that.addChatText(req);
             });
 
             socket.on('chat-history', function (req) {
                 req.forEach(function (chat) {
-                    var text = '[' + chat.created_at + '] ' + chat.sender + ' > ' + chat.content;
-                    that.chatTexts.push(text);
+                    that.addChatText(chat);
                 });
-                that.chatTexts.push('--------------------');
+                that.chatTexts.push('--------------------'); // 区切りバー
             });
 
             socket.initSocketDebugMode();
