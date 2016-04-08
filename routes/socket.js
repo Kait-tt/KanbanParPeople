@@ -147,7 +147,7 @@ function socketRouting(server) {
 
         // 切断
         socket.on('disconnect', function () {
-            notifyText(users[socket.id].projectRoomId, username, 'disjoined room');
+            notifyText(users[socket.id].projectRoomId, username, 'left room');
             console.log('disconnected: ' + socket.id);
             delete users[socket.id];
         });
@@ -273,9 +273,9 @@ module.exports.emitters = emitters = {
             successWrap('added issue', {issue: issue}, fn);
             if (issue) {
                 module.exports.io.to(projectId).emit('add-issue', {issue: issue});
-                notifyText(projectId, username, 'added issue: ' + JSON.stringify(params));
+                notifyText(projectId, username, 'added issue: ' + params.title);
             } else {
-                notifyText(projectId, username, 'added issue (through GitHub): ' + JSON.stringify(params));
+                notifyText(projectId, username, 'added issue via GitHub: ' + params.title);
             }
         });
     },
@@ -287,9 +287,10 @@ module.exports.emitters = emitters = {
             successWrap('removed issue', {issue: issue}, fn);
             if (issue) {
                 module.exports.io.to(projectId).emit('remove-issue', {issue: issue});
-                notifyText(projectId, username, 'removed issue: ' + JSON.stringify({issueId: issueId, title: issue.title}));
+                notifyText(projectId, username, 'removed issue: ' + issue.title);
             } else {
-                notifyText(projectId, username, 'removed issue (through GitHub): ' + JSON.stringify({issueId: issueId, title: issue.title}));
+                issue = project.findIssueById(issueId);
+                notifyText(projectId, username, 'removed issue via GitHub: ' + (issue ? issue.title : issueId));
             }
         });
     },
@@ -327,7 +328,7 @@ module.exports.emitters = emitters = {
 
             var insertBeforeOfIssue = project.findIssueById(insertBeforeOfIssueId);
             notifyText(projectId, username, 'updated issue priority: ' +
-                    'insert "' + issue.title + '" before "' + (insertBeforeOfIssue ? insertBeforeOfIssue.title : insertBeforeOfIssueId) + '"');
+                    'inserted "' + issue.title + '" before "' + (insertBeforeOfIssue ? insertBeforeOfIssue.title : insertBeforeOfIssueId) + '"');
         });
     },
 
@@ -343,7 +344,7 @@ module.exports.emitters = emitters = {
                     notifyText(projectId, username, 'attached label: ' + JSON.stringify({title: issue.title, label: labelName}));
                 } else {
                     issue = project.findIssueById(issueId);
-                    notifyText(projectId, username, 'attached label (through GitHub): ' +
+                    notifyText(projectId, username, 'attached label via GitHub: ' +
                         JSON.stringify({title: (issue ? issue.title : issueId), label: labelName}));
                 }
             });
@@ -362,7 +363,7 @@ module.exports.emitters = emitters = {
                     notifyText(projectId, username, 'detached label: ' + JSON.stringify({title: issue.title, label: labelName}));
                 } else {
                     issue = project.findIssueById(issueId);
-                    notifyText(projectId, username, 'detached label (through GitHub): ' +
+                    notifyText(projectId, username, 'detached label via GitHub: ' +
                         JSON.stringify({title: (issue ? issue.title : issue), label: labelName}));
                 }
             });
@@ -383,7 +384,7 @@ module.exports.emitters = emitters = {
 
                         successWrap('done to sync label all', {project: project}, fn);
                         module.exports.io.to(projectId).emit('sync-label-all', {project: project});
-                        notifyText(projectId, username, 'synchronized all labels. please update this page.');
+                        notifyText(projectId, username, 'synchronized all labels. *** Please update this page. ***');
                     });
                 });
             });
