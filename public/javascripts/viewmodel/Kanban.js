@@ -25,7 +25,7 @@
 
         that.socket = o.socket;
 
-        that.notifyTexts = ko.observableArray();
+        that.chatTexts = ko.observableArray();
 
         that.members = null;
 
@@ -472,8 +472,16 @@
                 that.project.replaceLabelAll(req.labels, req.issues);
             });
 
-            socket.on('notify', function (req) {
-                that.notifyTexts.push(req);
+            socket.on('chat', function (req) {
+                that.chatTexts.push('[' + req.created_at + '] ' + req.sender + ' > ' + req.content);
+            });
+
+            socket.on('chat-history', function (req) {
+                req.forEach(function (chat) {
+                    var text = '[' + chat.created_at + '] ' + chat.sender + ' > ' + chat.content;
+                    that.chatTexts.push(text);
+                });
+                that.chatTexts.push('--------------------');
             });
 
             socket.initSocketDebugMode();

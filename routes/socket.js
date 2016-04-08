@@ -3,17 +3,16 @@ var _ = require('underscore');
 var sessionMiddleware = require('../lib/module/sessionMiddleware');
 var Project = require('../lib/model/project');
 var User = require('../lib/model/user');
-var Issue = require('../lib/model/issue');
 var stages = require('../lib/model/stages');
 var LoggerSocket = require('../lib/model/loggerSocket');
 var GitHub = require('../lib/model/github');
 var queue = require('../lib/module/asyncQueue');
+var ChatLog = require('../lib/model/chatLog');
 
 
 var io;
 var emitters;
-var notifies = {};
-var notifiesQueueSize = 200;
+var firstSendChatLimit = 200;
 
 module.exports = {
     socket: socketRouting,
@@ -76,13 +75,20 @@ function socketRouting(server) {
                 project.github.token = token;
                 project.save(function (err) { if (err) { console.error(err); }});
 
-                if (notifies[projectId]) {
-                    notifies[projectId].forEach(function (content) {
-                        socket.emit('notify', content);
-                    });
-                    socket.emit('notify', '----------');
-                }
-                notifyText(projectId, username, 'joined room');
+                // チャットの履歴を送信する
+                ChatLog.find({projectId: projectId}).limit(firstSendChatLimit).exec(function (err, res) {
+                    if (err) {
+                        console.error(err);
+                        socket.emit('chat', {
+                            sender: 'System', content: 'error: the server could not find chat history.',
+                            type: 'error', created_at: Date.now()
+                        });
+                    } else {
+                        socket.emit('chat-history', res);
+                    }
+
+                    notifyText(projectId, username, 'joined room');
+                });
 
                 successWrap('joined room', {}, fn);
             });
@@ -424,13 +430,16 @@ function successWrap(message, otherParam, fn) {
 }
 
 function notifyText(projectId, username, text) {
-    var time = (new Date()).toLocaleString('ja-JP');
-    var content = '[' + time + '] "' + username + '" ' + text;
-    module.exports.io.to(projectId).emit('notify', content);
-
-    if (!notifies[projectId]) { notifies[projectId] = []; }
-    notifies[projectId].push(content);
-    if (notifies[projectId].length > notifiesQueueSize) {
-        notifies[projectId].shift();
-    }
+    var content = '"' + username + '" ' + text;
+    ChatLog.create({sender: 'System', content: content, type: 'system', projectId: projectId}, function (err, log) {
+        if (err) {
+            console.error(err);
+            module.exports.io.to(projectId).emit('chat', {
+                sender: 'System', content: 'error: the server could not create system log.',
+                type: 'error', created_at: Date.now()
+            });
+        } else {
+            module.exports.io.to(projectId).emit('chat', log);
+        }
+    });
 }
