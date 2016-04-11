@@ -3,10 +3,11 @@ $icon-size: 14px;
 
 .mini-menu {
   position: static;
-  display: inline-block;
-  margin: 0 0 1px 1px;
+  display: block;
+  margin: 0;
   font-size: 18px;
-  float: right;
+  width: 18px;
+  height: 18px;
 
   button, a {
     border-style: none;
@@ -19,6 +20,16 @@ $icon-size: 14px;
   .mini-menu-default {
     position: relative;
     z-index: 10;
+    height: 18px;
+    width: 18px;
+
+    .btn {
+      padding: 0;
+      height: 18px;
+      width: 18px;
+      text-align: center;
+      top: 0;
+    }
   }
 
   .mini-menu-list {

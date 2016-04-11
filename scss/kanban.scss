@@ -424,6 +424,43 @@ div.user-block-area {
     width: $card-width - $card-padding * 2 - 41 - 15;
     height: $card_height - $card_padding * 2 + 16 - 15;
   }
+
+  .card-right-wrapper {
+    position: static;
+    display: inline-block;
+    margin: 0 0 0 0;
+    font-size: 18px;
+    float: right;
+    width: 20px;
+
+    .weight-badge {
+      position: static;
+      display: block;
+      margin: 6px 0 0;
+      padding-top: 3px;
+      font-size: 12px;
+      line-height: 12px;
+      text-align: center;
+      font-weight: bold;
+      background-color: rgb(119, 119, 119);
+      color: #fff;
+      height: 18px;
+      width: 18px;
+      border-radius: 10px;
+
+      &.weight-badge-low {
+        background-color: #16a085;
+      }
+
+      &.weight-badge-middle {
+        background-color: #2980b9;
+      }
+
+      &.weight-badge-high {
+        background-color: #c0392b;
+      }
+    }
+  }
 }
 
 // description, title, etc...
