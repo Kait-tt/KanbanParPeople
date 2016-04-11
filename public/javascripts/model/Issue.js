@@ -12,6 +12,7 @@
             'created_at',
             'github',
             'stage',
+            'cost',
             'labels' // ids
         ];
 

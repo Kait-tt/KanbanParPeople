@@ -132,7 +132,7 @@ function socketRouting(server) {
 
         // update issue
         socketOn(socket, 'update-issue-detail', function (req, projectId, fn) {
-            emitters.updateIssueDetail(projectId, username, token, req.issueId, req.title, req.body, fn);
+            emitters.updateIssueDetail(projectId, username, token, req.issueId, req.title, req.body, req.cost, fn);
         });
 
         // update issue priority
@@ -315,13 +315,13 @@ module.exports.emitters = emitters = {
         });
     },
 
-    updateIssueDetail: function (projectId, username, token, issueId, title, body, fn) {
-        Project.updateIssueDetail({id: projectId}, token, issueId, title, body, function (err, project, issue) {
+    updateIssueDetail: function (projectId, username, token, issueId, title, body, cost, fn) {
+        Project.updateIssueDetail({id: projectId}, token, issueId, title, body, cost, function (err, project, issue) {
             if (err) { serverErrorWrap(err, {}, fn); return; }
 
             successWrap('updated issue detail', {issue: issue}, fn);
             module.exports.io.to(projectId).emit('update-issue-detail', {issue: issue, issueId: issueId});
-            notifyText(projectId, username, 'updated issue detail: ' + JSON.stringify({title: title, body: body}));
+            notifyText(projectId, username, 'updated issue detail: ' + JSON.stringify({title: title, body: body, cost: cost}));
         });
     },
 

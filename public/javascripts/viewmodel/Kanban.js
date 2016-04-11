@@ -66,10 +66,16 @@
         // Issueの更新後のLabels
         that.updateIssueDetailLabels = ko.observableArray();
 
+        // Issueの更新後のCost
+        that.updateIssueDetailCost = ko.observable();
+
         that.selectedIssue.subscribe(function (issue) {
             that.updateIssueDetailTitle(issue ? issue.title() : null);
             that.updateIssueDetailBody(issue ? issue.body() : null);
             that.updateIssueDetailLabels(issue ? _.clone(issue.labels()) : []);
+            var cost = issue ? issue.cost() : 0;
+            that.updateIssueDetailCost(String(cost ? cost : 0));
+            console.log(that.updateIssueDetailCost());
         });
 
         // 選択しているメンバー
@@ -313,7 +319,8 @@
             that.socket.emit('update-issue-detail', {
                 issueId: issue._id(),
                 title: that.updateIssueDetailTitle(),
-                body: that.updateIssueDetailBody()
+                body: that.updateIssueDetailBody(),
+                cost: Number(that.updateIssueDetailCost())
             }, function (res) {
                 if (res.status === 'success') {
                     // reset form
@@ -452,7 +459,7 @@
             socket.on('update-issue-detail', function (req) {
                 var targetIssue = that.project.getIssue(req.issue._id);
 
-                ['title', 'body'].forEach(function (key) {
+                ['title', 'body', 'cost'].forEach(function (key) {
                     targetIssue[key](req.issue[key]);
                 });
             });
