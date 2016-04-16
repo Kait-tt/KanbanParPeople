@@ -191,23 +191,24 @@
             </div>
             <form class="form">
                 <div class="modal-body">
-                    <div class="form-group issue-detail-is-working-group" data-bind="visible: $root.selectedIssue() && $root.selectedIssue().stage() === 'doing'">
-                        <input type="checkbox" id="issue-detail-is-working" data-size="mini" data-on-text="作業中"
-                               data-off-text="待機中" data-on-color="success" data-bind="bootstrapSwitchOn: $root.updateIssueDetailIsWorking">
-                        <p class="help-block">
-                            <span data-bind="visible: !$root.updateIssueDetailIsWorking()">
-                                クリックすると作業状態が「作業中」になり、作業時間が計測されます。
-                            </span>
-                            <span data-bind="visible: $root.updateIssueDetailIsWorking()">
-                                作業を停止または中断する場合は再度クリックしてください。
-                            </span>
-                        </p>
-                    </div>
-
                     <div class="form-group">
                         <label for="issue-detail-title" class="control-label">
-                           <span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span> タイトル
+                            <span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span> タイトル
                         </label>
+                        <!-- ko if: $root.selectedIssue() -->
+                        <!-- ko with: $root.selectedIssue() -->
+                        <!-- ko if: assigneeMember() && stage() === 'doing' -->
+                        <div class="issue-detail-is-working-wrapper" data-bind="tooltip: { placement:'right',
+                            title: '作業状態です。「作業中」にすると作業時間が計測されます。' }">
+                            <input type="checkbox" id="issue-detail-is-working" class="pull-right" data-size="mini" data-on-text="作業中"
+                                   data-off-text="待機中" data-on-color="success" data-bind="
+                                   attr: { disabled: assigneeMember().userName() !== '<%= userName %>' },
+                                   bootstrapSwitchOn: $root.updateIssueDetailIsWorking"
+                                   data-toggle="tooltip" data-placement="left" title="Tooltip on left">
+                        </div>
+                        <!-- /ko -->
+                        <!-- /ko -->
+                        <!-- /ko -->
                         <input type="text" class="form-control" id="issue-detail-title" placeholder="Title"
                            data-bind="value: $root.updateIssueDetailTitle">
                     </div>
