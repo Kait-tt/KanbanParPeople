@@ -69,13 +69,16 @@
         // Issueの更新後のCost
         that.updateIssueDetailCost = ko.observable();
 
+        // Issueの更新後の作業状態(isWorking)
+        that.updateIssueDetailIsWorking = ko.observable(false);
+
         that.selectedIssue.subscribe(function (issue) {
             that.updateIssueDetailTitle(issue ? issue.title() : null);
             that.updateIssueDetailBody(issue ? issue.body() : null);
             that.updateIssueDetailLabels(issue ? _.clone(issue.labels()) : []);
             var cost = issue ? issue.cost() : 0;
             that.updateIssueDetailCost(String(cost ? cost : 0));
-            console.log(that.updateIssueDetailCost());
+            that.updateIssueDetailIsWorking(issue ? issue.isWorking() : false);
         });
 
         // 選択しているメンバー
@@ -315,6 +318,7 @@
             if (!issue) { throw new Error('issue is not selected'); }
 
             that.updateIssueLabels();
+            that.updateIssueIsWorking();
 
             that.socket.emit('update-issue-detail', {
                 issueId: issue._id(),
@@ -327,6 +331,19 @@
                     that.selectedIssue(null);
                 }
             });
+        };
+
+        that.updateIssueIsWorking = function () {
+            var issue = that.selectedIssue();
+            var curIsWorking = issue.isWorking();
+            var newIsWorking = that.updateIssueDetailIsWorking();
+
+            if (curIsWorking !== newIsWorking) {
+                that.socket.emit('update-issue-working-state', {
+                    issueId: issue._id(),
+                    isWorking: newIsWorking
+                }, _.noop());
+            }
         };
 
         that.updateIssueLabels = function () {
@@ -459,9 +476,13 @@
             socket.on('update-issue-detail', function (req) {
                 var targetIssue = that.project.getIssue(req.issue._id);
 
-                ['title', 'body', 'cost'].forEach(function (key) {
+                ['title', 'body', 'cost', 'isWorking'].forEach(function (key) {
                     targetIssue[key](req.issue[key]);
                 });
+            });
+
+            socket.on('update-issue-working-state', function (req) {
+                that.project.updateIssueWorkingState(req.issue._id, req.isWorking);
             });
 
             socket.on('update-issue-priority', function (req) {
@@ -494,7 +515,7 @@
                 });
                 that.chatTexts.push('--------------------'); // 区切りバー
             });
-
+            
             socket.initSocketDebugMode();
 
             if (socket.connected) {

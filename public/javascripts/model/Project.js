@@ -95,6 +95,13 @@
         issue.assignee(member ? memberId : null);
     };
 
+    Project.prototype.updateIssueWorkingState = function (issueId, isWorking) {
+        var issue = this.getIssue(issueId);
+        if (!issue) { throw new Error('issue not found'); }
+        
+        issue.isWorking(isWorking);
+    };
+
     Project.prototype.updateIssuePriority = function (issueId, insertBeforeOfIssueId) {
         var issue = this.getIssue(issueId);
         if (!issue) { throw new Error('issue not found'); }

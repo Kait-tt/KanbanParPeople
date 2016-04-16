@@ -423,6 +423,10 @@ div.user-block-area {
     margin-left: 12px;
     width: $card-width - $card-padding * 2 - 41 - 15;
     height: $card_height - $card_padding * 2 + 16 - 15;
+
+    .issue-working-icon {
+      color: #3498db;
+    }
   }
 
   .card-right-wrapper {
@@ -506,6 +510,13 @@ div.user-block-area {
   #issue-detail-cost {
     display: inline-block;
     width: 220px;
+  }
+
+  .issue-detail-is-working-group {
+    .help-block {
+      display: inline-block;
+      font-size: 10px;
+    }
   }
 }
 

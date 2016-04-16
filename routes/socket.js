@@ -135,6 +135,11 @@ function socketRouting(server) {
             emitters.updateIssueDetail(projectId, username, token, req.issueId, req.title, req.body, req.cost, fn);
         });
 
+        // update issue
+        socketOn(socket, 'update-issue-working-state', function (req, projectId, fn) {
+            emitters.updateIssueWorkingState(projectId, username, token, req.issueId, req.isWorking, fn);
+        });
+
         // update issue priority
         socketOn(socket, 'update-issue-priority', function (req, projectId, fn) {
             emitters.updateIssuePriority(projectId, username, token, req.issueId, req.insertBeforeOfIssueId, fn);
@@ -322,6 +327,19 @@ module.exports.emitters = emitters = {
             successWrap('updated issue detail', {issue: issue}, fn);
             module.exports.io.to(projectId).emit('update-issue-detail', {issue: issue, issueId: issueId});
             notifyText(projectId, username, 'updated issue detail: ' + JSON.stringify({title: title, body: body, cost: cost}));
+        });
+    },
+
+    updateIssueWorkingState: function (projectId, username, token, issueId, isWorking, fn) {
+        queue.push(projectId, function (done) {
+            Project.updateIssueWorkingState({id: projectId}, issueId, isWorking, function (err, project, issue) {
+                done();
+                if (err) { serverErrorWrap(err, {}, fn); return; }
+
+                successWrap('update issue working status', {issue: issue, isWorking: isWorking}, fn);
+                module.exports.io.to(projectId).emit('update-issue-working-state', { issue: issue, issueId: issueId, isWorking: isWorking });
+                notifyText(projectId, username, (isWorking ? 'start to work: ' : 'stop to work: ') + issue.title);
+            });
         });
     },
 

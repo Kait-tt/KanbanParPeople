@@ -86,8 +86,9 @@
                                             tooltip: { title: name, placement: 'right' }"></div>
                                     </li>
                                 </ul>
-                                <span class="card-title" data-bind="text: displayTitle, click: $root.selectedIssue"
-                                      data-toggle="modal" data-target="#issue-detail-modal"></span>
+                                <span class="card-title" data-toggle="modal" data-target="#issue-detail-modal" data-bind="click: $root.selectedIssue">
+                                    <span data-bind="text: displayTitle"></span>
+                                </span>
                             </li>
                         </ul>
                     <% } %>
@@ -137,8 +138,12 @@
                                                                 tooltip: { title: name, placement: 'right' }"></div>
                                                         </li>
                                                     </ul>
-                                                    <span data-toggle="modal" data-target="#issue-detail-modal"
-                                                          class="card-title" data-bind="text: displayTitle, click: $root.selectedIssue"></span>
+                                                    <span class="card-title" data-toggle="modal" data-target="#issue-detail-modal" data-bind="click: $root.selectedIssue">
+                                                        <!-- ko if: isWorking -->
+                                                        <span class="glyphicon glyphicon-play-circle issue-working-icon"></span>
+                                                        <!-- /ko -->
+                                                        <span data-bind="text: displayTitle"></span>
+                                                    </span>
                                                 </li>>
                                             </ul>
 
@@ -186,6 +191,19 @@
             </div>
             <form class="form">
                 <div class="modal-body">
+                    <div class="form-group issue-detail-is-working-group" data-bind="visible: $root.selectedIssue() && $root.selectedIssue().stage() === 'doing'">
+                        <input type="checkbox" id="issue-detail-is-working" data-size="mini" data-on-text="作業中"
+                               data-off-text="待機中" data-on-color="success" data-bind="bootstrapSwitchOn: $root.updateIssueDetailIsWorking">
+                        <p class="help-block">
+                            <span data-bind="visible: !$root.updateIssueDetailIsWorking()">
+                                クリックすると作業状態が「作業中」になり、作業時間が計測されます。
+                            </span>
+                            <span data-bind="visible: $root.updateIssueDetailIsWorking()">
+                                作業を停止または中断する場合は再度クリックしてください。
+                            </span>
+                        </p>
+                    </div>
+
                     <div class="form-group">
                         <label for="issue-detail-title" class="control-label">
                            <span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span> タイトル
@@ -698,6 +716,7 @@
 <script src="/vendor/moment/moment.js"></script>
 
 <script src="/javascripts/module/knockout/knockout-selectPicker.js"></script>
+<script src="/javascripts/module/knockout/knockout-bootstrap-switch.js"></script>
 <script src="/javascripts/module/util.js"></script>
 <script src="/javascripts/model/Socket.js"></script>
 <script src="/javascripts/model/stageTypes.js"></script>
