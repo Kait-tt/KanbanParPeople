@@ -99,7 +99,7 @@
 
                         <ul class="user-blocks" data-bind="foreach: { data: members, as: 'member' }">
                             <li class="user-block" data-bind="visible: member.visible">
-                                <div class="user-label-area" data-bind="css: { 'wip-limited': member.isWipLimited}">
+                                <div class="user-label-area">
                                     <span class="user-name">
                                         <img data-bind="attr: { src: member.avatarUrl }" class="user-avatar" src="" width="24" height="24">
                                         <b data-bind="text: userName"></b>
@@ -110,9 +110,14 @@
                                             <span class="glyphicon glyphicon-cog" area-hidden="true"></span>
                                         </a>
                                     </span>
-                                    <small class="wip-limited-message" data-bind="visible: member.isWipLimited">
+
+                                    <span class="user-working-message alert alert-success" data-bind="visible: member.workingIssues().length">
+                                        <span class="glyphicon glyphicon-play-circle"></span> 作業中です。
+                                    </span>
+
+                                    <span class="wip-limited-message alert alert-warning" data-bind="visible: member.isWipLimited">
                                         <span class="glyphicon glyphicon-warning-sign"></span> WIP制限に達しています。
-                                    </small>
+                                    </span>
                                 </div>
 
                                 <ul class="stage-blocks" data-bind="foreach: { data: <%= assignedStageNamesJSON %>, as: 'stage' }">

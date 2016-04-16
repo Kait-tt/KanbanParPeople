@@ -300,12 +300,6 @@ div.user-block-area {
           right: $ribbon-offset;
           bottom: -($ribbon-size * 2);
         }
-        &.wip-limited{
-          background-color: $ribbon-bg-color--wip-limited;
-          &::before{
-            border-top-color: darken($ribbon-bg-color--wip-limited, 0%);
-          }
-        }
         .user-name {
           .user-avatar {
             width: 24px;
@@ -323,7 +317,15 @@ div.user-block-area {
             }
           }
         }
+        .alert {
+          padding: 4px 4px 4px 6px;
+        }
         .wip-limited-message{
+          font-size: 90%;
+          margin-left: 1rem;
+        }
+        .user-working-message {
+          font-size: 90%;
           margin-left: 1rem;
         }
       }

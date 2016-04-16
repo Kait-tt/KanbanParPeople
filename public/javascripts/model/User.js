@@ -37,6 +37,11 @@
             }, this, {deferEvaluation: true});
         }, this);
 
+        // 作業中のIssue
+        this.workingIssues = ko.computed(function () {
+            return this.doing().filter(function (issue) { return issue.isWorking(); });
+        }.bind(this));
+
         // 仕掛数
         this.wip = ko.computed(function () {
             return stageTypeAssignedKeys.reduce(function (sum, stage) {
