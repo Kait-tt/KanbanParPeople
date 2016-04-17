@@ -10,7 +10,8 @@
             'wipLimit',
             'visible'
         ],
-        stageTypeAssignedKeys = model.stageTypeAssignedKeys;
+        stageTypeAssignedKeys = model.stageTypeAssignedKeys,
+        defaultCost = 3;
 
     model.User = model.User || User;
 
@@ -44,8 +45,9 @@
 
         // 仕掛数
         this.wip = ko.computed(function () {
-            return stageTypeAssignedKeys.reduce(function (sum, stage) {
-                return sum + this[stage]().length;
+            return this.assignedIssues().reduce(function (sum, issue) {
+                var cost = issue.cost();
+                return sum + (cost ? issue.cost() : defaultCost);
             }.bind(this), 0);
         }, this, {deferEvaluation: true});
 
@@ -53,6 +55,11 @@
         this.isWipLimited = ko.computed(function () {
             return this.wip() >= this.wipLimit();
         }, this);
+
+        // アサインするとWIP制限を超過するか
+        this.willBeOverWipLimit = function (issue) {
+            return this.wip() + issue.cost() > this.wipLimit();
+        };
 
         // アバターURL
         this.avatarUrl = ko.computed(function () {

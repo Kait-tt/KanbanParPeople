@@ -184,7 +184,7 @@
             member = that.project.getMember(list.assignee);
             if (!member) { throw new Error('dragged target member is not found: ' + list.assignee); }
 
-            if (member.isWipLimited()) {
+            if (member.willBeOverWipLimit(issue)) {
                 arg.cancelDrop = true;
                 that.emit('overWIPLimitDropped', arg, member, list);
             }
