@@ -209,6 +209,11 @@
                         </label>
                         <!-- ko if: $root.selectedIssue() -->
                         <!-- ko with: $root.selectedIssue() -->
+                        <div class="issue-detail-all-work-time-wrapper alert alert-info"
+                             data-bind="tooltip: { placement:'right', title: '合計作業時間' }">
+                            <span class="glyphicon glyphicon-time"></span>
+                            <span data-bind="text: allWorkTimeFormat"></span>
+                        </div>
                         <!-- ko if: assigneeMember() && stage() === 'doing' -->
                         <div class="issue-detail-is-working-wrapper" data-bind="tooltip: { placement:'right',
                             title: '作業状態です。「作業中」にすると作業時間が計測されます。' }">

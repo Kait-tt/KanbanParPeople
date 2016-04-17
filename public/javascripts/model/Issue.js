@@ -26,6 +26,7 @@
     }
 
     Issue.defaultCost = 3;
+    Issue.calcAllWorkingIntervalTime = 1000 * 60; // 1minute
 
     Issue.prototype.init = function (o) {
         _.each(columnKeys, function (key) { this[key] = ko.observable(o[key]); }.bind(this));
@@ -48,6 +49,51 @@
                 title = '#' + this.github().number + ' ' + title;
             }
             return title;
+        }, this);
+
+        // 合計作業時間の計算（ms）
+        this.calcAllWorkTime = function () {
+            return this.workHistory().reduce(function (sum, x) {
+                var start = new Date(x.startTime);
+                var end = (x.isEnded || x.endTime) ? new Date(x.endTime) : new Date();
+                return sum + (end - start);
+            }, 0);
+        };
+
+        // 合計作業時間 (ms)
+        this.allWorkTime = ko.observable(this.calcAllWorkTime());
+
+        // 合計作業時間 (h時間m分)
+        this.allWorkTimeFormat = ko.computed(function () {
+            var time = this.allWorkTime();
+            var hour = Math.floor(time / 60 / 60 / 1000);
+            var minute = Math.round((time - hour * 60 * 60 * 1000) / 60 / 1000);
+            return hour + '時間' + minute + '分';
+        }, this);
+
+        // 合計作業時間を一定期間おきに計算
+        // ただし、いくつものIssueが同時に計算しないように最初にランダムにwaitを入れる
+        var timeoutId = null;
+        var calcAllWorkTimeIntervalFunc = function () {
+            this.allWorkTime(this.calcAllWorkTime());
+
+            if (this.isWorking()) {
+                timeoutId = setTimeout(calcAllWorkTimeIntervalFunc, Issue.calcAllWorkingIntervalTime);
+            } else {
+                if (timeoutId) {
+                    clearTimeout(timeoutId);
+                    timeoutId = null;
+                }
+            }
+        }.bind(this);
+
+        this.isWorking.subscribe(calcAllWorkTimeIntervalFunc);
+        if (this.isWorking()) {
+            setTimeout(calcAllWorkTimeIntervalFunc, 1000);
+        }
+
+        this.workHistory.subscribe(function () {
+            this.allWorkTime(this.calcAllWorkTime());
         }, this);
     };
 
