@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/basic.css'/>
+    <link rel='stylesheet' href='/stylesheets/top.css'/>
     <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,700' rel='stylesheet' type='text/css'>
 </head>
 <body>
@@ -12,21 +12,86 @@
 
 <div class="main">
     <div class="container">
-        <h1><%= displayTitle %></h1>
+        <div class="row">
+            <h1><%= displayTitle %></h1>
 
-        <% if (mustLogin) { %>
-        <p class="alert alert-danger">ログインしてください。</p>
-        <% } %>
+            <% if (mustLogin) { %>
+            <p class="alert alert-danger">ログインしてください。</p>
+            <% } %>
 
-        <% if (logined) { %>
+            <% if (logined) { %>
 
-        <p><a href="/users/me/" class="btn btn-default">利用する &raquo;</a></p>
+            <p><a href="/users/me/" class="btn btn-default">利用する &raquo;</a></p>
 
-        <% } else { %>
+            <% } else { %>
 
-        <p><a type="button" class="btn btn-success" href="/auth/github">Login with GitHub &raquo;</a></p>
+            <p><a type="button" class="btn btn-success" href="/auth/github">Login with GitHub &raquo;</a></p>
 
-        <% } %>
+            <% } %>
+        </div>
+        <div class="row information-wrap">
+            <h2><span class="glyphicon glyphicon-info-sign"></span> 機能説明</h2>
+            <hr>
+
+            <div class="information-container">
+                <h3>タスクの作業コストの設定</h3>
+                <div class="center-thumbnail-wrap">
+                    <div class="thumbnail">
+                        <img src="/images/topinfo/settingCost.png" width="385" height="400">
+                        <div class="caption">タスク詳細ダイアログ</div>
+                    </div>
+                    <div class="thumbnail">
+                        <img src="/images/topinfo/cardWithCost.png" width="315" height="133">
+                        <div class="caption">コスト付きカード</div>
+                    </div>
+                </div>
+                <p>
+                    タスクごとに見積もった作業コスト（ポイント）を設定できます。ポイントは以下の何れかから選択します。
+                </p>
+                <ul>
+                    <li>1 (low)</li>
+                    <li>3 (middle)</li>
+                    <li>5 (high)</li>
+                </ul>
+                <p>
+                    見積もった作業コストは、後述するWIP制限や解析に使われるため、<strong class="text-primary">アサイン前に設定するのが良い</strong>です。<br>
+                    見積もりは大雑把で良いので、相対的に見積もるのが通常です。<br>
+                </p>
+                <p class="text-warning">設定されていないタスクの作業コストは3ポイントで計算されます。</p>
+            </div>
+
+            <div class="information-container">
+                <h3>WIP制限</h3>
+                <div class="center-thumbnail-wrap">
+                    <div class="thumbnail">
+                        <img src="/images/topinfo/settingWIPLimit.png" width="505" height="400">
+                        <div class="caption">ユーザーダイアログ</div>
+                    </div>
+                    <div class="thumbnail">
+                        <img src="/images/topinfo/userAreaWithJustWIPLimit.png" width="600" height="114">
+                        <div class="caption">WIP制限ちょうどのユーザーエリア</div>
+                    </div>
+                </div>
+                <p>
+                    WIP制限は、ユーザーの仕掛タスク量を制限する機能です。WIP量はユーザが担当しているタスクのコストポイントの総和で求められます。<br>
+                    <span class="text-danger">WIP制限量を超えてタスクはアサインできません。</span><br>
+                    適切なWIP制限量を設けることで、タスクのリードタイムを短くしたり、問題を検出したりできます。
+                </p>
+                <p>
+                    WIP制限量はユーザごとに設定できます。デフォルト値は12です。
+                </p>
+                <p>
+                    前述のとおり、<span class="text-warning">設定されていないタスクのコストは3ポイントで計算されます。</span>
+                </p>
+            </div>
+
+            <div class="information-container">
+                <h3>作業状態と実作業時間の計測</h3>
+                <p>
+                    
+                </p>
+            </div>
+        </div>
     </div>
 </div>
 
