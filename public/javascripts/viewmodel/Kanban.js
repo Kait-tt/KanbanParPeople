@@ -428,6 +428,20 @@
             return true;
         };
 
+        that.onClickStartToWork = function (issue) {
+            that.socket.emit('update-issue-working-state', {
+                issueId: issue._id(),
+                isWorking: true
+            }, _.noop());
+        };
+
+        that.onClickStopToWork = function (issue) {
+            that.socket.emit('update-issue-working-state', {
+                issueId: issue._id(),
+                isWorking: false
+            }, _.noop());
+        };
+
         that.onClickMemberVisibleCheckBox = function (member) {
             that.socket.emit('update-member', {userName: member.userName(), visible: member.visible()});
             return true;

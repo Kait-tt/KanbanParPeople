@@ -7,7 +7,7 @@
     <ul class="mini-menu-list">
         <li data-toggle="modal" data-target="#issue-detail-modal"
             data-bind="click: $root.onClickIssueDetail,
-                        tooltip: { title: 'Detail', placement:'top', delay: { show: 200, hide: 100 } }">
+                        tooltip: { title: 'Detail', placement:'left', delay: { show: 200, hide: 100 } }">
             <button type="button" class="btn btn-sm btn-default">
                 <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
             </button>
@@ -31,11 +31,22 @@
 
         <li data-toggle="modal" data-target="#assign-issue-modal"
             data-bind="click: $root.onClickIssueAssign,
-                        tooltip: { title: 'Assign', placement:'bottom', delay: { show: 200, hide: 100 } }">
+                        tooltip: { title: 'Assign', placement:'right', delay: { show: 200, hide: 100 } }">
             <button type="button" class="btn btn-sm btn-default">
                 <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
             </button>
         </li>
+
+        <!-- ko if: stage() === 'doing' && assigneeMember() && assigneeMember().userName() === '<%= userName %>' -->
+        <li data-bind="click: isWorking() ? $root.onClickStopToWork : $root.onClickStartToWork,
+                        tooltip: { title: isWorking() ? 'Stop to work' : 'Start to work',
+                        placement:'left', delay: { show: 200, hide: 100 } }">
+            <button type="button" class="btn btn-sm btn-default">
+                <span class="glyphicon glyphicon-play" aria-hidden="true" data-bind="
+                    css: { 'glyphicon-play' : !isWorking(), 'glyphicon-stop': isWorking() }"></span>
+            </button>
+        </li>
+        <!-- /ko -->
 
         <!-- ko if: github && github().url -->
         <li>
@@ -46,7 +57,7 @@
         </li>
         <!-- /ko -->
 
-        <li data-bind="click: $root.onClickIssuePrevStage, tooltip: { title: 'Prev stage', placement:'right', delay: { show: 200, hide: 100 } }">
+        <li data-bind="click: $root.onClickIssuePrevStage, tooltip: { title: 'Prev stage', placement:'left', delay: { show: 200, hide: 100 } }">
             <button type="button" class="btn btn-sm btn-default"
                     data-bind="css: {disabled: stage() === 'issue' || stage() === 'done'},
                                attr: {disabled: stage() === 'issue' || stage() === 'done'}">

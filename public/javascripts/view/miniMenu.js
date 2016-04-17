@@ -67,6 +67,8 @@
     };
 
     MiniMenu.prototype.show = function () {
+        this.$li = this.$ul.children('li'); // 変更されているかもしれないので取得しなおす
+
         var that = this,
             len = that.$li.length,
             duration = that.opts.duration,
