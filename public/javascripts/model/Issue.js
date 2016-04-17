@@ -26,7 +26,7 @@
     }
 
     Issue.defaultCost = 3;
-    Issue.calcAllWorkingIntervalTime = 1000 * 60; // 1minute
+    Issue.calcAllWorkingIntervalTime = 1000 * 20; // 20 seconds
 
     Issue.prototype.init = function (o) {
         _.each(columnKeys, function (key) { this[key] = ko.observable(o[key]); }.bind(this));
@@ -77,17 +77,21 @@
         }, this);
 
         // 最後の作業時間
-        this.lastWorkTime = function () {
+        this.lastWorkTime = ko.observable(0);
+
+        // 最後の作業時間を計算
+        this.calcLastWorkTime = function () {
             var history = this.workHistory();
             if (!history.length) { return 0; }
             return this.calcOneWorkTime(history[history.length - 1]);
         };
 
-        // 合計作業時間を一定期間おきに計算
+        // 作業時間を一定期間おきに計算
         // ただし、いくつものIssueが同時に計算しないように最初にランダムにwaitを入れる
         var timeoutId = null;
         var calcAllWorkTimeIntervalFunc = function () {
             this.allWorkTime(this.calcAllWorkTime());
+            this.lastWorkTime(this.calcLastWorkTime());
 
             if (this.isWorking()) {
                 timeoutId = setTimeout(calcAllWorkTimeIntervalFunc, Issue.calcAllWorkingIntervalTime);
