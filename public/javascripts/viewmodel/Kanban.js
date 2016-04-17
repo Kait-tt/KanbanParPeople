@@ -524,13 +524,13 @@
             socket.on('update-issue-detail', function (req) {
                 var targetIssue = that.project.getIssue(req.issue._id);
 
-                ['title', 'body', 'cost', 'isWorking'].forEach(function (key) {
+                ['title', 'body', 'cost'].forEach(function (key) {
                     targetIssue[key](req.issue[key]);
                 });
             });
 
             socket.on('update-issue-working-state', function (req) {
-                that.project.updateIssueWorkingState(req.issue._id, req.isWorking);
+                that.project.updateIssueWorkingState(req.issue._id, req.isWorking, req.issue.workHistory);
             });
 
             socket.on('update-issue-priority', function (req) {

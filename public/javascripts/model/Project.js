@@ -95,11 +95,12 @@
         issue.assignee(member ? memberId : null);
     };
 
-    Project.prototype.updateIssueWorkingState = function (issueId, isWorking) {
+    Project.prototype.updateIssueWorkingState = function (issueId, isWorking, workHistory) {
         var issue = this.getIssue(issueId);
         if (!issue) { throw new Error('issue not found'); }
         
         issue.isWorking(isWorking);
+        issue.workHistory.splice.apply(issue.workHistory, [0, issue.workHistory().length].concat(workHistory));
     };
 
     Project.prototype.updateIssuePriority = function (issueId, insertBeforeOfIssueId) {
