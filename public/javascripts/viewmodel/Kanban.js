@@ -164,14 +164,22 @@
         };
 
         // ドラッグ時にWIP制限を超過するようならばキャンセルする
+        // ドラッグ時に作業中ならキャンセルする
         that.onBeforeMoveDrag = function (arg) {
             var list = arg.targetParent.parent,
-                item = arg.item,
+                issue = arg.item,
                 member;
 
             if (!(list instanceof DraggableIssueList)) { return; }
-            if (!list.assignee) { return; }
-            if (item.assignee() === list.assignee) { return; }
+
+            // 作業中チェック
+            if (issue.isWorking()) {
+                arg.cancelDrop = true;
+                that.emit('workingIssueDropped', arg, issue);
+            }
+
+            // WIPLimitチェック
+            if (!list.assignee || issue.assignee() === list.assignee) { return; }
 
             member = that.project.getMember(list.assignee);
             if (!member) { throw new Error('dragged target member is not found: ' + list.assignee); }

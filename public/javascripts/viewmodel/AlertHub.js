@@ -22,6 +22,14 @@
             });
         });
 
+        o.kanban.on('workingIssueDropped', function (arg, issue) {
+            alert.pushAlert({
+                title: '作業中タスクのステージや担当者は変更できません。',
+                message: '作業状態を「待機中」に変更してから操作しなおしてください。',
+                isSuccess: false
+            });
+        });
+
         /*** socket ***/
         //o.socket.on('connect', function (err) { });
 
