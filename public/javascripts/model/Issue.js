@@ -25,6 +25,8 @@
         this.init(this.opts);
     }
 
+    Issue.defaultCost = 3;
+
     Issue.prototype.init = function (o) {
         _.each(columnKeys, function (key) { this[key] = ko.observable(o[key]); }.bind(this));
         this.labels = ko.observableArray((o && o.labels) || []);

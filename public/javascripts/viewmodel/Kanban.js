@@ -5,7 +5,8 @@
         model = util.namespace('kpp.model'),
         stageTypeKeys = model.stageTypeKeys,
         stages = model.stageTypes,
-        DraggableIssueList = viewmodel.DraggableIssueList;
+        DraggableIssueList = viewmodel.DraggableIssueList,
+        defaultCost = model.Issue.defaultCost;
 
     viewmodel.Kanban = viewmodel.Kanban || Kanban;
 
@@ -184,7 +185,8 @@
             member = that.project.getMember(list.assignee);
             if (!member) { throw new Error('dragged target member is not found: ' + list.assignee); }
 
-            if (member.willBeOverWipLimit(issue)) {
+            var cost = issue.cost();
+            if (member.willBeOverWipLimit(cost ? cost : defaultCost)) {
                 arg.cancelDrop = true;
                 that.emit('overWIPLimitDropped', arg, member, list);
             }
@@ -347,6 +349,22 @@
                     that.selectedIssue(null);
                 }
             });
+        };
+
+        that.canUpdateIssueDetail = function () {
+            return !that.updateIssueWillBeOverWipLimit();
+        };
+
+        that.updateIssueWillBeOverWipLimit = function () {
+            var issue = that.selectedIssue();
+            if (!issue) { return false; }
+            var toMember = issue.assigneeMember();
+            if (!toMember) { return false; }
+            var curCost = Number(issue.cost());
+            var newCost = Number(that.updateIssueDetailCost());
+            var curCost2 = curCost ? curCost : defaultCost;
+            var newCost2 = newCost ? newCost : defaultCost;
+            return toMember.willBeOverWipLimit(newCost2 - curCost2);
         };
 
         that.updateIssueIsWorking = function () {
