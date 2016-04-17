@@ -1,4 +1,4 @@
-(function (EventEmitter, ko, io, _, util) {
+(function (EventEmitter, ko, io, _, util, global) {
     'use strict';
 
     var viewmodel = util.namespace('kpp.viewmodel'),
@@ -83,6 +83,14 @@
 
         // 選択しているメンバー
         that.selectedMember = ko.observable();
+
+        // ログインユーザ
+        that.loginMember = ko.computed(function () {
+            var username = global.username;
+            return _.find(that.members(), function (member) {
+                return member.userName() === username;
+            });
+        }, that, {deferEvaluation: true});
 
         // 編集用の仮のWIP制限
         that.settingsWipLimit = ko.observable();
@@ -526,4 +534,4 @@
 
     util.inherits(Kanban, EventEmitter);
 
-}(EventEmitter2, ko, io, _, window.nakazawa.util));
+}(EventEmitter2, ko, io, _, window.nakazawa.util, window));

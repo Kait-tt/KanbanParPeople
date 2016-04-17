@@ -8,12 +8,13 @@
     <link rel='stylesheet' href='/vendor/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css'/>
     <link rel='stylesheet' href='/vendor/bootstrap-select/dist/css/bootstrap-select.min.css'/>
     <link rel="stylesheet" href='/vendor/bootstrap-markdown/css/bootstrap-markdown.min.css' />
+    <script>window.username = '<%= userName %>';</script>
 </head>
 <body>
 
 <% include _header %>
 
-<div id="toolbar" class="navbar-inverse">
+<div id="toolbar" class="navbar-inverse" data-bind="visible: true" style="display: none">
     <div class="navbar-collapse collapse">
         <h1 class="navbar-text" id="project-name"><%= displayTitle %></h1>
         <div class="sync-status navbar-text">
@@ -30,6 +31,11 @@
           <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#members-settings-modal"><span class="glyphicon glyphicon-user"></span> <span class="sr-only">Members</span></button>
           <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#project-settings-modal"><span class="glyphicon glyphicon-cog"></span> <span class="sr-only">Settings</span></button>
           <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#project-labels-modal"><span class="glyphicon glyphicon-tags"></span> <span class="sr-only">Labels</span></button>
+        </div>
+        <div class="navbar-text" data-bind="visible: loginMember() && loginMember().workingIssues().length">
+            <span class="user-working-message alert alert-success">
+                <span class="glyphicon glyphicon-play-circle"></span> 作業中です。
+            </span>
         </div>
     </div>
 </div>
@@ -86,9 +92,10 @@
                                             tooltip: { title: name, placement: 'right' }"></div>
                                     </li>
                                 </ul>
-                                <span class="card-title" data-toggle="modal" data-target="#issue-detail-modal" data-bind="click: $root.selectedIssue">
-                                    <span data-bind="text: displayTitle"></span>
-                                </span>
+
+                                <div class="card-title-wrap" data-toggle="modal" data-target="#issue-detail-modal" data-bind="click: $root.selectedIssue">
+                                    <span class="card-title" data-bind="text: displayTitle"></span>
+                                </div>
                             </li>
                         </ul>
                     <% } %>
@@ -143,12 +150,12 @@
                                                                 tooltip: { title: name, placement: 'right' }"></div>
                                                         </li>
                                                     </ul>
-                                                    <span class="card-title" data-toggle="modal" data-target="#issue-detail-modal" data-bind="click: $root.selectedIssue">
+                                                    <div class="card-title-wrap" data-toggle="modal" data-target="#issue-detail-modal" data-bind="click: $root.selectedIssue">
                                                         <!-- ko if: isWorking -->
                                                         <span class="glyphicon glyphicon-play-circle issue-working-icon"></span>
                                                         <!-- /ko -->
-                                                        <span data-bind="text: displayTitle"></span>
-                                                    </span>
+                                                        <span class="card-title" data-bind="text: displayTitle, css: { 'is-working': isWorking }"></span>
+                                                    </div>
                                                 </li>>
                                             </ul>
 

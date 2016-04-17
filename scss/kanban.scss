@@ -43,6 +43,12 @@ body{
   top: 50px;
   z-index: 2;
   width: 100%;
+
+  .user-working-message {
+    font-size: 90%;
+    margin-left: 1rem;
+    padding: 4px 4px 4px 6px;
+  }
 }
 
 #project-name{
@@ -417,17 +423,34 @@ div.user-block-area {
     }
   }
 
-  .card-title {
+  .card-title-wrap {
     display: inline-block;
-    margin: 2px;
+    margin: 2px 2px 2px 12px;
     padding: 0;
     overflow: hidden;
-    margin-left: 12px;
-    width: $card-width - $card-padding * 2 - 41 - 15;
+    width: $card-width - $card-padding * 2 - 23 - 15;
     height: $card_height - $card_padding * 2 + 16 - 15;
 
+    .card-title {
+      display: inline-block;
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+      width: $card-width - $card-padding * 2 - 28 - 15;
+      height: $card_height - $card_padding * 2 + 16 - 15;
+
+      &.is-working {
+        margin: 0 0 0 8px;
+        width: $card-width - $card-padding * 2 - 73 - 15;
+      }
+    }
+
     .issue-working-icon {
-      color: #3498db;
+      float: left;
+      display: inline-block;
+      font-size: 240%;
+      color: #27ae60;
+      margin: 2px 0 0 0;
     }
   }
 
