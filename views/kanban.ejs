@@ -35,6 +35,7 @@
         <div class="navbar-text" data-bind="visible: loginMember() && loginMember().workingIssues().length">
             <span class="user-working-message alert alert-success">
                 <span class="glyphicon glyphicon-play-circle"></span> 作業中です。
+                (<span data-bind="text: loginMember().workingTimeFormat()"></span>経過)
             </span>
         </div>
     </div>
@@ -120,6 +121,7 @@
 
                                     <span class="user-working-message alert alert-success" data-bind="visible: member.workingIssues().length">
                                         <span class="glyphicon glyphicon-play-circle"></span> 作業中です。
+                                        (<span data-bind="text: member.workingTimeFormat()"></span>経過)
                                     </span>
 
                                     <span class="wip-limited-message alert alert-warning" data-bind="visible: member.isWipLimited">

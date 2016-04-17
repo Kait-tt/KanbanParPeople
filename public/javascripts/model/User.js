@@ -41,7 +41,22 @@
         // 作業中のIssue
         this.workingIssues = ko.computed(function () {
             return this.doing().filter(function (issue) { return issue.isWorking(); });
-        }.bind(this));
+        }, this);
+
+        // 作業開始からどのくらいの時間がたっているか
+        this.workingTime = ko.computed(function () {
+            var issues = this.workingIssues();
+            if (!issues.length) { return 0; }
+            return _.max(issues.map(function (x) { return x.lastWorkTime(); }));
+        }, this);
+
+        // 作業開始からどのくらいの時間がたっているか (h時間m分)
+        this.workingTimeFormat = ko.computed(function () {
+            var time = this.workingTime();
+            var hour = Math.floor(time / 60 / 60 / 1000);
+            var minute = Math.round((time - hour * 60 * 60 * 1000) / 60 / 1000);
+            return hour ? (hour + '時間' + minute + '分') : minute + '分';
+        }, this);
 
         // 仕掛数
         this.wip = ko.computed(function () {

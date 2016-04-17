@@ -51,13 +51,18 @@
             return title;
         }, this);
 
+        // ひとつの作業履歴の作業時間
+        this.calcOneWorkTime = function (history) {
+            var start = new Date(history.startTime);
+            var end = (history.isEnded || history.endTime) ? new Date(history.endTime) : new Date();
+            return end - start;
+        };
+
         // 合計作業時間の計算（ms）
         this.calcAllWorkTime = function () {
             return this.workHistory().reduce(function (sum, x) {
-                var start = new Date(x.startTime);
-                var end = (x.isEnded || x.endTime) ? new Date(x.endTime) : new Date();
-                return sum + (end - start);
-            }, 0);
+                return sum + this.calcOneWorkTime(x);
+            }.bind(this), 0);
         };
 
         // 合計作業時間 (ms)
@@ -68,8 +73,15 @@
             var time = this.allWorkTime();
             var hour = Math.floor(time / 60 / 60 / 1000);
             var minute = Math.round((time - hour * 60 * 60 * 1000) / 60 / 1000);
-            return hour + '時間' + minute + '分';
+            return hour ? (hour + '時間' + minute + '分') : minute + '分';
         }, this);
+
+        // 最後の作業時間
+        this.lastWorkTime = function () {
+            var history = this.workHistory();
+            if (!history.length) { return 0; }
+            return this.calcOneWorkTime(history[history.length - 1]);
+        };
 
         // 合計作業時間を一定期間おきに計算
         // ただし、いくつものIssueが同時に計算しないように最初にランダムにwaitを入れる
