@@ -159,6 +159,12 @@
                 ary.splice(idx, 1);
             }
             return ary;
+        },
+
+        dateFormatHM: function (time) {
+            var hour = Math.floor(time / 60 / 60 / 1000);
+            var minute = Math.round((time - hour * 60 * 60 * 1000) / 60 / 1000);
+            return hour ? (hour + '時間' + minute + '分') : minute + '分';
         }
     };
 }(window, _));

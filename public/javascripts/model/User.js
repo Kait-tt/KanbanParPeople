@@ -52,10 +52,7 @@
 
         // 作業開始からどのくらいの時間がたっているか (h時間m分)
         this.workingTimeFormat = ko.computed(function () {
-            var time = this.workingTime();
-            var hour = Math.floor(time / 60 / 60 / 1000);
-            var minute = Math.round((time - hour * 60 * 60 * 1000) / 60 / 1000);
-            return hour ? (hour + '時間' + minute + '分') : minute + '分';
+            return util.dateFormatHM(this.workingTime());
         }, this);
 
         // 仕掛数

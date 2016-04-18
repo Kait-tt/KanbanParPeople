@@ -70,10 +70,7 @@
 
         // 合計作業時間 (h時間m分)
         this.allWorkTimeFormat = ko.computed(function () {
-            var time = this.allWorkTime();
-            var hour = Math.floor(time / 60 / 60 / 1000);
-            var minute = Math.round((time - hour * 60 * 60 * 1000) / 60 / 1000);
-            return hour ? (hour + '時間' + minute + '分') : minute + '分';
+            return util.dateFormatHM(this.allWorkTime());
         }, this);
 
         // 最後の作業時間
@@ -110,6 +107,22 @@
 
         this.workHistory.subscribe(function () {
             this.allWorkTime(this.calcAllWorkTime());
+        }, this);
+
+        // workHistoryのプロパティの追加
+        this.addWorkHistoryProperty = _.debounce(function () {
+            this.workHistory().forEach(function (x) {
+                x.startTimeFormat = moment(new Date(x.startTime)).format('YYYY/MM/DD HH:mm:ss');
+                x.endTimeFormat = x.endTime ? moment(new Date(x.endTime)).format('YYYY/MM/DD HH:mm:ss') : '-';
+                x.duration = (x.isEnded && x.endTime) ? util.dateFormatHM((new Date(x.endTime)) - (new Date(x.startTime))) : '-';
+                x.user = _.find(this.members(), function (user) { return user._id() === x.userId; });
+                x.userName = x.user ? x.user.userName() : null;
+            }.bind(this));
+        }.bind(this), 200);
+        this.addWorkHistoryProperty();
+        this.workHistory.subscribe(this.addWorkHistoryProperty, this);
+        this.members.subscribe(function () {
+            this.addWorkHistoryProperty();
         }, this);
     };
 

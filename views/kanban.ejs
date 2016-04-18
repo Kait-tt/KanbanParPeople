@@ -288,10 +288,29 @@
                         </ul>
                     </div>
 
-                    <div data-bind="if: github && github().url">
+                    <div data-bind="if: github && github().url" class="form-group">
                         <a target="_blank" data-bind="attr: { href: github().url }">
                             <span class="glyphicon glyphicon-link" aria-hidden="true"></span> GitHub
                         </a>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="issue-detail-work-history" class="control-label">
+                            <span class="glyphicon glyphicon-time"></span> Work History
+                        </label>
+                        <table id="issue-detail-work-history" class="table table-responsive">
+                            <thead>
+                            <tr><th>StartTime</th><th>EndTime</th><th>Duration</th><th>User</th></tr>
+                            </thead>
+                            <tbody data-bind="foreach: workHistory">
+                            <tr>
+                                <td data-bind="text: startTimeFormat"></td>
+                                <td data-bind="text: endTimeFormat"></td>
+                                <td data-bind="text: duration"></td>
+                                <td data-bind="text: userName"></td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <!-- /ko -->
                     <!-- /ko -->
