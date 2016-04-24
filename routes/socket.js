@@ -84,6 +84,7 @@ function socketRouting(server) {
                             type: 'error', created_at: Date.now()
                         });
                     } else {
+                        res.reverse();
                         socket.emit('chat-history', res);
                     }
 
