@@ -153,10 +153,12 @@
                                                         </li>
                                                     </ul>
                                                     <div class="card-title-wrap" data-toggle="modal" data-target="#issue-detail-modal" data-bind="click: $root.selectedIssue">
-                                                        <!-- ko if: isWorking -->
-                                                        <span class="glyphicon glyphicon-play-circle issue-working-icon"></span>
+                                                        <!-- ko if: stage() === 'doing' -->
+                                                        <span class="glyphicon glyphicon-play-circle issue-working-icon" data-bind="
+                                                            click: $root.onClickToggleWorkOnCard,
+                                                            css: {'issue-working-active': isWorking}"></span>
                                                         <!-- /ko -->
-                                                        <span class="card-title" data-bind="text: displayTitle, css: { 'is-working': isWorking }"></span>
+                                                        <span class="card-title" data-bind="text: displayTitle, css: { 'is-working': stage() === 'doing' }"></span>
                                                     </div>
                                                 </li>>
                                             </ul>

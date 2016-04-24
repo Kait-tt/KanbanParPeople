@@ -100,7 +100,7 @@
         if (!issue) { throw new Error('issue not found'); }
         
         issue.isWorking(isWorking);
-        issue.workHistory.splice.apply(issue.workHistory, [0, issue.workHistory().length].concat(workHistory));
+        issue.updateWorkHistory(workHistory);
     };
 
     Project.prototype.updateIssuePriority = function (issueId, insertBeforeOfIssueId) {

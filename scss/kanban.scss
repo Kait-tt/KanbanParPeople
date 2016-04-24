@@ -449,8 +449,20 @@ div.user-block-area {
       float: left;
       display: inline-block;
       font-size: 240%;
-      color: #27ae60;
+      color: #a3a3a3;
       margin: 2px 0 0 0;
+
+      &:hover {
+        color: #6ea37c;
+      }
+
+      &.issue-working-active {
+        color: #27ae60;
+
+        &:hover {
+          color: #1d723c;
+        }
+      }
     }
   }
 

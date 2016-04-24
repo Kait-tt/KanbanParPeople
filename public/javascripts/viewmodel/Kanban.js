@@ -468,6 +468,15 @@
             }, _.noop());
         };
 
+        that.onClickToggleWorkOnCard = function (issue, e) {
+            that.socket.emit('update-issue-working-state', {
+                issueId: issue._id(),
+                isWorking: !issue.isWorking()
+            }, _.noop());
+            util.cancelBubble(e);
+            return false;
+        };
+
         that.onClickMemberVisibleCheckBox = function (member) {
             that.socket.emit('update-member', {userName: member.userName(), visible: member.visible()});
             return true;

@@ -109,21 +109,21 @@
             this.allWorkTime(this.calcAllWorkTime());
         }, this);
 
-        // workHistoryのプロパティの追加
-        this.addWorkHistoryProperty = _.debounce(function () {
-            this.workHistory().forEach(function (x) {
+        // workHistoryのプロパティの更新
+        this.updateWorkHistory = function (newWorkHistory) {
+            // issue.workHistory.splice.apply(issue.workHistory, [0, issue.workHistory().length].concat(workHistory));
+            newWorkHistory.forEach(function (x) {
                 x.startTimeFormat = moment(new Date(x.startTime)).format('YYYY/MM/DD HH:mm:ss');
                 x.endTimeFormat = x.endTime ? moment(new Date(x.endTime)).format('YYYY/MM/DD HH:mm:ss') : '-';
                 x.duration = (x.isEnded && x.endTime) ? util.dateFormatHM((new Date(x.endTime)) - (new Date(x.startTime))) : '-';
                 x.user = _.find(this.members(), function (user) { return user._id() === x.userId; });
                 x.userName = x.user ? x.user.userName() : null;
             }.bind(this));
-        }.bind(this), 200);
-        this.addWorkHistoryProperty();
-        this.workHistory.subscribe(this.addWorkHistoryProperty, this);
-        this.members.subscribe(function () {
-            this.addWorkHistoryProperty();
-        }, this);
+            // that.workHistory
+
+            this.workHistory.splice.apply(this.workHistory, [0, this.workHistory().length].concat(newWorkHistory));
+        };
+        this.updateWorkHistory(this.workHistory());
     };
 
 }(_, window.nakazawa.util));
