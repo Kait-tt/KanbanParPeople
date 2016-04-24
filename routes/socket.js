@@ -76,7 +76,7 @@ function socketRouting(server) {
                 project.save(function (err) { if (err) { console.error(err); }});
 
                 // チャットの履歴を送信する
-                ChatLog.find({projectId: projectId}).limit(firstSendChatLimit).exec(function (err, res) {
+                ChatLog.find({projectId: projectId}, {}, {sort:{ created_at: -1 }, limit: firstSendChatLimit}).exec(function (err, res) {
                     if (err) {
                         console.error(err);
                         socket.emit('chat', {
