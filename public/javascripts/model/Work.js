@@ -87,7 +87,7 @@
 
         this.duration = ko.computed(function () {
             var duration = this.calcDuration(false);
-            return duration ? util.dateFormatHM(duration) : null;
+            return _.isNumber(duration) ? util.dateFormatHM(duration) : null;
         }, this);
 
         this.user = ko.computed(function () {
@@ -123,7 +123,11 @@
         } else {
             return null;
         }
-        return end - start;
+
+        // Dateはマイナスにしてはいけないので気を付けて計算する
+        if (start < end) { return end - start; }
+        else if (start > end) { return -(start - end); }
+        else { return 0; }
     };
 
     // サーバDBと合わせたオブジェクト形式に変換する
