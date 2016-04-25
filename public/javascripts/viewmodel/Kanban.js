@@ -73,6 +73,12 @@
         // Issueの更新後の作業状態(isWorking)
         that.updateIssueDetailIsWorking = ko.observable(false);
 
+        // IssueDetail WorkingHistoryの表示mode ('edit' or 'view')
+        that.issueDetailWorkHistoryMode = ko.observable('view');
+
+        // Issueの更新後のWorkHistory
+        that.updateIssueDetailWorkHistory = ko.observableArray();
+
         that.selectedIssue.subscribe(function (issue) {
             that.updateIssueDetailTitle(issue ? issue.title() : null);
             that.updateIssueDetailBody(issue ? issue.body() : null);
@@ -80,6 +86,8 @@
             var cost = issue ? issue.cost() : 0;
             that.updateIssueDetailCost(String(cost ? cost : 0));
             that.updateIssueDetailIsWorking(issue ? issue.isWorking() : false);
+            that.issueDetailWorkHistoryMode('view');
+            that.updateIssueDetailWorkHistory.removeAll();
         });
 
         // 選択しているメンバー
@@ -492,7 +500,25 @@
             var time = moment(chat.created_at).format('MM/DD HH:mm:ss');
             that.chatTexts.push('[' + time + '] (' + chat.sender + ') ' + chat.content);
         };
+        
+        that.onClickWorkHistoryEditMode = function () {
+            that.updateIssueDetailWorkHistory(that.selectedIssue().workHistory());
+            that.issueDetailWorkHistoryMode('edit');
+        };
+        
+        that.onClickWorkHistorySave = function () {
+            that.issueDetailWorkHistoryMode('view');
+        };
 
+        that.canClickWorkHistorySave = ko.computed(function () {
+            return false;
+        });
+
+        that.onClickWorkHistoryCancel = function () {
+            that.updateIssueDetailWorkHistory.removeAll();
+            that.issueDetailWorkHistoryMode('view');
+        };
+        
         // ソケット通信のイベント設定、デバッグ設定を初期化する
         function initSocket (socket) {
             socket.on('connect', function (req) {

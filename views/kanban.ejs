@@ -299,20 +299,54 @@
                     <div class="form-group">
                         <label for="issue-detail-work-history" class="control-label">
                             <span class="glyphicon glyphicon-time"></span> Work History
+                            <!-- ko if: $root.issueDetailWorkHistoryMode() === 'view' -->
+                            <button class="btn btn-sm edit-work-history btn-primary" data-bind="click: $root.onClickWorkHistoryEditMode">
+                                <span class="glyphicon glyphicon-edit"></span> Edit
+                            </button>
+                            <!-- /ko -->
+                            <!-- ko if: $root.issueDetailWorkHistoryMode() === 'edit' -->
+                            <button class="btn btn-sm edit-work-history btn-success"
+                                    data-bind="click: $root.onClickWorkHistorySave, enable: $root.canClickWorkHistorySave">
+                                <span class="glyphicon glyphicon-ok"></span> Save
+                            </button>
+                            <button class="btn btn-sm edit-work-history btn-danger" data-bind="click: $root.onClickWorkHistorySave">
+                                <span class="glyphicon glyphicon-remove"></span> Cancel
+                            </button>
+                            <!-- /ko -->
                         </label>
-                        <table id="issue-detail-work-history" class="table table-responsive">
-                            <thead>
-                            <tr><th>StartTime</th><th>EndTime</th><th>Duration</th><th>User</th></tr>
-                            </thead>
-                            <tbody data-bind="foreach: workHistory">
-                            <tr>
-                                <td data-bind="text: startTimeFormat"></td>
-                                <td data-bind="text: endTimeFormat"></td>
-                                <td data-bind="text: duration"></td>
-                                <td data-bind="text: userName"></td>
-                            </tr>
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table id="issue-detail-work-history" class="table">
+                                <thead>
+                                <tr><th>StartTime</th><th>EndTime</th><th>Duration</th><th>User</th></tr>
+                                </thead>
+                                <!-- ko if: $root.issueDetailWorkHistoryMode() === 'view' -->
+                                <tbody data-bind="foreach: workHistory">
+                                <tr>
+                                    <td data-bind="text: startTimeFormat"></td>
+                                    <td data-bind="text: endTimeFormat"></td>
+                                    <td data-bind="text: duration"></td>
+                                    <td data-bind="text: userName"></td>
+                                </tr>
+                                </tbody>
+                                <!-- /ko -->
+                                <!-- ko if: $root.issueDetailWorkHistoryMode() === 'edit' -->
+                                <tbody data-bind="foreach: $root.updateIssueDetailWorkHistory">
+                                <tr>
+                                    <td>
+                                        <input type="datetime" class="form-control" data-bind="value: startTimeFormat">
+                                    </td>
+                                    <td>
+                                        <input type="datetime" class="form-control" data-bind="value: endTimeFormat">
+                                    </td>
+                                    <td data-bind="text: duration"></td>
+                                    <td>
+                                        <input type="text" class="form-control" data-bind="value: userName">
+                                    </td>
+                                </tr>
+                                </tbody>
+                                <!-- /ko -->
+                            </table>
+                        </div>
                     </div>
                     <!-- /ko -->
                     <!-- /ko -->

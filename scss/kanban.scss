@@ -563,6 +563,16 @@ div.user-block-area {
   .issue-detail-cost-wrap .text-danger {
     font-size: 85%;
   }
+
+  .edit-work-history {
+    padding: 2px 6px
+  }
+
+  #issue-detail-work-history {
+    input[type="datetime"] {
+      width: 180px;
+    }
+  }
 }
 
 #project-labels-modal {
