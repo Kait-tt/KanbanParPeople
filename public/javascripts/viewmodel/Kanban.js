@@ -87,7 +87,7 @@
             that.updateIssueDetailCost(String(cost ? cost : 0));
             that.updateIssueDetailIsWorking(issue ? issue.isWorking() : false);
             that.issueDetailWorkHistoryMode('view');
-            that.updateIssueDetailWorkHistory.removeAll();
+            that.updateIssueDetailWorkHistory([]); // removeAll は参照元も消しちゃうからダメ
         });
 
         // 選択しているメンバー
@@ -515,7 +515,7 @@
         });
 
         that.onClickWorkHistoryCancel = function () {
-            that.updateIssueDetailWorkHistory.removeAll();
+            that.updateIssueDetailWorkHistory([]); // removeAll は参照元も消しちゃうからダメ
             that.issueDetailWorkHistoryMode('view');
         };
         

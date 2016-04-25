@@ -9,13 +9,13 @@
             'body',
             'title',
             'isWorking',
-            'workHistory',
             'updated_at',
             'created_at',
             'github',
             'stage',
-            'cost',
-            'labels' // ids
+            'cost'
+            // 'workHistory',
+            // 'labels' // ids
         ];
 
     model.Issue = model.Issue || Issue;
@@ -31,10 +31,18 @@
     Issue.prototype.init = function (o) {
         _.each(columnKeys, function (key) { this[key] = ko.observable(o[key]); }.bind(this));
         this.labels = ko.observableArray((o && o.labels) || []);
-        this.workHistory = ko.observableArray((o && o.workHistory) || []);
+        this.workHistory = ko.observableArray(); // 後ろで初期化
 
         // プロジェクトに所属しているMembers (オブジェクトを指定して監視する)
         this.members = o.members || ko.observableArray();
+
+        // workHistoryのプロパティの更新
+        this.updateWorkHistory = function (newWorkHistory) {
+            this.workHistory(newWorkHistory.map(function (x) {
+                return new model.Work(_.extend({member: this.member}, x));
+            }.bind(this)));
+        };
+        this.updateWorkHistory(o.workHistory || []);
 
         // アサインメンバー
         this.assigneeMember = ko.computed(function () {
@@ -51,17 +59,10 @@
             return title;
         }, this);
 
-        // ひとつの作業履歴の作業時間
-        this.calcOneWorkTime = function (history) {
-            var start = new Date(history.startTime);
-            var end = (history.isEnded || history.endTime) ? new Date(history.endTime) : new Date();
-            return end - start;
-        };
-
         // 合計作業時間の計算（ms）
         this.calcAllWorkTime = function () {
-            return this.workHistory().reduce(function (sum, x) {
-                return sum + this.calcOneWorkTime(x);
+            return this.workHistory().reduce(function (sum, work) {
+                return sum + work.calcDuration(true);
             }.bind(this), 0);
         };
 
@@ -80,7 +81,7 @@
         this.calcLastWorkTime = function () {
             var history = this.workHistory();
             if (!history.length) { return 0; }
-            return this.calcOneWorkTime(history[history.length - 1]);
+            return history[history.length - 1].calcDuration(true);
         };
 
         // 作業時間を一定期間おきに計算
@@ -108,20 +109,6 @@
         this.workHistory.subscribe(function () {
             this.allWorkTime(this.calcAllWorkTime());
         }, this);
-
-        // workHistoryのプロパティの更新
-        this.updateWorkHistory = function (newWorkHistory) {
-            newWorkHistory.forEach(function (x) {
-                x.startTimeFormat = moment(new Date(x.startTime)).format('YYYY/MM/DD HH:mm:ss');
-                x.endTimeFormat = x.endTime ? moment(new Date(x.endTime)).format('YYYY/MM/DD HH:mm:ss') : '-';
-                x.duration = (x.isEnded && x.endTime) ? util.dateFormatHM((new Date(x.endTime)) - (new Date(x.startTime))) : '-';
-                x.user = _.find(this.members(), function (user) { return user._id() === x.userId; });
-                x.userName = x.user ? x.user.userName() : null;
-            }.bind(this));
-
-            this.workHistory(newWorkHistory);
-        };
-        this.updateWorkHistory(this.workHistory());
     };
 
 }(_, window.nakazawa.util));

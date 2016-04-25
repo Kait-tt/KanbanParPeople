@@ -162,9 +162,14 @@
         },
 
         dateFormatHM: function (time) {
+            time = new Date(time);
             var hour = Math.floor(time / 60 / 60 / 1000);
             var minute = Math.round((time - hour * 60 * 60 * 1000) / 60 / 1000);
             return hour ? (hour + '時間' + minute + '分') : minute + '分';
+        },
+
+        dateFormatYMDHM: function (time) {
+            return moment(new Date(time)).format('YYYY/MM/DD HH:mm:ss');
         }
     };
 }(window, _));
