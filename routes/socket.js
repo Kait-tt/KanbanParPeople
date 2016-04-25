@@ -136,9 +136,14 @@ function socketRouting(server) {
             emitters.updateIssueDetail(projectId, username, token, req.issueId, req.title, req.body, req.cost, fn);
         });
 
-        // update issue
+        // update issue working state
         socketOn(socket, 'update-issue-working-state', function (req, projectId, fn) {
             emitters.updateIssueWorkingState(projectId, username, token, req.issueId, req.isWorking, fn);
+        });
+
+        // update issue work history
+        socketOn(socket, 'update-issue-work-history', function (req, projectId, fn) {
+            emitters.updateIssueWorkHistory(projectId, username, token, req.issueId, req.workHistory, fn);
         });
 
         // update issue priority
@@ -340,6 +345,19 @@ module.exports.emitters = emitters = {
                 successWrap('update issue working status', {issue: issue, isWorking: isWorking}, fn);
                 module.exports.io.to(projectId).emit('update-issue-working-state', { issue: issue, issueId: issueId, isWorking: isWorking });
                 notifyText(projectId, username, (isWorking ? 'start to work: ' : 'stop to work: ') + issue.title);
+            });
+        });
+    },
+
+    updateIssueWorkHistory: function (projectId, username, token, issueId, workHistory, fn) {
+        queue.push(projectId, function (done) {
+            Project.updateIssueWorkHistory({id: projectId}, issueId, workHistory, function (err, project, issue) {
+                done();
+                if (err) { serverErrorWrap(err, {}, fn); return; }
+
+                successWrap('update issue work history', {issue: issue, workHistory: issue.workHistory}, fn);
+                module.exports.io.to(projectId).emit('update-issue-work-history', {issue: issue, workHistory: issue.workHistory});
+                notifyText(projectId, username, 'updated work history: ' + issue.title);
             });
         });
     },

@@ -507,13 +507,16 @@
         };
         
         that.onClickWorkHistorySave = function () {
-            if (!that.canClickWorkHistorySave()) {
-                console.error('invalid work history.');
-                return;
-            }
+            var issue = that.selectedIssue();
+            if (!issue) { return console.error('issue is not selected.'); }
+
+            if (!that.canClickWorkHistorySave()) { return console.error('invalid work history.'); }
 
             var workHistory = that.updateIssueDetailWorkHistory().map(function (x) { return x.toMinimumObject(); });
-            that.selectedIssue().updateWorkHistory(workHistory);
+            issue.updateWorkHistory(workHistory);
+
+            that.socket.emit('update-issue-work-history', {issueId: issue._id(), workHistory: workHistory});
+            
             that.issueDetailWorkHistoryMode('view');
         };
 
@@ -576,7 +579,11 @@
             socket.on('update-issue-working-state', function (req) {
                 that.project.updateIssueWorkingState(req.issue._id, req.isWorking, req.issue.workHistory);
             });
-
+            
+            socket.on('update-issue-work-history', function (req) {
+                that.project.updateIssueWorkHistory(req.issue._id, req.workHistory);
+            });
+            
             socket.on('update-issue-priority', function (req) {
                 that.project.updateIssuePriority(req.issue._id, req.insertBeforeOfIssueId);
             });

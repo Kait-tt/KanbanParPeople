@@ -103,6 +103,13 @@
         issue.updateWorkHistory(workHistory);
     };
 
+    Project.prototype.updateIssueWorkHistory = function (issueId, workHistory) {
+        var issue = this.getIssue(issueId);
+        if (!issue) { throw new Error('issue not found'); }
+
+        issue.updateWorkHistory(workHistory);
+    };
+
     Project.prototype.updateIssuePriority = function (issueId, insertBeforeOfIssueId) {
         var issue = this.getIssue(issueId);
         if (!issue) { throw new Error('issue not found'); }
