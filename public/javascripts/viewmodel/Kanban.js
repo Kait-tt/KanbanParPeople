@@ -395,6 +395,10 @@
             var adds = newLabels.filter(function (x) { return !_.includes(curLabels, x); });
             var removes = curLabels.filter(function (x) { return !_.includes(newLabels, x); });
 
+            if (that.issueDetailWorkHistoryMode() === 'edit') {
+                that.onClickWorkHistorySave();
+            }
+
             adds.forEach(function (label) {
                 that.socket.emit('attach-label', {
                     issueId: issue._id(),
@@ -522,13 +526,28 @@
 
         that.canClickWorkHistorySave = ko.computed(function () {
             return that.updateIssueDetailWorkHistory().every(function (work) {
-               return work.isValidStartTime() && work.isValidEndTime();
+               return work.isValidStartTime() && work.isValidEndTime() && work.isValidUserId();
             });
         });
 
         that.onClickWorkHistoryCancel = function () {
             that.updateIssueDetailWorkHistory.removeAll();
             that.issueDetailWorkHistoryMode('view');
+        };
+
+        that.onClickAddWork = function (issue) {
+            console.log(issue.assigneeMember());
+            that.updateIssueDetailWorkHistory.push(new model.Work({
+                members: that.members,
+                startTime: new Date(),
+                endTime: new Date(),
+                userId: issue.assigneeMember() ? issue.assigneeMember()._id() : null,
+                isEnded: true
+            }));
+        };
+
+        that.onClickRemoveWork = function (work) {
+            that.updateIssueDetailWorkHistory.remove(work);
         };
         
         // ソケット通信のイベント設定、デバッグ設定を初期化する

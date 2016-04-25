@@ -567,6 +567,31 @@ div.user-block-area {
   .edit-work-history {
     padding: 2px 6px
   }
+
+  .add-work {
+
+  }
+
+  #issue-detail-work-history {
+    table {
+      margin: 0;
+    }
+
+    td {
+      vertical-align: middle;
+    }
+
+    .add-work {
+      margin-left: 8px;
+    }
+
+    .remove-work {
+      font-size: 14px;
+      color: #BD2C00;
+      cursor: pointer;
+      margin-left: 6px;
+    }
+  }
 }
 
 #project-labels-modal {

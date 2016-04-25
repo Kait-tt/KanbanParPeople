@@ -32,6 +32,11 @@
     };
 
     Work.prototype.init = function (o) {
+        // isEndedの修正...
+        if (!o.isEnded && o.userId && o.endTime) {
+            o.isEnded = true;
+        }
+
         _.each(columnKeys, function (key) { this[key] = ko.observable(o[key]); }.bind(this));
 
         // プロジェクトに所属しているMembers (オブジェクトを指定して監視する)
@@ -49,6 +54,12 @@
             var end = moment(this.endTime());
             if (!end.isValid()) { return false; }
             return end.toDate() >= new Date(this.startTime());
+        }, this);
+
+        this.isValidUserId = ko.computed(function () {
+            var userId = this.userId();
+            var isEnded = this.isEnded();
+            return (userId && isEnded) || (!userId && !isEnded);
         }, this);
 
         this.startTimeFormat = ko.computed({
