@@ -199,7 +199,7 @@
 
 <!-- Issue Detail Modal -->
 <div class="modal fade" id="issue-detail-modal" tabindex="-1" role="dialog" aria-labelledby="issue-detail-modal-label" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -218,12 +218,11 @@
                             <span class="glyphicon glyphicon-time"></span>
                             <span data-bind="text: allWorkTimeFormat"></span>
                         </div>
-                        <!-- ko if: assigneeMember() && stage() === 'doing' -->
+                        <!-- ko if: assigneeMember() && stage() === 'doing' && assigneeMember().userName() !== '<%= userName %>' -->
                         <div class="issue-detail-is-working-wrapper" data-bind="tooltip: { placement:'right',
                             title: '作業状態です。「作業中」にすると作業時間が計測されます。' }">
                             <input type="checkbox" id="issue-detail-is-working" class="pull-right" data-size="mini" data-on-text="作業中"
                                    data-off-text="待機中" data-on-color="success" data-bind="
-                                   attr: { disabled: assigneeMember().userName() !== '<%= userName %>' },
                                    bootstrapSwitchOn: $root.updateIssueDetailIsWorking"
                                    data-toggle="tooltip" data-placement="left" title="Tooltip on left">
                         </div>
@@ -300,9 +299,18 @@
                         <label for="issue-detail-work-history" class="control-label">
                             <span class="glyphicon glyphicon-time"></span> Work History
                             <!-- ko if: $root.issueDetailWorkHistoryMode() === 'view' -->
+                            <!-- ko if: isWorking -->
+                            <button class="btn btn-sm edit-work-history btn-primary disabled" data-bind="
+                                    tooltip: { placement:'right', title: '作業中は編集できません。' }">
+                                <span class="glyphicon glyphicon-edit"></span> Edit
+                            </button>
+                            <!-- /ko -->
+                            <!-- ko ifnot: isWorking -->
                             <button class="btn btn-sm edit-work-history btn-primary" data-bind="click: $root.onClickWorkHistoryEditMode">
                                 <span class="glyphicon glyphicon-edit"></span> Edit
                             </button>
+                            <!-- /ko -->
+
                             <!-- /ko -->
                             <!-- ko if: $root.issueDetailWorkHistoryMode() === 'edit' -->
                             <button class="btn btn-sm edit-work-history btn-success"
@@ -332,15 +340,22 @@
                                 <!-- ko if: $root.issueDetailWorkHistoryMode() === 'edit' -->
                                 <tbody data-bind="foreach: $root.updateIssueDetailWorkHistory">
                                 <tr>
-                                    <td>
+                                    <td data-bind="css: { 'has-error': !isValidStartTime() }">
                                         <input type="datetime" class="form-control" data-bind="value: startTimeFormat">
                                     </td>
-                                    <td>
+                                    <td data-bind="css: { 'has-error': !isValidEndTime() }">
                                         <input type="datetime" class="form-control" data-bind="value: endTimeFormat">
                                     </td>
                                     <td data-bind="text: duration"></td>
                                     <td>
-                                        <input type="text" class="form-control" data-bind="value: userName">
+                                        <!--<input type="text" class="form-control" data-bind="value: userName">-->
+                                        <select class="form-control"
+                                                data-bind="options: $root.members,
+                                                optionsText: 'userName',
+                                                optionsValue: 'userName',
+                                                value: userName,
+                                                optionsCaption: '(no assignee)'" required>
+                                        </select>
                                     </td>
                                 </tr>
                                 </tbody>

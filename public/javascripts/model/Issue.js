@@ -39,7 +39,7 @@
         // workHistoryのプロパティの更新
         this.updateWorkHistory = function (newWorkHistory) {
             this.workHistory(newWorkHistory.map(function (x) {
-                return new model.Work(_.extend({member: this.member}, x));
+                return new model.Work(_.extend({members: this.members}, x));
             }.bind(this)));
         };
         this.updateWorkHistory(o.workHistory || []);

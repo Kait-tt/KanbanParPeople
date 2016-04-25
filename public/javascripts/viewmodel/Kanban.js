@@ -87,7 +87,7 @@
             that.updateIssueDetailCost(String(cost ? cost : 0));
             that.updateIssueDetailIsWorking(issue ? issue.isWorking() : false);
             that.issueDetailWorkHistoryMode('view');
-            that.updateIssueDetailWorkHistory([]); // removeAll は参照元も消しちゃうからダメ
+            that.updateIssueDetailWorkHistory.removeAll();
         });
 
         // 選択しているメンバー
@@ -502,20 +502,29 @@
         };
         
         that.onClickWorkHistoryEditMode = function () {
-            that.updateIssueDetailWorkHistory(that.selectedIssue().workHistory());
+            that.updateIssueDetailWorkHistory(that.selectedIssue().workHistory().map(model.Work.clone));
             that.issueDetailWorkHistoryMode('edit');
         };
         
         that.onClickWorkHistorySave = function () {
+            if (!that.canClickWorkHistorySave()) {
+                console.error('invalid work history.');
+                return;
+            }
+
+            var workHistory = that.updateIssueDetailWorkHistory().map(function (x) { return x.toMinimumObject(); });
+            that.selectedIssue().updateWorkHistory(workHistory);
             that.issueDetailWorkHistoryMode('view');
         };
 
         that.canClickWorkHistorySave = ko.computed(function () {
-            return false;
+            return that.updateIssueDetailWorkHistory().every(function (work) {
+               return work.isValidStartTime() && work.isValidEndTime();
+            });
         });
 
         that.onClickWorkHistoryCancel = function () {
-            that.updateIssueDetailWorkHistory([]); // removeAll は参照元も消しちゃうからダメ
+            that.updateIssueDetailWorkHistory.removeAll();
             that.issueDetailWorkHistoryMode('view');
         };
         
