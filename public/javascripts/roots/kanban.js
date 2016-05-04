@@ -44,6 +44,7 @@
                     project.github().sync(state);
                 });
             initIssueMarkDown();
+            setConfirmTransition();
         });
 
     function getProjectId() {
@@ -71,6 +72,16 @@
             setTimeout(function () {
                 markDownEle.showPreview();
             }, 300);
+        });
+    }
+
+    // 作業中で画面遷移しようとしたら確認ダイアログを表示する
+    function setConfirmTransition() {
+        $(window).bind('beforeunload', function () {
+            var user = kanban.loginMember();
+            if (user && user.workingIssues().length) {
+                return '*** ひとつ以上のタスクが作業状態になっています。 ***\n作業中のまま画面を移動しますか？';
+            }
         });
     }
 
