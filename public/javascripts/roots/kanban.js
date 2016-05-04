@@ -53,7 +53,7 @@
 
     function initIssueMarkDown() {
         var markDownEle;
-        var $content = $('#issue-detail-body');
+        var $content = $('#issue-detail-body, #add-issue-body');
         var body = vm.updateIssueDetailBody;
 
         $.fn.markdown.messages['en'] = {

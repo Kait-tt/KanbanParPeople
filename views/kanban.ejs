@@ -399,8 +399,8 @@
             <form class="form">
                 <div class="modal-body">
                     <p>
-                        Issueを追加します。<br>
-                        追加するIssue情報を入力してください。
+                        タスクを追加します。<br>
+                        追加するタスク情報を入力してください。
                     </p>
 
                     <div class="form-group">
@@ -415,8 +415,48 @@
                         <label for="add-issue-body" class="control-label">
                             <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span> 説明
                         </label>
-                        <textarea class="form-control" rows="3" id="add-issue-body" placeholder="Body"
-                               data-bind="value: addIssueBody"></textarea>
+                        <textarea class="form-control" rows="15" id="add-issue-body" placeholder="Body"
+                                  data-bind="value: addIssueBody"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="add-issue-stage" class="control-label">
+                            <span class="glyphicon glyphicon-road" aria-hidden="true"></span> Stage
+                        </label>
+                        <select id="add-issue-stage" class="form-control" data-bind="value: addIssueStage">
+                            <option value="issue">issue</option>
+                            <option value="backlog">backlog</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="add-issue-cost" class="control-label">
+                            <span class="glyphicon glyphicon-scissors"></span> Cost
+                        </label>
+                        <select id="add-issue-cost" class="form-control" data-bind="value: updateIssueDetailCost">
+                            <option value="0">Nothing selected</option>
+                            <option value="1">1 (Low)</option>
+                            <option value="3">3 (Middle)</option>
+                            <option value="5">5 (High)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="add-issue-labels" class="control-label">
+                            <span class="glyphicon glyphicon-tags" aria-hidden="true"></span> Labels
+                        </label>
+                        <select id="add-issue-labels" multiple data-bind="selectPicker: addIssueLabels,
+                                optionsText: 'name',
+                                selectPickerOptions: {optionsArray: labels}
+                                "></select>
+
+                        <ul class="issue-labels-view" data-bind="foreach: addIssueLabels">
+                            <li>
+                                <span class="label label-default" data-bind="
+                                        style: { color: '#' + invertMonoColor(), 'background-color':  '#' + color() },
+                                        text: name">Default</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 <div class="modal-footer">

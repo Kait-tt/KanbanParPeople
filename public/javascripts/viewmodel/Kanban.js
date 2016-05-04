@@ -52,6 +52,15 @@
         // 追加するIssueの説明
         that.addIssueBody = ko.observable();
 
+        // 追加するIssueのステージ
+        that.addIssueStage = ko.observable('issue');
+
+        // 追加するIssueのコスト
+        that.addIssueCost = ko.observable();
+
+        // 追加するIssueのLabels
+        that.addIssueLabels = ko.observableArray();
+
         // アサイン先のユーザ名
         that.assignUserName = ko.observable();
 
