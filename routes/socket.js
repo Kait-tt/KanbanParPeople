@@ -118,7 +118,8 @@ function socketRouting(server) {
 
         // issueの追加
         socketOn(socket, 'add-issue', function (req, projectId, fn) {
-            emitters.addIssue(projectId, username, token, {title: req.title, body: req.body}, fn);
+            emitters.addIssue(projectId, username, token, {title: req.title, body: req.body, stage: req.stage,
+                cost: req.cost, labels: req.labels}, fn);
         });
 
         // issueの削除
