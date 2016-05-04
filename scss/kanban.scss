@@ -537,13 +537,14 @@ div.user-block-area {
   }
 }
 
-#issue-detail-modal {
-  .issue-labels-view {
-    margin-top: 6px;
-    li {
-      display: inline-block;
-    }
+.issue-labels-view {
+  margin-top: 6px;
+  li {
+    display: inline-block;
   }
+}
+
+#issue-detail-modal {
   #issue-detail-cost {
     display: inline-block;
     width: 220px;
