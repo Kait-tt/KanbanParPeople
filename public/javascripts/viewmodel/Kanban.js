@@ -266,15 +266,13 @@
         // Issueと追加する
         that.addIssue = function () {
             var title = that.addIssueTitle(),
-                body = that.addIssueBody();
-
-            that.socket.emit('add-issue', {title: title, body: body}, function (res) {
-                if (res.status === 'success') {
-                    // reset form
-                    that.addIssueTitle(null);
-                    that.addIssueBody(null);
-                }
-            });
+                body = that.addIssueBody(),
+                stage = that.addIssueStage(),
+                cost = that.addIssueCost(),
+                labels = that.addIssueLabels().map(function (x) { return x.name(); });
+            
+            that.socket.emit('add-issue', {title: title, body: body,
+                stage: stage, cost: cost, labels: labels});
         };
 
         // Issueを削除する (archive)
