@@ -30,6 +30,8 @@
 
         that.chatTexts = ko.observableArray();
 
+        that.searchQuery = ko.observable();
+
         that.members = null;
 
         that.issues = null;
@@ -212,7 +214,7 @@
         };
 
         // 検索する
-        window.searchIssue = that.searchIssue = function (searchQuery) {
+        that.searchIssue = function (searchQuery) {
             if (!_.isString(searchQuery)) { searchQuery = ''; }
             searchQuery = searchQuery.trim();
 
@@ -230,6 +232,9 @@
                 });
             }
         };
+
+        // 検索クエリの値が変わったら検索を実行する
+        that.searchQuery.subscribe(_.debounce(that.searchIssue, 500));
 
         // メンバーを追加する
         that.addMember = function () {

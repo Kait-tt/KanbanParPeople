@@ -32,6 +32,12 @@
           <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#project-settings-modal"><span class="glyphicon glyphicon-cog"></span> <span class="sr-only">Settings</span></button>
           <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#project-labels-modal"><span class="glyphicon glyphicon-tags"></span> <span class="sr-only">Labels</span></button>
         </div>
+        <form class="navbar-form navbar-left search-form" role="search">
+            <div class="form-group has-feedback">
+                <input type="text" class="form-control" placeholder="Search" data-bind="textInput: searchQuery">
+                <span class="glyphicon glyphicon-search form-control-feedback"></span>
+            </div>
+        </form>
         <div class="navbar-text" data-bind="visible: loginMember() && loginMember().workingIssues().length">
             <span class="user-working-message alert alert-success">
                 <span class="glyphicon glyphicon-play-circle"></span> 作業中です。
