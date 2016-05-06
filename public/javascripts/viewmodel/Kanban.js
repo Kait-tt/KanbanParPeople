@@ -221,7 +221,7 @@
             if (searchQuery) { // search
                 var queries = util.splitSearchQuery(searchQuery);
                 that.issues().forEach(function (issue) {
-                    var text = issue.textjson();
+                    var text = issue.alltext();
                     issue.visible(queries.every(function (q) { return text.indexOf(q) !== -1; }));
                 });
                 

@@ -19,7 +19,7 @@
             'labels'
             // 'workHistory',
             // 'labels', // ids
-            // 'textjson'
+            // 'alltext'
         ];
 
     model.Issue = model.Issue || Issue;
@@ -44,14 +44,16 @@
         // 検索などで用いる
         this.visible = ko.observable(true);
 
-        // ほぼすべてのプロパティをJSONテキスト形式
-        // 検索などに用いる
-        this.textjson = ko.computed(function () {
-            var res = {};
+        // 検索などに用いる全文テキスト（JSONではない）
+        this.alltext = ko.computed(function () {
+            var res = [];
             columnKeys.forEach(function (key) {
-                res[key] = _.isFunction(this[key]) ? this[key]() : this[key];
+                var val = _.isFunction(this[key]) ? this[key]() : this[key];
+                if (_.isObject(val) || _.isArray(val)) val = JSON.stringify(val);
+                if (key === 'assigneeMember') key = 'assignee';
+                res.push(key + ':' + val);
             }.bind(this));
-            return JSON.stringify(res);
+            return res.join(' ');
         }, this, {deferEvaluation: true});
 
         // workHistoryのプロパティの更新
