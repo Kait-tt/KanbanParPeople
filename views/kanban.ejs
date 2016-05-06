@@ -86,7 +86,7 @@
                         sortable: {
                             data: $root.draggableList.<%= stage.name %>.issues,
                             afterRender: view.MiniMenu.init }">
-                            <li class="card" draggable="true">
+                            <li class="card" draggable="true" data-bind="visible: visible">
                                 <div class="card-right-wrapper">
                                     <% include _minimenu %>
                                     <!-- ko if: cost() >= 1 -->
@@ -145,7 +145,7 @@
                                             <!-- ko with: $root.draggableList[stage][member._id()] -->
                                             <ul class="card-list" data-bind="
                                                     sortable: { data: issues, afterRender: view.MiniMenu.init }">
-                                                <li class="card" draggable="true" data-bind="visible: $index() < 2 || !$parent.isCollapse()">
+                                                <li class="card" draggable="true" data-bind="visible: ($index() < 2 || !$parent.isCollapse()) && visible()">
                                                     <div class="card-right-wrapper">
                                                         <% include _minimenu %>
                                                         <!-- ko if: cost() >= 1 -->

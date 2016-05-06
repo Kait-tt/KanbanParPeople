@@ -170,6 +170,59 @@
 
         dateFormatYMDHM: function (time) {
             return moment(new Date(time)).format('YYYY/MM/DD HH:mm:ss');
-        }
+        },
+
+            // " や ' を考慮してテキストを分割する
+            splitSearchQuery: function (text) {
+                if (!_.isString(text)) { return []; }
+                text = text.trim();
+
+                var res = [];
+                var quote = null;
+                var str = '';
+
+                text.split('').forEach(function (c) {
+                    if (c === '"') {
+                        if (quote === c) {
+                            pushString();
+                        } else if (quote === '\'') {
+                            str += c;
+                        } else {
+                            quote = c;
+                        }
+
+                    } else if (c === '\'') {
+                        if (quote === c) {
+                            pushString();
+                        } else if (quote === '"') {
+                            str += c;
+                        } else {
+                            quote = c;
+                        }
+
+                    } else if (c === ' ') {
+                        if (quote) {
+                            str += c;
+                        } else {
+                            pushString();
+                        }
+
+                    } else {
+                        str += c;
+                    }
+                });
+
+                if (str) { res.push(str); }
+
+                return res;
+
+                function pushString() {
+                    if (str.length) {
+                        res.push(str);
+                        str = '';
+                    }
+                    quote = null;
+                }
+            }
     };
 }(window, _));

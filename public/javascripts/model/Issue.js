@@ -13,9 +13,13 @@
             'created_at',
             'github',
             'stage',
-            'cost'
+            'cost',
+            'assigneeMember',
+            'displayTitle',
+            'labels'
             // 'workHistory',
-            // 'labels' // ids
+            // 'labels', // ids
+            // 'textjson'
         ];
 
     model.Issue = model.Issue || Issue;
@@ -35,6 +39,20 @@
 
         // プロジェクトに所属しているMembers (オブジェクトを指定して監視する)
         this.members = o.members || ko.observableArray();
+
+        // カンバンボードに表示するか
+        // 検索などで用いる
+        this.visible = ko.observable(true);
+
+        // ほぼすべてのプロパティをJSONテキスト形式
+        // 検索などに用いる
+        this.textjson = ko.computed(function () {
+            var res = {};
+            columnKeys.forEach(function (key) {
+                res[key] = _.isFunction(this[key]) ? this[key]() : this[key];
+            }.bind(this));
+            return JSON.stringify(res);
+        }, this, {deferEvaluation: true});
 
         // workHistoryのプロパティの更新
         this.updateWorkHistory = function (newWorkHistory) {

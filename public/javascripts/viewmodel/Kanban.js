@@ -211,6 +211,26 @@
             }
         };
 
+        // 検索する
+        window.searchIssue = that.searchIssue = function (searchQuery) {
+            if (!_.isString(searchQuery)) { searchQuery = ''; }
+            searchQuery = searchQuery.trim();
+
+            if (searchQuery) { // search
+                var queries = util.splitSearchQuery(searchQuery);
+                console.log(queries);
+                that.issues().forEach(function (issue) {
+                    var text = issue.textjson();
+                    issue.visible(queries.every(function (q) { return text.indexOf(q) !== -1; }));
+                });
+                
+            } else { // all visible
+                that.issues().forEach(function (issue) {
+                    issue.visible(true);
+                });
+            }
+        };
+
         // メンバーを追加する
         that.addMember = function () {
             that.socket.emit('add-member', {userName: that.addMemberUserName()}, function (res) {
