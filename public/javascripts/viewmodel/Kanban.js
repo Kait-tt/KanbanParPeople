@@ -220,7 +220,6 @@
 
             if (searchQuery) { // search
                 var queries = util.splitSearchQuery(searchQuery);
-                console.log(queries);
                 that.issues().forEach(function (issue) {
                     var text = issue.textjson();
                     issue.visible(queries.every(function (q) { return text.indexOf(q) !== -1; }));
