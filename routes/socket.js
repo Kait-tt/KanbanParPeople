@@ -38,7 +38,8 @@ function socketRouting(server) {
         var user = {
             info: !socket.request.session ? null :
                 !socket.request.session.passport ? null :
-                    socket.request.session.passport.user
+                    socket.request.session.passport.user,
+            active: true
         };
 
         users[socket.id] = user;
@@ -88,10 +89,25 @@ function socketRouting(server) {
                         socket.emit('chat-history', res);
                     }
 
-                    notifyText(projectId, username, 'joined room');
+                    emitters.joinRoom(projectId, username);
                 });
 
                 successWrap('joined room', {}, fn);
+
+                // 同じ部屋にいるユーザ名リストを通知
+                // ユニーク処理はしない
+                var joinedUserNames = _.chain(users)
+                    .values()
+                    .where({projectRoomId: projectId, active: true})
+                    .map(function (user) { return user.info ? user.info.username : null; })
+                    .compact()
+                    .value();
+
+                // 自分はいったん除く（後でjoin通知を送る）
+                var pos = joinedUserNames.indexOf(username);
+                if (pos !== -1) { joinedUserNames.splice(pos, 1); }
+                
+                socket.emit('init-joined-users', {joinedUserNames: joinedUserNames});
             });
         });
 
@@ -165,8 +181,10 @@ function socketRouting(server) {
 
         // 切断
         socket.on('disconnect', function () {
-            notifyText(users[socket.id].projectRoomId, username, 'left room');
+            var projectId = users[socket.id].projectRoomId;
+            emitters.leaveRoom(projectId, username);
             console.log('disconnected: ' + socket.id);
+            users[socket.id].active = false;
             delete users[socket.id];
         });
     });
@@ -239,6 +257,16 @@ function socketRouting(server) {
 }
 
 module.exports.emitters = emitters = {
+    joinRoom: function (projectId, username, token) {
+        module.exports.io.to(projectId).emit('join-room', {username: username});
+        notifyText(projectId, username, 'joined room');
+    },
+
+    leaveRoom: function (projectId, username, token) {
+        module.exports.io.to(projectId).emit('leave-room', {username: username});
+        notifyText(projectId, username, 'left room');
+    },
+
     removeMember: function (projectId, username, token, targetUserName, fn) {
         Project.removeMember({id: projectId}, targetUserName, function (err, project, member) {
             if (err) { serverErrorWrap(err, {}, fn); return; }

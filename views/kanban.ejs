@@ -38,6 +38,16 @@
                 (<span data-bind="text: loginMember().workingTimeFormat()"></span>経過)
             </span>
         </div>
+        <div class="navbar-right" role="group" id="joined-members-group">
+            <ul data-bind="foreach: {
+                data: joinedMembers,
+                afterAdd: view.effects.fadeIn,
+                beforeRemove: view.effects.fadeOut }">
+                <li>
+                    <img data-bind="attr: { src: avatarUrl }" class="user-avatar" src="" width="34" height="34">
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
 

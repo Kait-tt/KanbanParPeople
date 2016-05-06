@@ -80,6 +80,20 @@ body{
   }
 }
 
+#joined-members-group {
+  ul {
+    margin: 8px 30px;
+
+    li {
+      display: inline-block;
+    }
+  }
+  .user-avatar {
+    width: 34px;
+    height: 34px;
+  }
+}
+
 #issue-toggle-wrapper{
   height: 100% - $activity-wrap-height;
   float: left;

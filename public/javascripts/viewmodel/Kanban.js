@@ -26,6 +26,8 @@
 
         that.socket = o.socket;
 
+        that.joinedMembers = ko.observableArray();
+
         that.chatTexts = ko.observableArray();
 
         that.members = null;
@@ -561,6 +563,31 @@
         function initSocket (socket) {
             socket.on('connect', function (req) {
                 socket.emit('join-project-room', {projectId: that.project.id()});
+            });
+
+            socket.on('init-joined-users', function (req) {
+                var usernames = req.joinedUserNames;
+                var members = _.compact(usernames.map(function (username) {
+                    return that.project.getMemberByName(username);
+                }));
+                that.joinedMembers(members);
+            });
+
+            socket.on('join-room', function (req) {
+                var member = that.project.getMemberByName(req.username);
+                if (member) { // ユニーク処理はしない
+                    that.joinedMembers.push(member);
+                }
+            });
+
+            socket.on('leave-room', function (req) {
+                var member = that.project.getMemberByName(req.username);
+                if (member) {
+                    var pos = that.joinedMembers().indexOf(member);
+                    if (pos !== -1) {
+                        that.joinedMembers.splice(pos, 1);
+                    }
+                }
             });
 
             socket.on('add-member', function (req) {
