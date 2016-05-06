@@ -5,7 +5,7 @@
 
     ns.effects = ns.effects || {
         fadeIn: function (elm) {
-            $(elm).hide('slow').fadeIn();
+            $(elm).hide().fadeIn('slow');
         },
 
         fadeOut: function (elm) {
