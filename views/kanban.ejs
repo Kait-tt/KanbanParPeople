@@ -70,12 +70,7 @@
     </div>
 </div>
 
-<div id="main" class="main" data-bind="visible: true, css: {'open': openedIssueList}" style="display: none">
-    <div id="issue-toggle-wrapper">
-        <button data-bind="click: toggleOpenedIssueList">
-            <span class="glyphicon glyphicon-chevron-right" data-bind="css: { reverse: openedIssueList() }"></span>
-        </button>
-    </div>
+<div id="main" class="main" data-bind="visible: true, css: {'compact': viewMode() === 'compact'}" style="display: none">
     <div class="blocks">
         <ul class="stage-blocks">
             <% stages.forEach(function (stage) { %>
@@ -83,7 +78,7 @@
                     <li id="three-stage-blocks">
                         <ul class="inner-stage-blocks">
                 <% } %>
-                <li id="<%= stage.name %>-block" class="stage-block" <% if(stage.name == 'issue'){ %> data-bind="css: {open: openedIssueList(), folded : !openedIssueList()}" <% } %>>
+                <li id="<%= stage.name %>-block" class="stage-block">
                     <h2 class="stage-title">
                         <%= stage.displayName %> <span class="badge" data-bind="text: $root.stages.<%= stage.name %>().length"></span>
                         <% if(stage.name == 'done') { %>

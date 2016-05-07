@@ -31,7 +31,6 @@ html, body{
 }
 
 body{
-  // overflow-y: hidden;
   background-color: $body-bg-color;
 }
 
@@ -94,59 +93,20 @@ body{
   }
 }
 
-#issue-toggle-wrapper{
-  height: 100% - $activity-wrap-height;
-  float: left;
-  text-align: center;
-  position: relative;
-  z-index: 11;
-  width: $issue-toggle-wrapper-size;
-  button{
-    height: 100%;
-    width: 100%;
-    font-size: 4rem;
-    border: none;
-    border-right: 1px solid $toggle-button-border-color;
-    background-color: transparent;
-    outline: none;
-    color: #fff;
-    text-shadow: 0 0 10px #999;
-    transition: all .2s ease-in-out;
-    background-color: $toggle-button-bg-color;
-    box-shadow: 1px 0 10px #999;
-    &:hover{
-      background-color: darken($toggle-button-bg-color, 5%);
-      text-shadow: 0 0 15px #888;
-    }
-    .glyphicon {
-      transition: all .2s ease-in-out;
-      &.reverse {
-        @include rotate(180deg);
-      }
-    }
-  }
-}
-
 #main{
   height: 100%;
   position: relative;
   z-index: 1;
-  width: ($block_width + $stage-block-horizontal-margin * 2) * 6 + $issue-toggle-wrapper-size + $stage-block-horizontal-margin * 2;
+  width: ($block_width + $stage-block-horizontal-margin * 2) * 6 + $stage-block-horizontal-margin * 2;
   transition: width .2s ease-in-out;
-  &.open{
-    width: ($block_width + $stage-block-horizontal-margin * 2) * 7 + $issue-toggle-wrapper-size + $stage-block-horizontal-margin * 2;
-  }
+  width: ($block_width + $stage-block-horizontal-margin * 2) * 7 + $stage-block-horizontal-margin * 2;
 }
 
 .blocks {
   transition: all .3s ease-in-out;
   position: relative;
   float: left;
-  // margin-left: -($block_width + $stage-block-horizontal-margin);
   height: 100% - $activity-wrap-height;
-  &.open{
-    // margin-left: $stage-block-horizontal-margin;
-  }
   &::after{
     clear: both;
     display: table-cell;
@@ -163,9 +123,7 @@ body{
 #issue-block{
   transition: margin-left .2s ease-in-out;
   margin-left: -$block_width;
-  &.open{
-    margin-left: $stage-block-horizontal-margin * 2;
-  }
+  margin-left: $stage-block-horizontal-margin * 2;
 }
 
 #three-stage-blocks{

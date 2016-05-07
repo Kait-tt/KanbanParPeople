@@ -119,14 +119,6 @@
         // 編集用の仮のWIP制限
         that.settingsWipLimit = ko.observable();
 
-        // IssueListが表示されているか
-        that.openedIssueList = ko.observable(true);
-
-        // IssueListの表示/非表示の切り替え
-        that.toggleOpenedIssueList = function () {
-            that.openedIssueList(!that.openedIssueList());
-        };
-
         that.selectedMember.subscribe(function (member) {
             if (member) {
                 that.settingsWipLimit(member.wipLimit());
