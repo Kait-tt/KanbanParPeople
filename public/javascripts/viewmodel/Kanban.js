@@ -3,10 +3,12 @@
 
     var viewmodel = util.namespace('kpp.viewmodel'),
         model = util.namespace('kpp.model'),
+        module = util.namespace('kpp.module'),
         stageTypeKeys = model.stageTypeKeys,
         stages = model.stageTypes,
         DraggableIssueList = viewmodel.DraggableIssueList,
-        defaultCost = model.Issue.defaultCost;
+        defaultCost = model.Issue.defaultCost,
+        localStorage = module.localStorage.load();
 
     viewmodel.Kanban = viewmodel.Kanban || Kanban;
 
@@ -32,7 +34,10 @@
 
         that.searchQuery = ko.observable();
 
-        that.viewMode = ko.observable('full'); // "full" or "compact"
+        that.viewMode = ko.observable(localStorage.getItem('viewMode')); // "full" or "compact"
+        that.viewMode.subscribe(function (val) { // localStorageに保存
+            localStorage.setItem('viewMode', val);
+        });
 
         that.members = null;
 
