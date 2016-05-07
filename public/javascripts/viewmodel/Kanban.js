@@ -32,6 +32,8 @@
 
         that.searchQuery = ko.observable();
 
+        that.viewMode = ko.observable('full'); // "full" or "compact"
+
         that.members = null;
 
         that.issues = null;

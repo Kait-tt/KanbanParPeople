@@ -26,11 +26,16 @@
             <!-- /ko -->
         </div>
         <div class="btn-group navbar-left" role="group" id="toolbar-btn-group">
-          <button type="button" class="btn btn-default navbar-btn"
-                                    data-toggle="modal" data-target="#add-issue-modal"><span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span> <span class="sr-only">Add task</span></button>
-          <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#members-settings-modal"><span class="glyphicon glyphicon-user"></span> <span class="sr-only">Members</span></button>
-          <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#project-settings-modal"><span class="glyphicon glyphicon-cog"></span> <span class="sr-only">Settings</span></button>
-          <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#project-labels-modal"><span class="glyphicon glyphicon-tags"></span> <span class="sr-only">Labels</span></button>
+            <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#add-issue-modal"><span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span> <span class="sr-only">Add task</span></button>
+            <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#members-settings-modal"><span class="glyphicon glyphicon-user"></span> <span class="sr-only">Members</span></button>
+            <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#project-settings-modal"><span class="glyphicon glyphicon-cog"></span> <span class="sr-only">Settings</span></button>
+            <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#project-labels-modal"><span class="glyphicon glyphicon-tags"></span> <span class="sr-only">Labels</span></button>
+            <button type="button" class="btn btn-default navbar-btn" data-bind="visible: viewMode() === 'full', click: viewMode.bind(this, 'compact'), tooltip: { title: 'コンパクトモードに変更する', placement: 'bottom' }">
+                <span class="glyphicon glyphicon-resize-small"></span> <span class="sr-only">Compact View</span>
+            </button>
+            <button type="button" class="btn btn-default navbar-btn" data-bind="visible: viewMode() === 'compact', click: viewMode.bind(this, 'full'), tooltip: { title: 'フルモードに変更する', placement: 'bottom' }">
+                <span class="glyphicon glyphicon-resize-full"></span> <span class="sr-only">Full View</span>
+            </button>
         </div>
         <form class="navbar-form navbar-left search-form" role="search">
             <div class="form-group has-feedback">
