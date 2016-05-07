@@ -97,9 +97,29 @@ body{
   height: 100%;
   position: relative;
   z-index: 1;
-  width: ($block_width + $stage-block-horizontal-margin * 2) * 6 + $stage-block-horizontal-margin * 2;
   transition: width .2s ease-in-out;
   width: ($block_width + $stage-block-horizontal-margin * 2) * 7 + $stage-block-horizontal-margin * 2;
+}
+
+#main.compact {
+  width: ($block_width + $stage-block-horizontal-margin * 2) * 5 + $stage-block-horizontal-margin * 2;
+
+  .blocks {
+    height: 100%;
+  }
+
+  #activity-wrap {
+    height: 0;
+  }
+
+  #issue-block {
+    margin-left: -$block_width;
+    overflow: hidden;
+  }
+
+  #archive-block {
+    overflow: hidden;
+  }
 }
 
 .blocks {
@@ -107,6 +127,7 @@ body{
   position: relative;
   float: left;
   height: 100% - $activity-wrap-height;
+  overflow: hidden;
   &::after{
     clear: both;
     display: table-cell;
@@ -118,12 +139,6 @@ body{
     height: 100%;
     margin: 0;
   }
-}
-
-#issue-block{
-  transition: margin-left .2s ease-in-out;
-  margin-left: -$block_width;
-  margin-left: $stage-block-horizontal-margin * 2;
 }
 
 #three-stage-blocks{
@@ -184,12 +199,8 @@ body{
   }
 
   &#issue-block {
-    &.folded{
-      overflow: hidden;
-    }
-    .issue-block-header {
-      padding-left: 21px;
-    }
+    transition: margin-left .2s ease-in-out;
+    margin-left: $stage-block-horizontal-margin * 2;
   }
 
   &#backlog-block {
@@ -205,6 +216,7 @@ body{
   }
 
   &#archive-block {
+    transition: margin-left .2s ease-in-out;
   }
 
   .cell-block {
@@ -586,6 +598,7 @@ div.user-block-area {
 }
 
 #activity-wrap {
+  transition: all .2s ease-in-out;
   width: 100%;
   height: $activity-wrap-height;
   position: fixed;
