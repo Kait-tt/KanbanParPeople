@@ -8,7 +8,7 @@
   }
 }
 
-.information-container {
+.information-container, .outline {
   margin-bottom: 40px;
 }
 
@@ -18,5 +18,12 @@
   .thumbnail {
     display: inline-block;
     margin-right: 20px;
+  }
+}
+
+.outline {
+  h3 {
+    margin-top: 10px;
+    font-size: 18px
   }
 }

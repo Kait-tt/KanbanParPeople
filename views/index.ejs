@@ -33,7 +33,17 @@
             <h2><span class="glyphicon glyphicon-info-sign"></span> 機能説明</h2>
             <hr>
 
-            <div class="information-container">
+            <div class="outline well well-sm">
+                <h3>目次</h3>
+                <ul>
+                    <li><a href="#describe-task-cost">タスクの作業コストの設定</a></li>
+                    <li><a href="#describe-wip-limit">WIP制限</a></li>
+                    <li><a href="#describe-working-state">作業状態と実作業時間の計測</a></li>
+                    <li><a href="#describe-search-task">タスクの検索</a></li>
+                </ul>
+            </div>
+
+            <div id="describe-task-cost" class="information-container">
                 <h3>タスクの作業コストの設定</h3>
                 <div class="center-thumbnail-wrap">
                     <div class="thumbnail">
@@ -60,7 +70,7 @@
                 <p class="text-warning">設定されていないタスクの作業コストは3ポイントで計算されます。</p>
             </div>
 
-            <div class="information-container">
+            <div id="describe-wip-limit" class="information-container">
                 <h3>WIP制限</h3>
                 <div class="center-thumbnail-wrap">
                     <div class="thumbnail">
@@ -85,7 +95,7 @@
                 </p>
             </div>
 
-            <div class="information-container">
+            <div id="describe-working-state" class="information-container">
                 <h3>作業状態と実作業時間の計測</h3>
                 <div class="center-thumbnail-wrap">
                     <div class="thumbnail">
@@ -107,7 +117,7 @@
                 </p>
             </div>
 
-            <div class="information-container">
+            <div id="describe-search-task" class="information-container">
                 <h3>タスクの検索</h3>
                 <div class="center-thumbnail-wrap">
                     <div class="thumbnail">
@@ -133,6 +143,9 @@
 <!-- include javascripts -->
 <script src="/vendor/jquery/dist/jquery.min.js"></script>
 <script src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/vendor/lodash/lodash.min.js"></script>
+<script src="/javascripts/module/util.js"></script>
+<script src="/javascripts/roots/top.js"></script>
 
 </body>
 </html>
