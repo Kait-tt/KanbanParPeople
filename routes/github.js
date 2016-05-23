@@ -63,7 +63,7 @@ var routes = {
                 return routes.issues.opened(project, req, res);
             }
 
-            var toAssignee = req.body.issue.assignee.login;
+            var toAssignee = req.body.assignee.login;
 
             if (issue.assignee) {
                 User.findById(issue.assignee, function (err, user) {
@@ -119,7 +119,7 @@ var routes = {
             // GitHubと本システムで、名前とカラーは同じだが異なるラベルのような場合は、ここでは想定していない
             var label = project.findLabelByName(req.body.label.name);
             if (!label || String(label.color) !== String(req.body.label.color)) {
-                return syncLabelAll();
+                return syncLabelAll(project, req, res);
             }
 
             // 変更が必要なければ何もしない
@@ -143,7 +143,7 @@ var routes = {
             // GitHubと本システムで、名前とカラーは同じだが異なるラベルのような場合は、ここでは想定していない
             var label = project.findLabelByName(req.body.label.name);
             if (!label || String(label.color) !== String(req.body.label.color)) {
-                return syncLabelAll();
+                return syncLabelAll(project, req, res);
             }
 
             // 変更が必要なければ何もしない
