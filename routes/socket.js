@@ -313,16 +313,31 @@ module.exports.emitters = emitters = {
     },
 
     addIssue: function (projectId, username, token, params, fn) {
-        Project.addIssue({id: projectId}, token, params, function (err, project, issue) {
-            if (err) { serverErrorWrap(err, {}, fn); return; }
+        queue.push(projectId, function (done) {
+            Project.findOne({id: projectId}, function (err, project) {
+                if (err) { done(); return serverErrorWrap(err, {}, fn); }
+                
+                // exists?
+                if (params.github && params.github.number && GitHub.findIssueByNumber(project, params.github.number)) {
+                    done();
+                    console.log('issue already exists: ' + params.github.number);
+                    return successWrap('issue already exists.', {}, fn);
+                }
 
-            successWrap('added issue', {issue: issue}, fn);
-            if (issue) {
-                module.exports.io.to(projectId).emit('add-issue', {issue: issue});
-                notifyText(projectId, username, 'added issue: ' + params.title);
-            } else {
-                notifyText(projectId, username, 'added issue via GitHub: ' + params.title);
-            }
+                project.addIssue(token, params, function (err, project, issue) {
+                    done();
+
+                    if (err) { serverErrorWrap(err, {}, fn); return; }
+
+                    successWrap('added issue', {issue: issue}, fn);
+                    if (issue) {
+                        module.exports.io.to(projectId).emit('add-issue', {issue: issue});
+                        notifyText(projectId, username, 'added issue: ' + params.title);
+                    } else {
+                        notifyText(projectId, username, 'added issue via GitHub: ' + params.title);
+                    }
+                });
+            });
         });
     },
 

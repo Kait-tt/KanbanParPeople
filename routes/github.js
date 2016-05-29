@@ -13,12 +13,6 @@ var _ = require('underscore');
 var routes = {
     issues: {
         opened: function (project, req, res) {
-            // exists
-            if (GitHub.findIssueByNumber(project, req.body.issue.number)) {
-                console.error('issue already exists: ' + req.body.issue.number);
-                return res.status(500).json({});
-            }
-
             GitHub.serializeIssue(project, req.body.issue, function (err, issue) {
                 if (err) {
                     console.error(err);
