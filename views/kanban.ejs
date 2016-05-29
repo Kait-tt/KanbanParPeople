@@ -51,7 +51,7 @@
                 <span class="glyphicon glyphicon-search form-control-feedback"></span>
             </div>
         </form>
-        <div class="navbar-text" data-bind="visible: loginMember() && loginMember().workingIssues().length">
+        <div class="navbar-text" data-bind="if: loginMember() && loginMember().workingIssues().length">
             <span class="user-working-message alert alert-success">
                 <span class="glyphicon glyphicon-play-circle"></span> 作業中です。
                 (<span data-bind="text: loginMember().workingTimeFormat()"></span>経過)
