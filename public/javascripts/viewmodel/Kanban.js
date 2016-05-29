@@ -174,7 +174,8 @@
                             .filter(function (member) { return !list[member._id()]; })
                             .forEach(function (member) {
                                 list[member._id()] = new DraggableIssueList(_.extend(_.clone(params), {assignee: member._id()}));
-                            });
+                            })
+                            .value(); // value method is exec
                     }, this, 'arrayChange');
                 } else {
                     list = new DraggableIssueList(params);
