@@ -614,7 +614,7 @@
             });
 
             socket.on('add-member', function (req) {
-                that.project.addMember(req.member);
+                that.project.addMember(req.member, {reverse: true});
             });
 
             socket.on('remove-member', function (req) {
