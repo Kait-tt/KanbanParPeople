@@ -62,7 +62,7 @@
                 data: joinedMembers,
                 afterAdd: view.effects.fadeIn,
                 beforeRemove: view.effects.fadeOut }">
-                <li>
+                <li data-bind="tooltip: { title: username, placement: 'bottom' }">
                     <img data-bind="attr: { src: avatarUrl }" class="user-avatar" src="" width="34" height="34">
                 </li>
             </ul>
