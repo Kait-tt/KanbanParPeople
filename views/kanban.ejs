@@ -59,7 +59,7 @@
         </div>
         <div class="navbar-right" role="group" id="joined-members-group">
             <ul data-bind="foreach: {
-                data: joinedMembers,
+                data: _.uniq(joinedMembers()),
                 afterAdd: view.effects.fadeIn,
                 beforeRemove: view.effects.fadeOut }">
                 <li data-bind="tooltip: { title: username, placement: 'bottom' }">
