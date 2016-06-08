@@ -182,7 +182,9 @@ function socketRouting(server) {
         // 切断
         socket.on('disconnect', function () {
             var projectId = users[socket.id].projectRoomId;
-            emitters.leaveRoom(projectId, username);
+            if (projectId) {
+                emitters.leaveRoom(projectId, username);
+            }
             console.log('disconnected: ' + socket.id);
             users[socket.id].active = false;
             delete users[socket.id];
