@@ -47,6 +47,8 @@
 
         that.project = null;
 
+        that.stats = null;
+
         // that.stages[name] = 各ステージのIssues
         that.stages = null;
 
@@ -143,6 +145,7 @@
             that.issues = project.issues;
             that.labels = project.labels;
             that.stages = project.stages;
+            that.stats = new model.ProjectStats({project: project});
             that.initDraggableIssueList();
 
             initSocket(that.socket);

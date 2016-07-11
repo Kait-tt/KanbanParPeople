@@ -32,11 +32,14 @@
             <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#members-settings-modal" data-bind="tooltip: { title: 'メンバー管理', placement: 'bottom' }">
                 <span class="glyphicon glyphicon-user"></span> <span class="sr-only">Members</span>
             </button>
+            <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#project-labels-modal" data-bind="tooltip: { title: 'ラベル管理', placement: 'bottom' }">
+                <span class="glyphicon glyphicon-tags"></span> <span class="sr-only">Labels</span>
+            </button>
             <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#project-settings-modal" data-bind="tooltip: { title: 'プロジェクト管理', placement: 'bottom' }">
                 <span class="glyphicon glyphicon-cog"></span> <span class="sr-only">Settings</span>
             </button>
-            <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#project-labels-modal" data-bind="tooltip: { title: 'ラベル管理', placement: 'bottom' }">
-                <span class="glyphicon glyphicon-tags"></span> <span class="sr-only">Labels</span>
+            <button type="button" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#project-stats-modal" data-bind="tooltip: { title: '統計', placement: 'bottom' }">
+                <span class="glyphicon glyphicon-stats"></span> <span class="sr-only">Stats</span>
             </button>
             <button type="button" class="btn btn-default navbar-btn" data-bind="visible: viewMode() === 'full', click: viewMode.bind(this, 'compact'), tooltip: { title: 'コンパクトモードに変更', placement: 'bottom' }">
                 <span class="glyphicon glyphicon-resize-small"></span> <span class="sr-only">Compact View</span>
@@ -865,6 +868,39 @@
 </div>
 
 
+<!-- Project stats Modal -->
+<div class="modal fade" id="project-stats-modal" tabindex="-1" role="dialog" aria-labelledby="project-stats-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="project-stats-modal-label">Project Stats</h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsible">
+                    <table class="table">
+                        <thead>
+                        <tr><th>label name</th><th>time</th></tr>
+                        </thead>
+                        <tbody>
+                        <!-- ko foreach: stats.totalTimeLabels -->
+                        <tr>
+                            <td data-bind="text: name"></td>
+                            <td data-bind="text: format"></td>
+                        </tr>
+                        <!-- /ko -->
+                        <tr>
+                            <td>(Total)</td>
+                            <td data-bind="text: stats.totalTimeFormat"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- include javascripts -->
 <script src="/vendor/jquery/dist/jquery.min.js"></script>
 <script src="/vendor/jquery-ui/jquery-ui.min.js"></script>
@@ -895,6 +931,7 @@
 <script src="/javascripts/model/User.js"></script>
 <script src="/javascripts/model/Project.js"></script>
 <script src="/javascripts/model/Projects.js"></script>
+<script src="/javascripts/model/ProjectStats.js"></script>
 <script src="/javascripts/view/effects.js"></script>
 <script src="/javascripts/view/miniMenu.js"></script>
 <script src="/javascripts/view/scroller.js"></script>
