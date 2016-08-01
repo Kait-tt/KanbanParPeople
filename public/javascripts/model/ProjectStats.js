@@ -51,6 +51,20 @@
                 return {name: key, time: val, format: util.dateFormatHM(val)};
             });
         }, this);
+        //
+        // // 過去1週間の人ごとの作業時間
+        // // pastTimes()[username][date][time]
+        // this.pastTimes = ko.computed(function () {
+        //     var totalKey = '(total)',
+        //         res = [],
+        //         members = this.project.members(),
+        //         issues = this.project.issues();
+        //
+        //     var beginDate = moment(),
+        //         endDate = moment().subtract(7, 'days'),
+        //
+        //
+        // }, this);
     };
 
 }(_, window.nakazawa.util));

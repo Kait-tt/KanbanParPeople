@@ -15,7 +15,7 @@ var routes = {
         opened: function (project, req, res) {
             GitHub.serializeIssue(project, req.body.issue, function (err, issue) {
                 if (err) {
-                    console.error(err);
+                    console.error(err && (err.stack || err));
                     return res.status(500).json({message: err.message});
                 }
 
@@ -62,7 +62,7 @@ var routes = {
             if (issue.assignee) {
                 User.findById(issue.assignee, function (err, user) {
                     if (err) {
-                        console.error(err.message);
+                        console.error(err && (err.stack || err));
                         return res.status(500).json({message: err.message});
                     }
                     if (user.userName === toAssignee) {
@@ -79,7 +79,7 @@ var routes = {
             } else {
                 User.findOrCreate(toAssignee, function (err, user) {
                     if (err) {
-                        console.error(err);
+                        console.error(err && (err.stack || err));
                         res.status(500).json({message: err.message});
                     } else {
                         console.log('assign: ' + JSON.stringify({issue: issue._id, user: user._id}));
@@ -161,12 +161,12 @@ router.post('/:projectId', function (req, res) {
     // projetの特定
     Project.findPopulated({id: req.params.projectId}, {one: true}, function (err, project) {
         if (err) {
-            console.error(err);
+            console.error(err && (err.stack || err));
             res.status(500).json({message: err.message});
             return;
         }
         if (!project) {
-            console.error('project not found: ' + req.params.projectId);
+            console.error((new Error('project not found: ' + req.params.projectId)).trace);
             res.status(400).json({message: 'project not found'});
             return;
         }
@@ -174,7 +174,7 @@ router.post('/:projectId', function (req, res) {
         // ルーティング
         if (!~Object.keys(routes).indexOf(type) ||
             !~Object.keys(routes[type]).indexOf(action)) {
-            console.error('routing not matched: ' + type + ' ' + action);
+            console.error((new Error('routing not matched: ' + type + ' ' + action)).trace);
             res.status(400).end();
         } else {
             routes[type][action](project, req, res);

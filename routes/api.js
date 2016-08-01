@@ -19,7 +19,7 @@ router.get('/projects/:projectId', logger.hook, function (req, res) {
     Project.findPopulated({id: req.params.projectId}, {one: true}, function (err, project) {
         if (err) { return serverError(res, err); }
         (new GitHub(req.user.token)).fetchUserAvatar(project.members.map(function (member) { return member.user.userName; }), function (err) {
-            if (err) { console.error(err); }
+            if (err) { return serverError(res, err); }
             res.status(200).json({ message: 'OK', project: project });
         });
     });
@@ -113,6 +113,7 @@ function getLogs(req, res, type) {
 }
 
 function serverError(res, err) {
+    console.error(err && (err.stack || err));
     res.status(500).json({message: 'server error.', error: err.message });
 }
 

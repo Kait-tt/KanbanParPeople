@@ -25,8 +25,9 @@ module.exports = function (passport) {
         function (req, res, next) {
             User.findOrCreate(req.user.username, function (err) {
                 if (err) {
-                    console.log(err);
+                    console.error(err && (err.stack || err));
                     next(err);
+                    return;
                 }
                 res.redirect('/users/me');
             });

@@ -1,13 +1,11 @@
 # KanbanParPeople
 小規模プロジェクトのための人別カンバンのプロトタイプ  
 
-大学のセミナーで開発中  
-
 ## Development
 
 ### Require
 
-- node
+- node@~6
 - mongodb
 - npm
 - bower
@@ -31,4 +29,3 @@
 
 - `cp config/default.json config/test.json` and edit
 - `mocha lib/spec/**/* --timeout 10000`
-

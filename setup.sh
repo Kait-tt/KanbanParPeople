@@ -6,5 +6,3 @@ echo "### npm install ###"
 npm install
 echo "### compass compile ###"
 compass compile
-forever restart 0
-

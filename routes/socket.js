@@ -46,7 +46,7 @@ function socketRouting(server) {
 
         // ログインしていなかったら接続を切る
         if (!checkAuth(socket, function (message) { socket.disconnect(message); })) {
-            console.error('must be login: ' + socket.id);
+            console.error((new Error('must be login: ' + socket.id)).trace);
             return;
         }
 
@@ -74,12 +74,12 @@ function socketRouting(server) {
 
                 // 同期用にtokenを保存する
                 project.github.token = token;
-                project.save(function (err) { if (err) { console.error(err); }});
+                project.save(function (err) { if (err) { console.error(err && (err.stack || err)); }});
 
                 // チャットの履歴を送信する
                 ChatLog.find({projectId: projectId}, {}, {sort:{ created_at: -1 }, limit: firstSendChatLimit}).exec(function (err, res) {
                     if (err) {
-                        console.error(err);
+                        console.error(err && (err.stack || err));
                         socket.emit('chat', {
                             sender: 'System', content: 'error: the server could not find chat history.',
                             type: 'error', created_at: Date.now()
@@ -489,8 +489,7 @@ module.exports.emitters = emitters = {
 /*** helper ***/
 
 function serverErrorWrap(err, otherParam, fn) {
-    console.error('server error: ', err);
-    console.error(err.stack);
+    console.error('server error: ', err && (err.stack || err));
     fn(_.extend({
         status: 'server error',
         message: err.message
@@ -516,7 +515,7 @@ function notifyText(projectId, username, text) {
     var content = '"' + username + '" ' + text;
     ChatLog.create({sender: 'System', content: content, type: 'system', projectId: projectId}, function (err, log) {
         if (err) {
-            console.error(err);
+            console.error(err && (err.stack || err));
             module.exports.io.to(projectId).emit('chat', {
                 sender: 'System', content: 'error: the server could not create system log.',
                 type: 'error', created_at: Date.now()
