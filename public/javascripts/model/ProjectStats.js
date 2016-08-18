@@ -51,20 +51,82 @@
                 return {name: key, time: val, format: util.dateFormatHM(val)};
             });
         }, this);
-        //
-        // // 過去1週間の人ごとの作業時間
-        // // pastTimes()[username][date][time]
-        // this.pastTimes = ko.computed(function () {
-        //     var totalKey = '(total)',
-        //         res = [],
-        //         members = this.project.members(),
-        //         issues = this.project.issues();
-        //
-        //     var beginDate = moment(),
-        //         endDate = moment().subtract(7, 'days'),
-        //
-        //
-        // }, this);
+
+        // work listを取得する
+        this.getWorkList = () => {
+            const res = [];
+
+            this.project.issues().forEach(issue => {
+                issue.workHistory().forEach(work => {
+                    res.push(work);
+                });
+            });
+
+            return res;
+        };
+
+        // 過去1週間の人ごとの作業時間
+        // pastTimes()[iteration]
+        // iteration = {start, startFormat, end, endFormat, users}
+        // users[username] = {minutes, format}
+        this.iterationWorkTime = ko.observableArray([]);
+        // 過去1週間の人ごとの作業時間の計算
+        this.calcIterationWorkTime = () => {
+            return new Promise(resolve => setTimeout(() => {
+                const userNames = this.project.members().map(x => x.userName());
+                const works = this.getWorkList();
+
+                const iterationTimes = 10;
+                const beginDate = moment().day(-7 * (iterationTimes - 1));
+                const endDate = moment().day(7);
+                beginDate.set({'hours': 0, 'minutes': 0, 'seconds' : 0});
+                endDate.set({'hours': 0, 'minutes': 0, 'seconds' : 0});
+                const now = moment();
+
+                const maxt = endDate.diff(beginDate, 'minutes');
+                const ts = {};
+                const n = maxt + 2;
+                const m = maxt / iterationTimes;
+                userNames.forEach(userName => ts[userName] = _.fill(Array(n), 0));
+
+                works.forEach(work => {
+                    const userName = work.userName();
+                    if (userName && _.isArray(ts[userName])) {
+                        const s = Math.max(0, moment(work.startTime()).diff(beginDate, 'minutes'));
+                        const t = moment(work.endTime() || now).diff(beginDate, 'minutes');
+                        ts[userName][s]++;
+                        ts[userName][t]--;
+                    }
+                });
+
+                userNames.forEach(userName => {
+                    _.times(2, () => {
+                        let sum = 0;
+                        _.times(n, i => {
+                            sum += ts[userName][i];
+                            ts[userName][i] = sum;
+                        });
+                    });
+                });
+
+                const res = [];
+                _.times(iterationTimes, i => {
+                    const start = moment(beginDate).add(i * 7, 'days');
+                    const end = moment(start).add(7, 'days').subtract(1, 'minutes');
+                    const startFormat = start.format('MM/DD(ddd)');
+                    const endFormat = end.format('MM/DD(ddd)');
+                    const users = {};
+                    userNames.forEach(username => {
+                        const minutes = ts[username][m * (i + 1)] - ts[username][m * i];
+                        users[username] = {minutes, format: util.secondsFormatHM(minutes * 60)};
+                    });
+                    res.push({start, end, startFormat, endFormat, users});
+                });
+
+                this.iterationWorkTime(res);
+                resolve(res);
+            }, 0));
+        };
     };
 
 }(_, window.nakazawa.util));

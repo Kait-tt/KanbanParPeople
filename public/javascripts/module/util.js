@@ -168,8 +168,14 @@
             return hour ? (hour + '時間' + minute + '分') : minute + '分';
         },
 
+        secondsFormatHM: function (seconds) {
+            var hour = Math.floor(seconds / 60 / 60);
+            var minute = Math.round((seconds - hour * 60 * 60) / 60);
+            return hour ? (hour + '時間' + minute + '分') : minute + '分';
+        },
+
         dateFormatYMDHM: function (time) {
-            return moment(new Date(time)).format('YYYY/MM/DD HH:mm:ss');
+            return (moment.isMoment(time) ? time : moment(new Date(time))).format('YYYY/MM/DD HH:mm:ss');
         },
 
         // " や ' を考慮してテキストを分割する

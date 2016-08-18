@@ -45,6 +45,8 @@
                 });
             initIssueMarkDown();
             setConfirmTransition();
+            // 統計モーダルを開いたら統計を計算
+            $('#project-stats-modal').on('show.bs.modal', () => kanban.stats.calcIterationWorkTime());
         });
 
     function getProjectId() {
