@@ -70,6 +70,7 @@
         // iteration = {start, startFormat, end, endFormat, users}
         // users[username] = {minutes, format}
         this.iterationWorkTime = ko.observableArray([]);
+
         // 過去1週間の人ごとの作業時間の計算
         this.calcIterationWorkTime = () => {
             return new Promise(resolve => setTimeout(() => {
@@ -86,14 +87,13 @@
                 const maxt = endDate.diff(beginDate, 'minutes');
                 const ts = {};
                 const n = maxt + 2;
-                const m = maxt / iterationTimes;
                 userNames.forEach(userName => ts[userName] = _.fill(Array(n), 0));
 
                 works.forEach(work => {
                     const userName = work.userName();
                     if (userName && _.isArray(ts[userName])) {
                         const s = Math.max(0, moment(work.startTime()).diff(beginDate, 'minutes'));
-                        const t = moment(work.endTime() || now).diff(beginDate, 'minutes');
+                        const t = Math.max(0, moment(work.endTime() || now).diff(beginDate, 'minutes'));
                         ts[userName][s]++;
                         ts[userName][t]--;
                     }
@@ -116,8 +116,10 @@
                     const startFormat = start.format('MM/DD(ddd)');
                     const endFormat = end.format('MM/DD(ddd)');
                     const users = {};
+                    const s = start.diff(beginDate, 'minutes');
+                    const t = end.diff(beginDate, 'minutes');
                     userNames.forEach(username => {
-                        const minutes = ts[username][m * (i + 1)] - ts[username][m * i];
+                        const minutes = ts[username][t] - ts[username][s];
                         users[username] = {minutes, format: util.secondsFormatHM(minutes * 60)};
                     });
                     res.push({start, end, startFormat, endFormat, users});
